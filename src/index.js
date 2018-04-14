@@ -14,6 +14,21 @@ function configureProvider (conf = {}) {
 }
 const DidReg = Contract(DidRegistryContract)
 
+function attributeToHex (key, value) {
+  if (Buffer.isBuffer(value)) {
+    return `0x${value.toString('hex')}`
+  }
+  const match = key.match(/^did\/(publicKey|authentication)\/\w+\/\w+(Base64)$/)
+  if (match) {
+    const encoding = match[2]
+    // TODO add support for base58
+    if (encoding === 'Base64') {
+      return `0x${Buffer.from(value, 'base64').toString('hex')}`
+    }
+  }
+  return value
+}
+
 class EthrDID {
   constructor (conf = {}) {
     const provider = configureProvider(conf)
@@ -37,7 +52,7 @@ class EthrDID {
 
   async addDelegate (delegate, options = {}) {
     const delegateType = options.delegateType || 'Secp256k1VerificationKey2018'
-    const expiresIn = options.expiresIn
+    const expiresIn = options.expiresIn || 86400
     const owner = await this.lookupOwner()
     return this.registry.addDelegate(this.address, delegateType, delegate, expiresIn, {from: owner})
   }
@@ -47,9 +62,9 @@ class EthrDID {
     return this.registry.revokeDelegate(this.address, delegateType, delegate, {from: owner})
   }
 
-  async setAttribute (key, value, expiresIn) {
+  async setAttribute (key, value, expiresIn = 86400) {
     const owner = await this.lookupOwner()
-    return this.registry.setAttribute(this.address, key, value, expiresIn, {from: owner})
+    return this.registry.setAttribute(this.address, key, attributeToHex(key, value), expiresIn, {from: owner})
   }
 }
 module.exports = EthrDID

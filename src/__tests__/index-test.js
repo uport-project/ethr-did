@@ -198,7 +198,7 @@ describe('ethrResolver', () => {
 
     describe('re-add auth delegate', () => {
       beforeAll(async () => {
-        await ethrDid.addDelegate(delegate2, {delegateType: 'Secp256k1SignatureAuthentication2018', expiresIn: 86400})
+        await ethrDid.addDelegate(delegate2, {delegateType: 'Secp256k1SignatureAuthentication2018'})
       })
 
       it('resolves document', () => {
@@ -266,9 +266,9 @@ describe('ethrResolver', () => {
         })
       })
 
-      describe('Ed25519VerificationKey2018', () => {
+      describe('Base64 Encoded Key', () => {
         beforeAll(async () => {
-          await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71', 10)
+          await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 10)
         })
   
         it('resolves document', () => {
@@ -294,7 +294,53 @@ describe('ethrResolver', () => {
               id: `${did}#delegate-3`,
               type: 'Ed25519VerificationKey2018',
               owner: did,
-              publicKeyBase64: Buffer.from('02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71', 'hex').toString('base64')
+              publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx'
+            }],
+            authentication: [{
+              type: 'Secp256k1SignatureAuthentication2018',
+              publicKey: `${did}#owner`
+            }, {
+              type: 'Secp256k1SignatureAuthentication2018',
+              publicKey: `${did}#delegate-1`
+            }]
+          })
+        })
+      })
+
+      describe('Use Buffer', () => {
+        beforeAll(async () => {
+          await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'), 10)
+        })
+  
+        it('resolves document', () => {
+          return expect(resolve(did)).resolves.toEqual({
+            '@context': 'https://w3id.org/did/v1',
+            id: did,
+            publicKey: [{
+              id: `${did}#owner`,
+              type: 'Secp256k1VerificationKey2018',
+              owner: did,
+              ethereumAddress: owner
+            }, {
+              id: `${did}#delegate-1`,
+              type: 'Secp256k1VerificationKey2018',
+              owner: did,
+              ethereumAddress: delegate2
+            }, {
+              id: `${did}#delegate-2`,
+              type: 'Secp256k1VerificationKey2018',
+              owner: did,
+              publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
+            }, {
+              id: `${did}#delegate-3`,
+              type: 'Ed25519VerificationKey2018',
+              owner: did,
+              publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx'
+            }, {
+              id: `${did}#delegate-4`,
+              type: 'Ed25519VerificationKey2018',
+              owner: did,
+              publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
             }],
             authentication: [{
               type: 'Secp256k1SignatureAuthentication2018',
@@ -337,6 +383,11 @@ describe('ethrResolver', () => {
               type: 'Ed25519VerificationKey2018',
               owner: did,
               publicKeyBase64: Buffer.from('02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71', 'hex').toString('base64')
+            }, {
+              id: `${did}#delegate-4`,
+              type: 'Ed25519VerificationKey2018',
+              owner: did,
+              publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
             }],
             authentication: [{
               type: 'Secp256k1SignatureAuthentication2018',
