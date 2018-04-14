@@ -1,0 +1,8 @@
+node_modules
+lib
+.vscode/settings.json
+coverage
+
+*.log
+
+*.tgz

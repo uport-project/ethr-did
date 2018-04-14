@@ -1,0 +1,64 @@
+{
+  "name": "ethr-did",
+  "version": "0.0.1",
+  "description": "Create and manage DID documents for ethereum addresses",
+  "main": "lib/index.js",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uport-project/ethr-did.git"
+  },
+  "files": [
+    "dist",
+    "lib",
+    "src",
+    "LICENSE",
+    "babel-preset.js",
+    ".babelrc"
+  ],
+  "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
+  "license": "Apache-2.0",
+  "scripts": {
+    "test": "jest",
+    "build:es5": "./node_modules/.bin/babel src -d lib",
+    "build": "yarn build:es5 && yarn test"
+  },
+  "jest": {
+    "coverageDirectory": "./coverage/",
+    "collectCoverage": true
+  },
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.0",
+    "babel-jest": "^22.4.3",
+    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
+    "babel-plugin-transform-runtime": "^6.23.0",
+    "babel-preset-env": "^1.6.1",
+    "ganache-cli": "^6.1.0",
+    "jest": "^22.4.3",
+    "regenerator-runtime": "^0.11.1",
+    "standard": "^11.0.0"
+  },
+  "dependencies": {
+    "babel-plugin-module-resolver": "^3.1.1",
+    "babel-runtime": "^6.26.0",
+    "did-resolver": "^0.0.4",
+    "ethr-did-registry": "^0.0.2",
+    "ethr-did-resolver": "^0.0.5",
+    "truffle-contract": "^3.0.4"
+  },
+  "standard": {
+    "ignore": [
+      "lib/**"
+    ],
+    "globals": [
+      "it",
+      "describe",
+      "expect",
+      "jest",
+      "beforeAll",
+      "beforeEach",
+      "afterAll",
+      "afterEach"
+    ]
+  }
+}
