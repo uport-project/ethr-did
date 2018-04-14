@@ -1,6 +1,6 @@
 import resolve from 'did-resolver'
 import register from 'ethr-did-resolver'
-import EthrDid from '../index.js'
+import EthrDID from '../index.js'
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
 import Web3 from 'web3'
@@ -32,7 +32,7 @@ describe('ethrResolver', () => {
       gasPrice: 100000000000,
       gas: 4712388
     })
-    ethrDid = new EthrDid({provider, registry: registry.address, address: identity})
+    ethrDid = new EthrDID({provider, registry: registry.address, address: identity})
     register({provider, registry: registry.address})
   })
 

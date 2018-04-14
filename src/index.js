@@ -41,13 +41,15 @@ class EthrDID {
     this.did = `did:ethr:${this.address}`
   }
 
-  async lookupOwner () {
+  async lookupOwner (cache = true) {
+    if (cache && this.owner) return this.owner
     return this.registry.identityOwner(this.address)
   }
 
   async changeOwner (newOwner) {
     const owner = await this.lookupOwner()
-    return this.registry.changeOwner(this.address, newOwner, {from: owner})
+    await this.registry.changeOwner(this.address, newOwner, {from: owner})
+    this.owner = newOwner
   }
 
   async addDelegate (delegate, options = {}) {

@@ -17,11 +17,11 @@ eg:
 ## Configuration
 
 ```js
-import EthrDid from 'ethr-did'
+import EthrDID from 'ethr-did'
 
 // Assume web3 object is configured either manually or injected using metamask
 
-const ethrDid = new EthrDid({web3, address: web3.eth.defaultAccount})
+const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount})
 ```
 
 ## Create ethr DID
