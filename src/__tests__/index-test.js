@@ -19,7 +19,7 @@ describe('ethrResolver', () => {
   const getAccounts = () => new Promise((resolve, reject) => web3.eth.getAccounts((error, accounts) => error ? reject(error) : resolve(accounts)))
   DidReg.setProvider(provider)
 
-  let ethrDid, registry, accounts, did, identity, owner, delegate1, delegate2
+  let ethrDid, plainDid, registry, accounts, did, identity, owner, delegate1, delegate2
 
   beforeAll(async () => {
     accounts = await getAccounts()
@@ -485,8 +485,24 @@ describe('ethrResolver', () => {
     describe('plain vanilla keypair account', () => {
       it('should sign valid jwt', () => {
         const kp = EthrDID.createKeyPair()
-        const plainDid = new EthrDID({...kp, provider, registry: registry.address})
+        plainDid = new EthrDID({...kp, provider, registry: registry.address})
         plainDid.signJWT({hello: 'world'}).then(jwt => verifyJWT(jwt).then(({payload}) => expect(payload).toBeDefined(), error => expect(error).toBeNull()))
+      })
+    })
+  })
+
+  describe('verifyJWT', () => {
+    it('verifies the signature of the JWT', () => {
+      return ethrDid.signJWT({hello: 'friend'}).then(jwt => plainDid.verifyJWT(jwt)).then(({issuer}) => expect(issuer).toEqual(did))
+    })
+
+    describe('uses did for verifying aud claim', () => {
+      it('verifies the signature of the JWT', () => {
+        return ethrDid.signJWT({hello: 'friend', aud: plainDid.did}).then(jwt => plainDid.verifyJWT(jwt)).then(({issuer}) => expect(issuer).toEqual(did))
+      })
+
+      it('fails if wrong did', () => {
+        return ethrDid.signJWT({hello: 'friend', aud: ethrDid.did}).then(jwt => plainDid.verifyJWT(jwt)).catch(error => expect(error.message).toEqual(`JWT audience does not match your DID: aud: ${ethrDid.did} !== yours: ${plainDid.did}`))
       })
     })
   })

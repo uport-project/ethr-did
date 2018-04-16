@@ -87,7 +87,20 @@ const verification = await ethrDid.signJWT({claims: {name: 'Joe Lubin'}})
 
 ### Verifying a JWT
 
-Use [did-jwt](https://github.com/uport-project/did-jwt) for verifying JWTs.
+You can easily verify a JWT sent to you using `verifyJWT()`
+
+```js
+const {payload, issuer} = ethrDid.verifyJWT(helloJWT)
+// payload contains the javascript object that was signed together with a vew JWT specific attributes
+console.log(`hello: ${payload.hello}`)
+
+// Issuer contains the DID of the signing identity
+console.log(issuer)
+
+```
+
+A consuming app can use it directly using [did-jwt](https://github.com/uport-project/did-jwt) for verifying JWTs.
+
 
 ```js
 import { verifyJWT } from 'did-jwt'
@@ -97,11 +110,6 @@ require('ethr-did-resolver')()
 
 const {payload, issuer} = await verifyJWT(helloJWT)
 
-// payload contains the javascript object that was signed together with a vew JWT specific attributes
-console.log(`hello: ${payload.hello}`)
-
-// Issuer contains the DID of the signing identity
-console.log(issuer)
 ```
 
 ## Key Management

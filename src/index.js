@@ -1,7 +1,7 @@
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
 import Web3 from 'web3'
-import { createJWT, SimpleSigner } from 'did-jwt'
+import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
 import { ec as EC } from 'elliptic'
 import { toEthereumAddress } from 'did-jwt/lib/Digest'
 const secp256k1 = new EC('secp256k1')
@@ -99,6 +99,10 @@ class EthrDID {
     const options = {signer: this.signer, alg: 'ES256K-R', issuer: this.did}
     if (expiresIn) options.expiresIn = expiresIn
     return createJWT(payload, options)
+  }
+
+  async verifyJWT (jwt, audience=this.did) {
+    return verifyJWT(jwt, {audience})
   }
 }
 EthrDID.createKeyPair = createKeyPair
