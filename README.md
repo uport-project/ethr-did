@@ -2,6 +2,8 @@
 
 This library is intended to use ethereum addresses as fully self managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs) and lets you easily create and manage keys for these identities.
 
+It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [did-jwt](https://github.com/uport-project/did-jwt) library.
+
 It supports the proposed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io).
 
 The DID method relies on the [ethr-did-registry](https://github.com/uport-project/ethr-did-registry).
@@ -21,14 +23,102 @@ import EthrDID from 'ethr-did'
 
 // Assume web3 object is configured either manually or injected using metamask
 
-const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount})
+
+const ethrDid = new EthrDID({address: '0x...', privateKey: '...', web3})
 ```
 
 ## Create ethr DID
 
-Creating an ethr DID is just creating an ethereum account. This library assumes that is done using the built in web3 provider already.
+Creating an ethr DID is just creating an ethereum account.
 
-## Change owner of ethr DID
+We provide a convenience method to easily create one `EthrDID.createKeyPair()` which returns an object containing an ethereum address and privatekey.
+
+```js
+const keypair = EthrDID.createKeyPair()
+// Save keypair somewhere safe
+
+const ethrDid = new EthrDID({...keypair, web3})
+```
+
+## Using a web3 provider
+
+If you use a built in web3 provider like metamask you can use one of your metamask addresses as your identity.
+
+```js
+const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount})
+```
+
+Unfortunately web3 providers are not directly able to sign data in a way thats compliant with the JWT ES256K standard, so you will need to add a key pair as a signing delegate to be able to sign JWT's. 
+
+You can quickly add one like this:
+
+```js
+await ethrDid.createSigningDelegate() // Adds a signing delegate valid for 1 day
+```
+
+See section on adding delegates below.
+
+### Ethereum Web3 Wallet developers
+
+You can easily add support for signing yourself by implementing a signer function with a clean GUI. See [DID-JWT Signer Functions](https://github.com/uport-project/did-jwt#signer-functions).
+
+The signer function can be passed in as the signer option to the `EthrDID` constructor:
+
+```js
+const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount, signer: wallet.jwtSigner})
+```
+
+## Signing JWT's
+
+A JWT is basically a JSON object that is signed so it can be verified as being created by a given DID.
+
+A JWT looks like this:
+
+`eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpc3MiOiJkaWQ6dXBvcnQ6Mm5RdGlRRzZDZ20xR1lUQmFhS0Fncjc2dVk3aVNleFVrcVgiLCJpYXQiOjE0ODUzMjExMzMsInJlcXVlc3RlZCI6WyJuYW1lIiwicGhvbmUiXX0.1hyeUGRBb-cgvjD5KKbpVJBF4TfDjYxrI8SWRJ-GyrJrNLAxt4MutKMFQyF1k_YkxbVozGJ_4XmgZqNaW4OvCw`
+
+Use any JSON compatible Javascript Object as a payload to sign.
+
+```js
+const helloJWT = await ethrDid.signJWT({hello: 'world'})
+
+// A uPort compatible Verification
+const verification = await ethrDid.signJWT({claims: {name: 'Joe Lubin'}})
+```
+
+### Verifying a JWT
+
+Use [did-jwt](https://github.com/uport-project/did-jwt) for verifying JWTs.
+
+```js
+import { verifyJWT } from 'did-jwt'
+
+// did-jwt is agnostic about did methods so you need to register the 'ethr-did-resolver' first
+require('ethr-did-resolver')()
+
+const {payload, issuer} = await verifyJWT(helloJWT)
+
+// payload contains the javascript object that was signed together with a vew JWT specific attributes
+console.log(`hello: ${payload.hello}`)
+
+// Issuer contains the DID of the signing identity
+console.log(issuer)
+```
+
+## Key Management
+
+The ethr DID supports sophisticated key management, that can be used to change ownership of keys, delegate signing rights temporarily to another account and publish information about the identity in it's DID document.
+
+### Understanding Ownership of an Identity
+
+By default an identity address is owned by itself. An identity owner is the address able to make and publish changes to the identity. As this is a very important function, you could change the ownership to use a smart contract based address implementing recovery or multi-sig at some point in the future.
+
+Smart Contract's are not able to actually sign, so we would also need to add a Key Pair based address as a signing delegate. 
+
+Most web3 providers also do not let the user sign data that is compatible with JWT standards, which means that you would have to add a sepa
+
+All the following functions assume that the passed in web3 provider can sign ethereum transactions on behalf of the identity owner.
+
+### Change owner of ethr DID
 
 You can change the owner of an ethr DID. This is useful in particular if you are changing identity provider and want to continue to use the same identity.
 
@@ -38,7 +128,7 @@ This creates an Ethereum Transaction so your current owner account needs suffice
 await ethrDid.changeOwner(web3.eth.accounts[2])
 ```
 
-## Add delegate signer
+### Add delegate signer
 
 You can temporarily add a delegate signer to your DID. This is an address that can sign JWT's on your behalf. By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
 
@@ -57,7 +147,16 @@ await ethrDid.addDelegate(web3.eth.accounts[3])
 // Override defaults
 await ethrDid.addDelegate(web3.eth.accounts[3], {expiresIn: 360, delegateType: 'Secp256k1SignatureAuthentication2018'})
 ```
-## Set public attributes
+
+There also exists a convenience function that creates a new delegate keypair, configures a signer with it and finally calls the above `addDelegate()` function.
+
+```js
+const keypair = await ethrDid.createSigningDelegate(`Secp256k1SignatureAuthentication2018`, 360)
+```
+
+The keypair object contains an `address` and `privateKey` attribute. Unless the key is just added temporarily, store it somewhere safe.
+
+### Set public attributes
 
 You can set various public attributes to your DID using `setAttribute(key, value, exp)`. These are not directly queriable within smart contracts. But they let you publish information to your DID document, such as public encryption keys etc.
 

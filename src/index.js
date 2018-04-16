@@ -1,6 +1,10 @@
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
 import Web3 from 'web3'
+import { createJWT, SimpleSigner } from 'did-jwt'
+import { ec as EC } from 'elliptic'
+import { toEthereumAddress } from 'did-jwt/lib/Digest'
+const secp256k1 = new EC('secp256k1')
 
 export const REGISTRY = '0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61'
 
@@ -29,6 +33,14 @@ function attributeToHex (key, value) {
   return value
 }
 
+export function createKeyPair () {
+  const kp = secp256k1.genKeyPair()
+  const publicKey = kp.getPublic('hex')
+  const privateKey = kp.getPrivate('hex')
+  const address = toEthereumAddress(publicKey)
+  return {address, privateKey}
+}
+
 class EthrDID {
   constructor (conf = {}) {
     const provider = configureProvider(conf)
@@ -39,6 +51,11 @@ class EthrDID {
     this.address = conf.address || this.web3.eth.defaultAccount
     if (!this.address) throw new Error('No address is set for EthrDid')
     this.did = `did:ethr:${this.address}`
+    if (conf.signer) {
+      this.signer = conf.signer
+    } else if (conf.privateKey) {
+      this.signer = SimpleSigner(conf.privateKey)
+    }
   }
 
   async lookupOwner (cache = true) {
@@ -68,5 +85,21 @@ class EthrDID {
     const owner = await this.lookupOwner()
     return this.registry.setAttribute(this.address, key, attributeToHex(key, value), expiresIn, {from: owner})
   }
+
+  // Create a temporary signing delegate able to sign JWT on behalf of identity
+  async createSigningDelegate (delegateType = 'Secp256k1VerificationKey2018', expiresIn = 86400) {
+    const kp = createKeyPair()
+    this.signer = SimpleSigner(kp.privateKey)
+    await this.addDelegate(kp.address, {delegateType, expiresIn})
+    return kp
+  }
+
+  async signJWT (payload, expiresIn) {
+    if (typeof this.signer !== 'function') throw new Error('No signer configured')
+    const options = {signer: this.signer, alg: 'ES256K-R', issuer: this.did}
+    if (expiresIn) options.expiresIn = expiresIn
+    return createJWT(payload, options)
+  }
 }
+EthrDID.createKeyPair = createKeyPair
 module.exports = EthrDID
