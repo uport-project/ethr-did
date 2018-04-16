@@ -20,7 +20,8 @@
   "scripts": {
     "test": "jest",
     "build:es5": "./node_modules/.bin/babel src -d lib",
-    "build": "yarn build:es5 && yarn test"
+    "build:webpack": "./node_modules/.bin/webpack",
+    "build": "yarn build:es5 && yarn test && yarn webpack"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -38,7 +39,9 @@
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.3",
     "regenerator-runtime": "^0.11.1",
-    "standard": "^11.0.0"
+    "standard": "^11.0.0",
+    "webpack": "^4.5.0",
+    "webpack-cli": "^2.0.14"
   },
   "dependencies": {
     "babel-plugin-module-resolver": "^3.1.1",
