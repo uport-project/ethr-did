@@ -36,10 +36,13 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
+    "ethr-did-registry": "^0.0.2",
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.3",
     "regenerator-runtime": "^0.11.1",
     "standard": "^11.0.0",
+    "truffle-contract": "^3.0.5",
+    "web3": "^1.0.0-beta.34",
     "webpack": "^4.5.0",
     "webpack-cli": "^2.0.14"
   },
@@ -47,9 +50,10 @@
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-runtime": "^6.26.0",
     "did-jwt": "^0.0.7",
-    "ethr-did-registry": "^0.0.2",
-    "ethr-did-resolver": "^0.0.5",
-    "truffle-contract": "^3.0.4"
+    "ethjs-contract": "^0.1.9",
+    "ethjs-provider-http": "^0.1.6",
+    "ethjs-query": "^0.3.5",
+    "ethr-did-resolver": "^0.0.6"
   },
   "standard": {
     "ignore": [

@@ -11,7 +11,7 @@ function sleep (seconds) {
   return new Promise((resolve, reject) => setTimeout(resolve, seconds * 1000))
 }
 
-describe('ethrResolver', () => {
+describe('EthrDID', () => {
   const provider = ganache.provider()
   const DidReg = Contract(DidRegistryContract)
   const web3 = new Web3()
@@ -23,10 +23,10 @@ describe('ethrResolver', () => {
 
   beforeAll(async () => {
     accounts = await getAccounts()
-    identity = accounts[1]
-    owner = accounts[2]
-    delegate1 = accounts[3]
-    delegate2 = accounts[4]
+    identity = accounts[1].toLowerCase()
+    owner = accounts[2].toLowerCase()
+    delegate1 = accounts[3].toLowerCase()
+    delegate2 = accounts[4].toLowerCase()
     did = `did:ethr:${identity}`
 
     registry = await DidReg.new({
@@ -48,7 +48,7 @@ describe('ethrResolver', () => {
     })
   })
 
-  it('defaults to itself', () => {
+  it('defaults owner to itself', () => {
     return expect(ethrDid.lookupOwner()).resolves.toEqual(identity)
   })
 
