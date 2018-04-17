@@ -24,8 +24,18 @@ import EthrDID from 'ethr-did'
 // Assume web3 object is configured either manually or injected using metamask
 
 
-const ethrDid = new EthrDID({address: '0x...', privateKey: '...', web3})
+const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 ```
+
+| key | description| required |
+|-----|------------|----------|
+|`address`|Ethereum addres representing Identity| yes |
+|`registry`| registy address (defaults to `0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61`) | no |
+|`provider`| web3 provider | no |
+|`web3`| preconfigured web3 object | no |
+|`rpcUrl`| JSON-RPC endpoint url | no |
+|`signer`| [Signing function](https://github.com/uport-project/did-jwt#signer-functions)| either `signer` or `privateKey` |
+|`privateKey`| Hex encoded private key | yes* |
 
 ## Create ethr DID
 
@@ -37,7 +47,7 @@ We provide a convenience method to easily create one `EthrDID.createKeyPair()` w
 const keypair = EthrDID.createKeyPair()
 // Save keypair somewhere safe
 
-const ethrDid = new EthrDID({...keypair, web3})
+const ethrDid = new EthrDID({...keypair, provider})
 ```
 
 ## Using a web3 provider
@@ -45,7 +55,7 @@ const ethrDid = new EthrDID({...keypair, web3})
 If you use a built in web3 provider like metamask you can use one of your metamask addresses as your identity.
 
 ```js
-const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount})
+const ethrDid = new EthrDID({provider: web3.currentProvider, address: web3.eth.defaultAccount})
 ```
 
 Unfortunately web3 providers are not directly able to sign data in a way thats compliant with the JWT ES256K standard, so you will need to add a key pair as a signing delegate to be able to sign JWT's. 
@@ -65,7 +75,7 @@ You can easily add support for signing yourself by implementing a signer functio
 The signer function can be passed in as the signer option to the `EthrDID` constructor:
 
 ```js
-const ethrDid = new EthrDID({web3, address: web3.eth.defaultAccount, signer: wallet.jwtSigner})
+const ethrDid = new EthrDID({provider, address: web3.eth.defaultAccount, signer: wallet.jwtSigner})
 ```
 
 ## Signing JWT's

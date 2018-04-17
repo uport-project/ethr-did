@@ -1,6 +1,8 @@
-import Contract from 'truffle-contract'
-import DidRegistryContract from 'ethr-did-registry'
-import Web3 from 'web3'
+import HttpProvider from 'ethjs-provider-http'
+import Eth from 'ethjs-query'
+import abi from 'ethjs-abi'
+import EthContract from 'ethjs-contract'
+import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
 import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
 import { ec as EC } from 'elliptic'
 import { toEthereumAddress } from 'did-jwt/lib/Digest'
@@ -13,10 +15,10 @@ function configureProvider (conf = {}) {
     return conf.provider
   } else if (conf.web3) {
     return conf.web3.currentProvider
+  } else {
+    return new HttpProvider(conf.rpcUrl || 'https://mainnet.infura.io/ethr-did')
   }
-  throw new Error('either web3 object or provider is required')
 }
-const DidReg = Contract(DidRegistryContract)
 
 function attributeToHex (key, value) {
   if (Buffer.isBuffer(value)) {
@@ -30,7 +32,10 @@ function attributeToHex (key, value) {
       return `0x${Buffer.from(value, 'base64').toString('hex')}`
     }
   }
-  return value
+  if (value.match(/^0x[0-9a-fA-F]*$/)) {
+    return value
+  }
+  return `0x${Buffer.from(value).toString('hex')}`
 }
 
 export function createKeyPair () {
@@ -44,11 +49,11 @@ export function createKeyPair () {
 class EthrDID {
   constructor (conf = {}) {
     const provider = configureProvider(conf)
-    this.web3 = new Web3()
-    this.web3.setProvider(provider)
-    DidReg.setProvider(provider)
-    this.registry = DidReg.at(conf.registry || REGISTRY)
-    this.address = conf.address || this.web3.eth.defaultAccount
+    const eth = new Eth(provider)
+    const registryAddress = conf.registry || REGISTRY
+    const DidReg = new EthContract(eth)(DidRegistryContract)
+    this.registry = DidReg.at(registryAddress)
+    this.address = conf.address
     if (!this.address) throw new Error('No address is set for EthrDid')
     this.did = `did:ethr:${this.address}`
     if (conf.signer) {
@@ -60,7 +65,8 @@ class EthrDID {
 
   async lookupOwner (cache = true) {
     if (cache && this.owner) return this.owner
-    return this.registry.identityOwner(this.address)
+    const result = await this.registry.identityOwner(this.address)
+    return result['0']
   }
 
   async changeOwner (newOwner) {
