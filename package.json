@@ -49,12 +49,13 @@
   "dependencies": {
     "babel-plugin-module-resolver": "^3.1.1",
     "babel-runtime": "^6.26.0",
-    "did-jwt": "^0.0.7",
+    "buffer": "^5.1.0",
+    "did-jwt": "^0.0.8",
     "did-resolver": "^0.0.4",
     "ethjs-contract": "^0.1.9",
     "ethjs-provider-http": "^0.1.6",
     "ethjs-query": "^0.3.5",
-    "ethr-did-resolver": "^0.0.7"
+    "ethr-did-resolver": "^0.0.8"
   },
   "standard": {
     "ignore": [

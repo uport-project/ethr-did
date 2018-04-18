@@ -6,6 +6,7 @@ import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.j
 import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
 import { ec as EC } from 'elliptic'
 import { toEthereumAddress } from 'did-jwt/lib/Digest'
+import { Buffer } from 'buffer'
 const secp256k1 = new EC('secp256k1')
 
 export const REGISTRY = '0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61'
