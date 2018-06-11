@@ -132,7 +132,7 @@ By default an identity address is owned by itself. An identity owner is the addr
 
 Smart Contract's are not able to actually sign, so we would also need to add a Key Pair based address as a signing delegate. 
 
-Most web3 providers also do not let the user sign data that is compatible with JWT standards, which means that you would have to add a sepa
+Most web3 providers also do not let the user sign data that is compatible with JWT standards, which means that you would have to add a separate delegate key that you can use to sign JWTs on you behalf.
 
 All the following functions assume that the passed in web3 provider can sign ethereum transactions on behalf of the identity owner.
 
