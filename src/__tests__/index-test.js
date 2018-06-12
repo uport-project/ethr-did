@@ -420,7 +420,7 @@ describe('EthrDID', () => {
     describe('creating a signing Delegate', () => {
       let kp
       beforeAll(async () => {
-        kp = await ethrDid.createSigningDelegate()
+        kp = (await ethrDid.createSigningDelegate()).kp
       })
 
       it('resolves document', () => {
