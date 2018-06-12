@@ -37,7 +37,11 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 |`signer`| [Signing function](https://github.com/uport-project/did-jwt#signer-functions)| either `signer` or `privateKey` |
 |`privateKey`| Hex encoded private key | yes* |
 
-## Create ethr DID
+## Getting Started
+
+### Construct a New Identity
+
+#### Create ethr DID
 
 Creating an ethr DID is just creating an ethereum account.
 
@@ -50,7 +54,7 @@ const keypair = EthrDID.createKeyPair()
 const ethrDid = new EthrDID({...keypair, provider})
 ```
 
-## Using a web3 provider
+#### Use Existing Web3 Provider
 
 If you use a built in web3 provider like metamask you can use one of your metamask addresses as your identity.
 
@@ -68,7 +72,7 @@ await ethrDid.createSigningDelegate() // Adds a signing delegate valid for 1 day
 
 See section on adding delegates below.
 
-### Ethereum Web3 Wallet developers
+##### Ethereum Web3 Wallet developers
 
 You can easily add support for signing yourself by implementing a signer function with a clean GUI. See [DID-JWT Signer Functions](https://github.com/uport-project/did-jwt#signer-functions).
 
@@ -78,7 +82,9 @@ The signer function can be passed in as the signer option to the `EthrDID` const
 const ethrDid = new EthrDID({provider, address: web3.eth.defaultAccount, signer: wallet.jwtSigner})
 ```
 
-## Signing JWT's
+### Exchange Verifiable Data
+
+#### Signing a JWT
 
 A JWT is basically a JSON object that is signed so it can be verified as being created by a given DID.
 
@@ -95,7 +101,7 @@ const helloJWT = await ethrDid.signJWT({hello: 'world'})
 const verification = await ethrDid.signJWT({claims: {name: 'Joe Lubin'}})
 ```
 
-### Verifying a JWT
+#### Verifying a JWT
 
 You can easily verify a JWT sent to you using `verifyJWT()`
 
@@ -122,11 +128,11 @@ const {payload, issuer} = await verifyJWT(helloJWT)
 
 ```
 
-## Key Management
+### Manage Keys
 
 The ethr DID supports sophisticated key management, that can be used to change ownership of keys, delegate signing rights temporarily to another account and publish information about the identity in it's DID document.
 
-### Understanding Ownership of an Identity
+#### The Concept of Identity Ownership
 
 By default an identity address is owned by itself. An identity owner is the address able to make and publish changes to the identity. As this is a very important function, you could change the ownership to use a smart contract based address implementing recovery or multi-sig at some point in the future.
 
@@ -136,7 +142,7 @@ Most web3 providers also do not let the user sign data that is compatible with J
 
 All the following functions assume that the passed in web3 provider can sign ethereum transactions on behalf of the identity owner.
 
-### Change owner of ethr DID
+#### Changing an Owner
 
 You can change the owner of an ethr DID. This is useful in particular if you are changing identity provider and want to continue to use the same identity.
 
@@ -146,7 +152,7 @@ This creates an Ethereum Transaction so your current owner account needs suffice
 await ethrDid.changeOwner(web3.eth.accounts[2])
 ```
 
-### Add delegate signer
+#### Adding a Delegate Signer
 
 You can temporarily add a delegate signer to your DID. This is an address that can sign JWT's on your behalf. By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
 
