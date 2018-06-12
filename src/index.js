@@ -72,8 +72,9 @@ class EthrDID {
 
   async changeOwner (newOwner) {
     const owner = await this.lookupOwner()
-    await this.registry.changeOwner(this.address, newOwner, {from: owner})
+    const txHash = await this.registry.changeOwner(this.address, newOwner, {from: owner})
     this.owner = newOwner
+    return txHash
   }
 
   async addDelegate (delegate, options = {}) {
@@ -97,8 +98,8 @@ class EthrDID {
   async createSigningDelegate (delegateType = 'Secp256k1VerificationKey2018', expiresIn = 86400) {
     const kp = createKeyPair()
     this.signer = SimpleSigner(kp.privateKey)
-    await this.addDelegate(kp.address, {delegateType, expiresIn})
-    return kp
+    const txHash = await this.addDelegate(kp.address, {delegateType, expiresIn})
+    return {kp, txHash}
   }
 
   async signJWT (payload, expiresIn) {
