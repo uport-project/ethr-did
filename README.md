@@ -1,8 +1,17 @@
+---
+title: "Ethr DID"
+index: 8
+category: "reference"
+type: "content"
+---
+
 # ethr DID library
 
 This library is intended to use ethereum addresses as fully self managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs) and lets you easily create and manage keys for these identities.
 
 It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [did-jwt](https://github.com/uport-project/did-jwt) library.
+
+Ethr DID provides a scalable identity method for Ethereum addresses that gives any Ethereum address the ability to collect on-chain and off-chain data. Because Ethr DID allows any Ethereum keypair to become an identity, it is more scalable and privacy-preserving than smart contract-based identity methods, like our previous [Proxy Contract](https://github.com/uport-project/uport-identity/blob/develop/docs/reference/proxy.md).
 
 It supports the proposed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io).
 
@@ -29,8 +38,8 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 
 | key | description| required |
 |-----|------------|----------|
-|`address`|Ethereum addres representing Identity| yes |
-|`registry`| registy address (defaults to `0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61`) | no |
+|`address`|Ethereum address representing Identity| yes |
+|`registry`| registry address (defaults to `0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61`) | no |
 |`provider`| web3 provider | no |
 |`web3`| preconfigured web3 object | no |
 |`rpcUrl`| JSON-RPC endpoint url | no |
@@ -43,7 +52,7 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 
 ### Create ethr DID
 
-Creating an ethr DID is just creating an ethereum account.
+Creating an ethr DID is analogous to creating an ethereum account, which is an address on the ethereum blockchain controlled by a key pair.  Your ethr DID will be your key pair.
 
 We provide a convenience method to easily create one `EthrDID.createKeyPair()` which returns an object containing an ethereum address and privatekey.
 
@@ -54,7 +63,7 @@ const keypair = EthrDID.createKeyPair()
 const ethrDid = new EthrDID({...keypair, provider})
 ```
 
-### Use Existing Web3 Provider
+#### Use Existing Web3 Provider
 
 If you use a built in web3 provider like metamask you can use one of your metamask addresses as your identity.
 
@@ -62,7 +71,7 @@ If you use a built in web3 provider like metamask you can use one of your metama
 const ethrDid = new EthrDID({provider: web3.currentProvider, address: web3.eth.defaultAccount})
 ```
 
-Unfortunately web3 providers are not directly able to sign data in a way thats compliant with the JWT ES256K standard, so you will need to add a key pair as a signing delegate to be able to sign JWT's. 
+Unfortunately web3 providers are not directly able to sign data in a way that is compliant with the JWT ES256K standard.  This is a requirement for exchanging verifiable off-chain data, so you will need to add a key pair as a signing delegate to be able to sign JWT's.
 
 You can quickly add one like this:
 
@@ -130,13 +139,13 @@ const {payload, issuer} = await verifyJWT(helloJWT)
 
 ## Manage Keys
 
-The ethr DID supports sophisticated key management, that can be used to change ownership of keys, delegate signing rights temporarily to another account and publish information about the identity in it's DID document.
+The ethr DID supports general key management that can be used to change ownership of keys, delegate signing rights temporarily to another account and publish information about the identity in it's DID document.
 
 ### The Concept of Identity Ownership
 
 By default an identity address is owned by itself. An identity owner is the address able to make and publish changes to the identity. As this is a very important function, you could change the ownership to use a smart contract based address implementing recovery or multi-sig at some point in the future.
 
-Smart Contract's are not able to actually sign, so we would also need to add a Key Pair based address as a signing delegate. 
+Smart Contract's are not able to actually sign, so we would also need to add a Key Pair based address as a signing delegate.
 
 Most web3 providers also do not let the user sign data that is compatible with JWT standards, which means that you would have to add a separate delegate key that you can use to sign JWTs on you behalf.
 
@@ -146,7 +155,7 @@ All the following functions assume that the passed in web3 provider can sign eth
 
 You can change the owner of an ethr DID. This is useful in particular if you are changing identity provider and want to continue to use the same identity.
 
-This creates an Ethereum Transaction so your current owner account needs sufficent gas to be able to update it.
+This creates an Ethereum Transaction so your current owner account needs sufficient gas to be able to update it.
 
 ```js
 await ethrDid.changeOwner(web3.eth.accounts[2])
@@ -163,7 +172,7 @@ You can add different delegate types. The two types currently supported by [did-
 
 This is useful if you want to give a dapp permission to sign on your behalf.
 
-This creates an Ethereum Transaction so your current owner account needs sufficent gas to be able to update it.
+This creates an Ethereum Transaction so your current owner account needs sufficient gas to be able to update it.
 
 ```js
 await ethrDid.addDelegate(web3.eth.accounts[3])
@@ -182,7 +191,7 @@ The keypair object contains an `address` and `privateKey` attribute. Unless the 
 
 ## Set public attributes
 
-You can set various public attributes to your DID using `setAttribute(key, value, exp)`. These are not directly queriable within smart contracts. But they let you publish information to your DID document, such as public encryption keys etc.
+You can set various public attributes to your DID using `setAttribute(key, value, exp)`. These cannot be queried within smart contracts, but they let you publish information to your DID document such as public encryption keys, etc.
 
 By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
 
@@ -201,4 +210,3 @@ await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBa
 await ethrDid.setAttribute('did/service/HubService', 'https://hubs.uport.me', 10)
 
 ```
-
