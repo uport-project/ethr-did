@@ -3,6 +3,7 @@ title: "Ethr DID"
 index: 8
 category: "reference"
 type: "content"
+source: "https://github.com/uport-project/ethr-did/blob/develop/README.md"
 ---
 
 # ethr DID library
@@ -17,7 +18,7 @@ This particular DID method relies on the [ethr-did-registry](https://github.com/
 
 An example of a DID document:
 
-```json
+```
 {
   '@context': 'https://w3id.org/did/v1',
   id:'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74',
@@ -150,7 +151,7 @@ console.log(issuer)
 
 Example of a verified JWT:
 
-```json
+```
 { payload:
    { iat: 1525927517,
      aud: 'did:uport:2osnfJ4Wy7LBAm2nPBXire1WfQn75RrV6Ts',
