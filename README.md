@@ -8,7 +8,7 @@ source: "https://github.com/uport-project/ethr-did/blob/develop/README.md"
 
 # ethr DID library
 
-This library is intended to use ethereum addresses as fully self managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs) and lets you easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [did-jwt](https://github.com/uport-project/did-jwt) library.
+This library conforms to ERC 1056 and is intended to use ethereum addresses as fully self managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs) and lets you easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [did-jwt](https://github.com/uport-project/did-jwt) library.
 
 A DID is an Identifier that allows you to lookup a DID document that can be used to authenticate you and messages created by you.
 
@@ -137,19 +137,37 @@ const verification = await ethrDid.signJWT({claims: {name: 'Joe Lubin'}})
 
 ### Verifying a JWT
 
-You can easily verify a JWT using `verifyJWT()`.  When a JWT is verified the signature of the public key is compared to the known issuer of the DID, if it checks out the time it was issued and expiration times are checked for validity.
+You can easily verify a JWT using `verifyJWT()`.  When a JWT is verified the signature of the public key is compared to the known issuer of the DID.  If the signature matches the time it was issued and expiration times are checked for validity too.
+
+An unverified JWT will resemble:
+
+```
+{ header: { typ: 'JWT', alg: 'ES256K' },
+  payload:
+   { iat: 1525927517,
+     aud: 'did:uport:2osnfJ4Wy7LBAm2nPBXire1WfQn75RrV6Ts',
+     exp: 1557463421,
+     name: 'uPort Developer',
+     iss: 'did:uport:2osnfJ4Wy7LBAm2nPBXire1WfQn75RrV6Ts' },
+  signature: 'R7owbvNZoL4ti5ec-Kpktb0datw9Y-FshHsF5R7cXuKaiGlQz1dcOOXbXTOb-wg7-30CDfchFERR6Yc8F61ymw',
+  data: 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1MjU5Mjc1MTcsImF1ZCI6ImRpZDp1cG9ydDoyb3NuZko0V3k3TEJBbTJuUEJYaXJlMVdmUW43NVJyVjZUcyIsImV4cCI6MTU1NzQ2MzQyMSwibmFtZSI6InVQb3J0IERldmVsb3BlciIsImlzcyI6ImRpZDp1cG9ydDoyb3NuZko0V3k3TEJBbTJuUEJYaXJlMVdmUW43NVJyVjZUcyJ9' }
+```
+
+The `verifyJWT` function will take the above encoded JWT and validate it:
 
 ```js
-const {payload, issuer} = ethrDid.verifyJWT(helloJWT)
-// payload contains the javascript object that was signed together with a vew JWT specific attributes
-console.log(`hello: ${payload.hello}`)
+const jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1MzE4Mjk5NzUsImF1ZCI6ImRpZDpldGhyOltvYmplY3QgT2JqZWN0XSIsImV4cCI6MTk1NzQ2MzQyMSwibmFtZSI6InVQb3J0IERldmVsb3BlciIsImlzcyI6ImRpZDpldGhyOltvYmplY3QgT2JqZWN0XSJ9.Mralpbz1Lo7DRsrWX7EYvtKDr8NAJWnf0Mgt4y8Eyu-WDNEHmZFwsTw_vG09zYGCM38RHEPeRTftRIYL__WMPg'
+
+const {payload, issuer} = ethrDid.verifyJWT(jwt)
+// payload contains the javascript object that was signed together with a few JWT specific attributes
+console.log(`${payload}`)
 
 // Issuer contains the DID of the signing identity
 console.log(issuer)
 
 ```
 
-Example of a verified JWT:
+It's verified output looks like:
 
 ```
 { payload:
