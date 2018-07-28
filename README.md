@@ -1,6 +1,6 @@
 ---
 title: "Ethr DID"
-index: 0
+index: 5
 category: "reference"
 type: "content"
 source: "https://github.com/uport-project/ethr-did/blob/develop/README.md"
