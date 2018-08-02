@@ -16,22 +16,20 @@ Ethr DID provides a scalable identity method for Ethereum addresses that gives a
 
 This particular DID method relies on the [ethr-did-registry](https://github.com/uport-project/ethr-did-registry).  The Ethr-DID-Registry is a smart contract that facilitates public key resolution for off-chain (and on-chain) authentication.  It also facilitates key rotation, delegate assignment and revocation to allow 3rd party signers on a Key's behalf, as well as setting and revoking off-chain attribute data.  These interactions and events are used in aggregate to form a DID's DID document using the [ethr-did-resolver](https://github.com/uport-project/ethr-did-resolver).
 
-An example of a DID document:
+An example of a DID document resolved using the ethr-did-resolver:
 
 ```
 {
   '@context': 'https://w3id.org/did/v1',
-  id:'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74',
+  id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
   publicKey: [{
-    id: 'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74#owner',
-    type: 'Secp256k1VerificationKey2018',
-    owner: 'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74',
-    ethereumAddress: '0xf3beac30c498d9e26865f34fcaa57dbb935b0d74'
-  }],
+       id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner',
+       type: 'Secp256k1VerificationKey2018',
+       owner: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
+       ethereumAddress: '0xb9c5714089478a327f09197987f16f9e5d936e8a'}],
   authentication: [{
-    type: 'Secp256k1SignatureAuthentication2018',
-    publicKey: 'did:eth:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74#owner'
-  }]
+       type: 'Secp256k1SignatureAuthentication2018',
+       publicKey: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner'}]
 }
 ```
 
