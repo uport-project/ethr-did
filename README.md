@@ -19,16 +19,18 @@ This particular DID method relies on the [ethr-did-registry](https://github.com/
 An example of a DID document resolved using the ethr-did-resolver:
 
 ```
-{ '@context': 'https://w3id.org/did/v1',
+{
+  '@context': 'https://w3id.org/did/v1',
   id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
-  publicKey:
-   [ { id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner',
+  publicKey: [{
+       id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner',
        type: 'Secp256k1VerificationKey2018',
        owner: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
-       ethereumAddress: '0xb9c5714089478a327f09197987f16f9e5d936e8a' } ],
-  authentication:
-   [ { type: 'Secp256k1SignatureAuthentication2018',
-       publicKey: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner' } ] }
+       ethereumAddress: '0xb9c5714089478a327f09197987f16f9e5d936e8a'}],
+  authentication: [{
+       type: 'Secp256k1SignatureAuthentication2018',
+       publicKey: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#owner'}]
+}
 ```
 
 On-chain refers to something that is resolved with a transaction on a blockchain, while off-chain can be anything from temporary payment channels, to IPFS.
