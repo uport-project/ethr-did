@@ -1,15 +1,14 @@
 import HttpProvider from 'ethjs-provider-http'
 import Eth from 'ethjs-query'
-import abi from 'ethjs-abi'
 import EthContract from 'ethjs-contract'
 import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
 import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
 import { ec as EC } from 'elliptic'
 import { toEthereumAddress } from 'did-jwt/lib/Digest'
 import { Buffer } from 'buffer'
+import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
 const secp256k1 = new EC('secp256k1')
-
-export const REGISTRY = '0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61'
+const { Secp256k1VerificationKey2018 } = delegateTypes
 
 function configureProvider (conf = {}) {
   if (conf.provider) {
@@ -25,11 +24,11 @@ function attributeToHex (key, value) {
   if (Buffer.isBuffer(value)) {
     return `0x${value.toString('hex')}`
   }
-  const match = key.match(/^did\/(publicKey|authentication)\/\w+\/\w+(Base64)$/)
+  const match = key.match(/^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/)
   if (match) {
-    const encoding = match[2]
+    const encoding = match[6]
     // TODO add support for base58
-    if (encoding === 'Base64') {
+    if (encoding === 'base64') {
       return `0x${Buffer.from(value, 'base64').toString('hex')}`
     }
   }
@@ -78,24 +77,24 @@ class EthrDID {
   }
 
   async addDelegate (delegate, options = {}) {
-    const delegateType = options.delegateType || 'Secp256k1VerificationKey2018'
+    const delegateType = options.delegateType || Secp256k1VerificationKey2018
     const expiresIn = options.expiresIn || 86400
     const owner = await this.lookupOwner()
     return this.registry.addDelegate(this.address, delegateType, delegate, expiresIn, {from: owner})
   }
 
-  async revokeDelegate (delegate, delegateType = 'Secp256k1VerificationKey2018') {
+  async revokeDelegate (delegate, delegateType = Secp256k1VerificationKey2018) {
     const owner = await this.lookupOwner()
     return this.registry.revokeDelegate(this.address, delegateType, delegate, {from: owner})
   }
 
   async setAttribute (key, value, expiresIn = 86400) {
     const owner = await this.lookupOwner()
-    return this.registry.setAttribute(this.address, key, attributeToHex(key, value), expiresIn, {from: owner})
+    return this.registry.setAttribute(this.address, stringToBytes32(key), attributeToHex(key, value), expiresIn, {from: owner})
   }
 
   // Create a temporary signing delegate able to sign JWT on behalf of identity
-  async createSigningDelegate (delegateType = 'Secp256k1VerificationKey2018', expiresIn = 86400) {
+  async createSigningDelegate (delegateType = Secp256k1VerificationKey2018, expiresIn = 86400) {
     const kp = createKeyPair()
     this.signer = SimpleSigner(kp.privateKey)
     const txHash = await this.addDelegate(kp.address, {delegateType, expiresIn})

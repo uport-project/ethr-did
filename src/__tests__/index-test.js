@@ -1,5 +1,5 @@
 import resolve from 'did-resolver'
-import register from 'ethr-did-resolver'
+import register, { delegateTypes } from 'ethr-did-resolver'
 import EthrDID from '../index.js'
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
@@ -7,8 +7,10 @@ import Web3 from 'web3'
 import ganache from 'ganache-cli'
 import { verifyJWT } from 'did-jwt'
 
+const { Secp256k1SignatureAuthentication2018 } = delegateTypes
+
 function sleep (seconds) {
-  return new Promise((resolve, reject) => setTimeout(resolve, seconds * 1000))
+  return new Promise(resolve => setTimeout(resolve, seconds * 1000))
 }
 
 describe('EthrDID', () => {
@@ -111,7 +113,7 @@ describe('EthrDID', () => {
 
       describe('add auth delegate', () => {
         beforeAll(async () => {
-          await ethrDid.addDelegate(delegate2, {delegateType: 'Secp256k1SignatureAuthentication2018', expiresIn: 10})
+          await ethrDid.addDelegate(delegate2, {delegateType: Secp256k1SignatureAuthentication2018, expiresIn: 10})
         })
 
         it('resolves document', () => {
@@ -178,7 +180,8 @@ describe('EthrDID', () => {
 
       describe('revokes delegate', () => {
         beforeAll(async () => {
-          await ethrDid.revokeDelegate(delegate2, 'Secp256k1SignatureAuthentication2018')
+          await ethrDid.revokeDelegate(delegate2, Secp256k1SignatureAuthentication2018)
+          await sleep(1)
         })
 
         it('resolves document', () => {
@@ -201,7 +204,7 @@ describe('EthrDID', () => {
 
       describe('re-add auth delegate', () => {
         beforeAll(async () => {
-          await ethrDid.addDelegate(delegate2, {delegateType: 'Secp256k1SignatureAuthentication2018'})
+          await ethrDid.addDelegate(delegate2, {delegateType: Secp256k1SignatureAuthentication2018})
         })
 
         it('resolves document', () => {
@@ -235,7 +238,7 @@ describe('EthrDID', () => {
       describe('publicKey', () => {
         describe('Secp256k1VerificationKey2018', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/publicKey/Secp256k1VerificationKey2018', '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71', 10)
+            await ethrDid.setAttribute('did/pub/Secp256k1/veriKey', '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71', 10)
           })
 
           it('resolves document', () => {
@@ -271,7 +274,7 @@ describe('EthrDID', () => {
 
         describe('Base64 Encoded Key', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 10)
+            await ethrDid.setAttribute('did/pub/Ed25519/veriKey/base64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 10)
           })
 
           it('resolves document', () => {
@@ -312,7 +315,7 @@ describe('EthrDID', () => {
 
         describe('Use Buffer', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'), 10)
+            await ethrDid.setAttribute('did/pub/Ed25519/veriKey/base64', Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'), 10)
           })
 
           it('resolves document', () => {
@@ -360,7 +363,7 @@ describe('EthrDID', () => {
       describe('service endpoints', () => {
         describe('HubService', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/service/HubService', 'https://hubs.uport.me', 10)
+            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 10)
           })
           it('resolves document', () => {
             return expect(resolve(did)).resolves.toEqual({
