@@ -246,8 +246,8 @@ You can temporarily add a delegate signer to your DID. This is an address that c
 
 You can add different delegate types. The two types currently supported by [did-jwt](https://github.com/uport-project/did-jwt) are:
 
-- `Secp256k1VerificationKey2018` *Default* for signing general purpose JWTs
-- `Secp256k1SignatureAuthentication2018` A signer who is able to interactively authenticate as the DID's owner (log in)
+- `veriKey` Which adds a `Secp256k1VerificationKey2018` (*Default* for signing general purpose JWTs)
+- `sigAuth` Which adds a `Secp256k1SignatureAuthentication2018` signer who is able to interactively authenticate as the DID's owner (log in)
 
 This is useful if you want to give a dapp permission to sign on your behalf.
 
@@ -257,35 +257,31 @@ This creates an Ethereum Transaction so your current owner account needs suffici
 await ethrDid.addDelegate(web3.eth.accounts[3])
 
 // Override defaults
-await ethrDid.addDelegate(web3.eth.accounts[3], {expiresIn: 360, delegateType: 'Secp256k1SignatureAuthentication2018'})
+await ethrDid.addDelegate(web3.eth.accounts[3], {expiresIn: 360, delegateType: 'sigAuth'})
 ```
 
 There also exists a convenience function that creates a new delegate keypair, configures a signer with it and finally calls the above `addDelegate()` function.
 
 ```js
-const keypair = await ethrDid.createSigningDelegate(`Secp256k1SignatureAuthentication2018`, 360)
+const keypair = await ethrDid.createSigningDelegate('sigAuth', 360)
 ```
 
 The keypair object contains an `address` and `privateKey` attribute. Unless the key is just added temporarily, store it somewhere safe.
 
 ## Set public attributes
 
-You can set various public attributes to your DID using `setAttribute(key, value, exp)`. These cannot be queried within smart contracts, but they let you publish information to your DID document such as public encryption keys, etc.
+You can set various public attributes to your DID using `setAttribute(key, value, expiresIn)`. These cannot be queried within smart contracts, but they let you publish information to your DID document such as public encryption keys, etc.
+
+The following attribute `key` formats are currently support:
+
+- `did/pub/(Secp256k1|Rsa|Ed25519)/(veriKey|sigAuth)/(hex|base64)` for adding a public key
+- `did/svc/[ServiceName]` for adding a service
 
 By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
 
-You can add different delegate types. The two types currently supported by [did-jwt](https://github.com/uport-project/did-jwt).
-
-- `Secp256k1VerificationKey2018` *Default* for signing general purpose JWTs
-- `Secp256k1SignatureAuthentication2018` A signer who is able to interactively authenticate as the DID's owner (log in)
-
-This is useful if you want to give a dapp permission to sign on your behalf.
-
-This creates an Ethereum Transaction so your current owner account needs sufficent gas to be able to update it.
-
 ```js
-await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 31104000)
-await ethrDid.setAttribute('did/publicKey/Ed25519VerificationKey2018/publicKeyBase64', Buffer.from('Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 'base64'), 31104000)
-await ethrDid.setAttribute('did/service/HubService', 'https://hubs.uport.me', 10)
+await ethrDid.setAttribute('did/pub/Ed25519/veriKey/base64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 31104000)
+await ethrDid.setAttribute('did/pub/Ed25519/veriKey/base64', Buffer.from('Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 'base64'), 31104000)
+await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 10)
 
 ```

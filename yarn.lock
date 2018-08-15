@@ -2481,13 +2481,13 @@ ethjs-util@0.1.3:
     is-hex-prefixed "1.0.0"
     strip-hex-prefix "1.0.0"
 
-ethr-did-registry@^0.0.2:
-  version "0.0.2"
-  resolved "https://registry.yarnpkg.com/ethr-did-registry/-/ethr-did-registry-0.0.2.tgz#61746bb70c1ad64e86e424fb32ade4a620f7a180"
+ethr-did-registry@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/ethr-did-registry/-/ethr-did-registry-0.0.3.tgz#f363d2c73cb9572b57bd7a5c9c90c88485feceb5"
 
-ethr-did-resolver@^0.0.8:
-  version "0.0.8"
-  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-0.0.8.tgz#1aa279962744291be3c1bd78903a12c420a40b1f"
+ethr-did-resolver@^0.1.1:
+  version "0.1.1"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-0.1.1.tgz#30ed9b86eec7e44f8bb538c7f89aabe9130e82ae"
   dependencies:
     babel-plugin-module-resolver "^3.1.1"
     babel-runtime "^6.26.0"
@@ -2497,7 +2497,7 @@ ethr-did-resolver@^0.0.8:
     ethjs-contract "^0.1.9"
     ethjs-provider-http "^0.1.6"
     ethjs-query "^0.3.5"
-    ethr-did-registry "^0.0.2"
+    ethr-did-registry "^0.0.3"
 
 eventemitter3@1.1.1:
   version "1.1.1"
