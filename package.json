@@ -1,6 +1,6 @@
 {
   "name": "ethr-did",
-  "version": "0.0.5",
+  "version": "1.0.0",
   "description": "Create and manage DID documents for ethereum addresses",
   "main": "lib/index.js",
   "repository": {
@@ -36,7 +36,7 @@
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-runtime": "^6.23.0",
     "babel-preset-env": "^1.6.1",
-    "ethr-did-registry": "^0.0.2",
+    "ethr-did-registry": "^0.0.3",
     "ganache-cli": "^6.1.0",
     "jest": "^22.4.3",
     "regenerator-runtime": "^0.11.1",
@@ -55,7 +55,7 @@
     "ethjs-contract": "^0.1.9",
     "ethjs-provider-http": "^0.1.6",
     "ethjs-query": "^0.3.5",
-    "ethr-did-resolver": "^0.0.8"
+    "ethr-did-resolver": "^0.1.1"
   },
   "standard": {
     "ignore": [
