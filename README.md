@@ -104,6 +104,24 @@ await ethrDid.createSigningDelegate() // Adds a signing delegate valid for 1 day
 
 See section on adding delegates below.
 
+**Note when using `HttpProvider` from `web3.js v1.0.0`:** There is an [issue](https://github.com/ethereum/web3.js/issues/1119) where the `sendAsync` function is undefined.  In order to avoid errors resulting from this, please configure `EthrDID` using a different HTTP provider such as the one from `ethjs`:
+
+```js
+import HttpProvider from 'ethjs-provider-http'
+const provider = new HttpProvider('http://localhost:8545')
+const ethrDid = new EthrDID({provider, address, registry})
+```
+
+or manually assign `sendAsync` before creating an instance of the `web3` provider
+
+```js
+import Web3 from 'web3'
+Web3.providers.HttpProvider.prototype.sendAsync = Web3.providers.HttpProvider.prototype.send
+const provider = new Web3.providers.HttpProvider('http://localhost:8545')
+const ethrDid = new EthrDID({provider, address, registry})
+```
+
+
 #### Ethereum Web3 Wallet developers
 
 You can easily add support for signing yourself by implementing a signer function with a clean GUI. See [DID-JWT Signer Functions](https://github.com/uport-project/did-jwt#signer-functions).
