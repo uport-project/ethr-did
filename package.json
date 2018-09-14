@@ -5,7 +5,7 @@
   "main": "lib/index.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/uport-project/ethr-did.git"
+    "url": "https://github.com/riusricardo/ethr-did.git"
   },
   "files": [
     "dist",
