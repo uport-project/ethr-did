@@ -1,8 +1,8 @@
 ---
 title: "Ethr DID"
 index: 5
-category: "reference"
-type: "content"
+category: "ethr-did"
+type: "reference"
 source: "https://github.com/uport-project/ethr-did/blob/develop/README.md"
 ---
 
