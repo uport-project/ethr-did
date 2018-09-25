@@ -4,7 +4,7 @@ Ethr-DID
 A Scalable Identity Method for Ethereum Addresses
 -------------------------------------------------
 
-uPort is a self-sovereign digital identity platform---anchored on the Ethereum blockchain. The uPort technology primarily consists of smart contracts, developer libraries, and a mobile app. uPort identities are fully owned and controlled by the creator---independent of centralized third-parties for creation, control or validation. For more information visit the overview page.
+uPort is a self-sovereign digital identity platform---anchored on the Ethereum blockchain. The uPort technology primarily consists of smart contracts, developer libraries, and a mobile app. uPort identities are fully owned and controlled by the creator---independent of centralized third-parties for creation, control or validation.
 
 Using the Ethr-DID library, you can:
 
