@@ -6,17 +6,17 @@ type: "reference"
 source: "https://github.com/uport-project/ethr-did/blob/develop/README.md"
 ---
 
-# ethr DID library
+# Ethr-DID Library
 
-This library conforms to ERC 1056 and is intended to use ethereum addresses as fully self managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs) and lets you easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [did-jwt](https://github.com/uport-project/did-jwt) library.
+This library conforms to ERC-1056 and is intended to use Ethereum addresses as fully self-managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs), it allows you to easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [DID-JWT](https://github.com/uport-project/did-jwt) library.
 
 A DID is an Identifier that allows you to lookup a DID document that can be used to authenticate you and messages created by you.
 
-Ethr DID provides a scalable identity method for Ethereum addresses that gives any Ethereum address the ability to collect on-chain and off-chain data. Because Ethr DID allows any Ethereum keypair to become an identity, it is more scalable and privacy-preserving than smart contract-based identity methods, like our previous [Proxy Contract](https://github.com/uport-project/uport-identity/blob/develop/docs/reference/proxy.md).
+Ethr-DID provides a scalable identity method for Ethereum addresses that gives any Ethereum address the ability to collect on-chain and off-chain data. Because Ethr-DID allows any Ethereum key pair to become an identity, it is more scalable and privacy-preserving than smart contract based identity methods, like our previous [Proxy Contract](https://github.com/uport-project/uport-identity/blob/develop/docs/reference/proxy.md).
 
-This particular DID method relies on the [ethr-did-registry](https://github.com/uport-project/ethr-did-registry).  The Ethr-DID-Registry is a smart contract that facilitates public key resolution for off-chain (and on-chain) authentication.  It also facilitates key rotation, delegate assignment and revocation to allow 3rd party signers on a Key's behalf, as well as setting and revoking off-chain attribute data.  These interactions and events are used in aggregate to form a DID's DID document using the [ethr-did-resolver](https://github.com/uport-project/ethr-did-resolver).
+This particular DID method relies on the [Ethr-Did-Registry](https://github.com/uport-project/ethr-did-registry). The Ethr-DID-Registry is a smart contract that facilitates public key resolution for off-chain (and on-chain) authentication. It also facilitates key rotation, delegate assignment and revocation to allow 3rd party signers on a key's behalf, as well as setting and revoking off-chain attribute data. These interactions and events are used in aggregate to form a DID's DID document using the [Ethr-Did-Resolver](https://github.com/uport-project/ethr-did-resolver).
 
-An example of a DID document resolved using the ethr-did-resolver:
+An example of a DID document resolved using the Ethr-Did-Resolver:
 
 ```
 {
@@ -33,18 +33,18 @@ An example of a DID document resolved using the ethr-did-resolver:
 }
 ```
 
-On-chain refers to something that is resolved with a transaction on a blockchain, while off-chain can be anything from temporary payment channels, to IPFS.
+On-chain refers to something that is resolved with a transaction on a blockchain, while off-chain can refer to anything from temporary payment channels to IPFS.
 
 It supports the proposed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/) spec from the [W3C Credentials Community Group](https://w3c-ccg.github.io).
 
 
-## DID method
+## DID Method
 
-A "DID method" is a specific implementation of a DID scheme that is identified by a `method name`.  In this case, the method name is `ethr`, and the method identifier is an ethereum address.
+A "DID method" is a specific implementation of a DID scheme that is identified by a `method name`. In this case, the method name is `ethr`, and the method identifier is an Ethereum address.
 
 To encode a DID for an Ethereum address, simply prepend `did:ethr:`
 
-eg:
+For example:
 
 `did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74`
 
@@ -73,11 +73,11 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 
 ## Construct a New Identity
 
-### Create ethr DID
+### Create Ethr-DID
 
-Creating an ethr DID is analogous to creating an ethereum account, which is an address on the ethereum blockchain controlled by a key pair.  Your ethr DID will be your key pair.
+Creating an Ethr-DID is analogous to creating an Ethereum account, which is an address on the Ethereum blockchain controlled by a key pair. Your Ethr-DID will be your key pair.
 
-We provide a convenience method to easily create one `EthrDID.createKeyPair()` which returns an object containing an ethereum address and privatekey.
+We provide a convenient method to easily create one `EthrDID.createKeyPair()` which returns an object containing an Ethereum address and private key.
 
 ```js
 const keypair = EthrDID.createKeyPair()
@@ -88,13 +88,13 @@ const ethrDid = new EthrDID({...keypair, provider})
 
 #### Use Existing Web3 Provider
 
-If you use a built in web3 provider like metamask you can use one of your metamask addresses as your identity.
+If you use a built-in web3 provider like metamask you can use one of your metamask addresses as your identity.
 
 ```js
 const ethrDid = new EthrDID({provider: web3.currentProvider, address: web3.eth.defaultAccount})
 ```
 
-Unfortunately web3 providers are not directly able to sign data in a way that is compliant with the JWT ES256K standard.  This is a requirement for exchanging verifiable off-chain data, so you will need to add a key pair as a signing delegate to be able to sign JWT's.
+Unfortunately, web3 providers are not directly able to sign data in a way that is compliant with the JWT-ES256K standard. This is a requirement for exchanging verifiable off-chain data, so you will need to add a key pair as a signing delegate to be able to sign JWT's.
 
 You can quickly add one like this:
 
@@ -104,7 +104,7 @@ await ethrDid.createSigningDelegate() // Adds a signing delegate valid for 1 day
 
 See section on adding delegates below.
 
-**Note when using `HttpProvider` from `web3.js v1.0.0`:** There is an [issue](https://github.com/ethereum/web3.js/issues/1119) where the `sendAsync` function is undefined.  In order to avoid errors resulting from this, please configure `EthrDID` using a different HTTP provider such as the one from `ethjs`:
+**Note when using `HttpProvider` from `web3.js v1.0.0`:** There is an [issue](https://github.com/ethereum/web3.js/issues/1119) where the `sendAsync` function is undefined. In order to avoid errors resulting from this, please configure `EthrDID` using a different HTTP provider such as the one from `ethjs`:
 
 ```js
 import HttpProvider from 'ethjs-provider-http'
@@ -112,7 +112,7 @@ const provider = new HttpProvider('http://localhost:8545')
 const ethrDid = new EthrDID({provider, address, registry})
 ```
 
-or manually assign `sendAsync` before creating an instance of the `web3` provider
+or manually assign `sendAsync` before creating an instance of the `web3` provider.
 
 ```js
 import Web3 from 'web3'
@@ -122,7 +122,7 @@ const ethrDid = new EthrDID({provider, address, registry})
 ```
 
 
-#### Ethereum Web3 Wallet developers
+#### Ethereum Web3 Wallet Developers
 
 You can easily add support for signing yourself by implementing a signer function with a clean GUI. See [DID-JWT Signer Functions](https://github.com/uport-project/did-jwt#signer-functions).
 
@@ -136,7 +136,7 @@ const ethrDid = new EthrDID({provider, address: web3.eth.defaultAccount, signer:
 
 ### Signing a JWT
 
-A JWT is basically a JSON object that is signed so it can be verified as being created by a given DID.
+A JWT is a JSON object that is signed so it can be verified as being created by a given DID.
 
 A JWT looks like this:
 
@@ -147,13 +147,13 @@ Use any JSON compatible Javascript Object as a payload to sign.
 ```js
 const helloJWT = await ethrDid.signJWT({hello: 'world'})
 
-// A uPort compatible Verification
+// A uPort compatible verification
 const verification = await ethrDid.signJWT({claims: {name: 'Joe Lubin'}})
 ```
 
 ### Verifying a JWT
 
-You can easily verify a JWT using `verifyJWT()`.  When a JWT is verified the signature of the public key is compared to the known issuer of the DID.  If the signature matches the time it was issued and expiration times are checked for validity too.
+You can easily verify a JWT using `verifyJWT()`. When a JWT is verified, the signature of the public key is compared to the known issuer of the DID. If the signature matches the time it was issued and expiration times are checked for validity too.
 
 An unverified JWT will resemble:
 
@@ -175,7 +175,7 @@ The `verifyJWT` function will take the above encoded JWT and validate it:
 const jwt = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJFUzI1NksifQ.eyJpYXQiOjE1MzE4Mjk5NzUsImF1ZCI6ImRpZDpldGhyOltvYmplY3QgT2JqZWN0XSIsImV4cCI6MTk1NzQ2MzQyMSwibmFtZSI6InVQb3J0IERldmVsb3BlciIsImlzcyI6ImRpZDpldGhyOltvYmplY3QgT2JqZWN0XSJ9.Mralpbz1Lo7DRsrWX7EYvtKDr8NAJWnf0Mgt4y8Eyu-WDNEHmZFwsTw_vG09zYGCM38RHEPeRTftRIYL__WMPg'
 
 const {payload, issuer} = ethrDid.verifyJWT(jwt)
-// payload contains the javascript object that was signed together with a few JWT specific attributes
+// payload contains the JavaScript object that was signed together with a few JWT specific attributes
 console.log(`${payload}`)
 
 // Issuer contains the DID of the signing identity
@@ -183,7 +183,7 @@ console.log(issuer)
 
 ```
 
-It's verified output looks like:
+Its verified output looks like:
 
 ```
 { payload:
@@ -226,33 +226,33 @@ const {payload, issuer} = await verifyJWT(helloJWT)
 
 ## Manage Keys
 
-The ethr DID supports general key management that can be used to change ownership of keys, delegate signing rights temporarily to another account and publish information about the identity in it's DID document.
+The Ethr-DID supports general key management that can be used to change ownership of keys, delegate signing rights temporarily to another account, and publish information about the identity in its DID document.
 
-Currently the following public key types are supported:
+Currently, the following public key types are supported:
 - `Secp256k1SignatureVerificationKey2018`
   - with `publicKeyHex` encoding and `ES256K`, `ES256K-R` algorithm's.
 - `Secp256k1VerificationKey2018` is also supported1
   - with `publicKeyHex` encoding and `ES256K`, `ES256K-R` algorithm's.
   - or with `ethereumAddress` encoding but only with the `ES256K-R` algorithm.
 
-Private keys (signing keys), also used for account recovery, are hex encoded using [`secp256k1`](https://en.bitcoin.it/wiki/Secp256k1).
+Private keys (signing keys), also used for account recovery are hex encoded using [`secp256k1`](https://en.bitcoin.it/wiki/Secp256k1).
 
 
 ### The Concept of Identity Ownership
 
-By default an identity address is owned by itself. An identity owner is the address able to make and publish changes to the identity. As this is a very important function, you could change the ownership to use a smart contract based address implementing recovery or multi-sig at some point in the future.
+By default, an identity address is owned by itself. An identity owner is an address that is able to make and publish changes to the identity. As this is a very important function, you could change the ownership to use a smart contract based address implementing recovery or multi-sig at some point in the future.
 
-Smart Contract's are not able to actually sign, so we would also need to add a Key Pair based address as a signing delegate.
+Smart contracts are not able to sign, so you would also need to add a key pair based address as a signing delegate.
 
-Most web3 providers also do not let the user sign data that is compatible with JWT standards, which means that you would have to add a separate delegate key that you can use to sign JWTs on you behalf.
+Most web3 providers also don't allow users to sign data that is compatible with JWT standards, which means that you would have to add a separate delegate key that you can use to sign JWTs on your behalf.
 
-All the following functions assume that the passed in web3 provider can sign ethereum transactions on behalf of the identity owner.
+All the following functions assume that the passed in web3 provider can sign Ethereum transactions on behalf of the identity owner.
 
 ### Changing an Owner
 
-You can change the owner of an ethr DID. This is useful in particular if you are changing identity provider and want to continue to use the same identity.
+You can change the owner of an Ethr-DID. This is useful in particular if you are changing an identity provider and want to continue to use the same identity.
 
-This creates an Ethereum Transaction, which will also broadcast a DIDOwnerChanged event.  Make sure that the current account owner has sufficient gas to be able to update it.
+This creates an Ethereum transaction, which will also broadcast a DIDOwnerChanged event. Make sure that the current account owner has sufficient gas to be able to update it.
 
 ```js
 await ethrDid.changeOwner(web3.eth.accounts[2])
@@ -260,16 +260,16 @@ await ethrDid.changeOwner(web3.eth.accounts[2])
 
 ### Adding a Delegate Signer
 
-You can temporarily add a delegate signer to your DID. This is an address that can sign JWT's on your behalf. By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
+You can temporarily add a delegate signer to your DID. This is an address that can sign JWTs on your behalf. By adding an `expiresIn` value, it will automatically expire after a certain time. It will by default expire after a day.
 
-You can add different delegate types. The two types currently supported by [did-jwt](https://github.com/uport-project/did-jwt) are:
+You can add different delegate types. The two types currently supported by [DID-JWT](https://github.com/uport-project/did-jwt) are:
 
 - `veriKey` Which adds a `Secp256k1VerificationKey2018` (*Default* for signing general purpose JWTs)
 - `sigAuth` Which adds a `Secp256k1SignatureAuthentication2018` signer who is able to interactively authenticate as the DID's owner (log in)
 
-This is useful if you want to give a dapp permission to sign on your behalf.
+This is useful if you want to give a dApp the permission to sign on your behalf.
 
-This creates an Ethereum Transaction so your current owner account needs sufficient gas to be able to update it.
+This creates an Ethereum transaction, so your current owner account needs sufficient gas to be able to update it.
 
 ```js
 await ethrDid.addDelegate(web3.eth.accounts[3])
@@ -278,24 +278,24 @@ await ethrDid.addDelegate(web3.eth.accounts[3])
 await ethrDid.addDelegate(web3.eth.accounts[3], {expiresIn: 360, delegateType: 'sigAuth'})
 ```
 
-There also exists a convenience function that creates a new delegate keypair, configures a signer with it and finally calls the above `addDelegate()` function.
+There also exists a convenience function that creates a new delegate key pair, configures a signer with it and finally calls the above `addDelegate()` function.
 
 ```js
 const keypair = await ethrDid.createSigningDelegate('sigAuth', 360)
 ```
 
-The keypair object contains an `address` and `privateKey` attribute. Unless the key is just added temporarily, store it somewhere safe.
+The key pair object contains an `address` and `privateKey` attribute. Unless the key is just added temporarily, store it somewhere safe.
 
-## Set public attributes
+## Set Public Attributes
 
-You can set various public attributes to your DID using `setAttribute(key, value, expiresIn)`. These cannot be queried within smart contracts, but they let you publish information to your DID document such as public encryption keys, etc.
+You can set various public attributes to your DID using `setAttribute(key, value, expiresIn)`. These cannot be queried within smart contracts, but they let you publish information to your DID document such as public encryption keys.
 
 The following attribute `key` formats are currently support:
 
 - `did/pub/(Secp256k1|Rsa|Ed25519)/(veriKey|sigAuth)/(hex|base64)` for adding a public key
 - `did/svc/[ServiceName]` for adding a service
 
-By adding an `expiresIn` value it will automatically expire after a certain time. It will by default expire after 1 day.
+By adding an `expiresIn` value, it will automatically expire after a certain time. By default, it will expire after a day.
 
 ```js
 await ethrDid.setAttribute('did/pub/Ed25519/veriKey/base64', 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx', 31104000)
