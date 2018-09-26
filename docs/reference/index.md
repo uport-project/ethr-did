@@ -42,6 +42,7 @@ A "DID method" is a specific implementation of a DID scheme that is identified b
 
 To encode a DID for an Ethereum address, simply prepend `did:ethr:`
 
+
 For example:
 
 `did:ethr:0xf3beac30c498d9e26865f34fcaa57dbb935b0d74`
