@@ -1,13 +1,15 @@
-# Ethr-DID Library
+
 
 [![npm](https://img.shields.io/npm/dt/ethr-did.svg)](https://www.npmjs.com/package/ethr-did)
 [![npm](https://img.shields.io/npm/v/ethr-did.svg)](https://www.npmjs.com/package/ethr-did)
 [![Join the chat at](https://img.shields.io/badge/Riot-Join%20chat-green.svg)](https://chat.uport.me/#/login)
 [![Twitter Follow](https://img.shields.io/twitter/follow/uport_me.svg?style=social&label=Follow)](https://twitter.com/uport_me)
 
-[Getting Started](/docs/guides/index.md) 
+# Ethr-DID Library
 
-This library conforms to ERC-1056 and is intended to use Ethereum addresses as fully self-managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs), it allows you to easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [DID-JWT](https://github.com/uport-project/did-jwt) library.
+[DID Specification](https://w3c-ccg.github.io/did-spec/) | [ERC-1056](https://github.com/ethereum/EIPs/issues/1056) | [Getting Started](/docs/guides/index.md)
+
+This library conforms to [ERC-1056](https://github.com/ethereum/EIPs/issues/1056) and is intended to use Ethereum addresses as fully self-managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs), it allows you to easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [DID-JWT](https://github.com/uport-project/did-jwt) library.
 
 A DID is an Identifier that allows you to lookup a DID document that can be used to authenticate you and messages created by you.
 
