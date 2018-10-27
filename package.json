@@ -54,7 +54,6 @@
     "jest": "^22.4.3",
     "prettier": "^1.14.3",
     "regenerator-runtime": "^0.11.1",
-    "standard": "^11.0.0",
     "truffle-contract": "^3.0.5",
     "web3": "^1.0.0-beta.34",
     "webpack": "^4.5.0",
@@ -70,20 +69,5 @@
     "ethjs-provider-http": "^0.1.6",
     "ethjs-query": "^0.3.5",
     "ethr-did-resolver": "^0.1.1"
-  },
-  "standard": {
-    "ignore": [
-      "lib/**"
-    ],
-    "globals": [
-      "it",
-      "describe",
-      "expect",
-      "jest",
-      "beforeAll",
-      "beforeEach",
-      "afterAll",
-      "afterEach"
-    ]
   }
 }
