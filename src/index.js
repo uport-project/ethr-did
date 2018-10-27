@@ -10,7 +10,7 @@ import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
 const secp256k1 = new EC('secp256k1')
 const { Secp256k1VerificationKey2018 } = delegateTypes
 
-function configureProvider (conf = {}) {
+function configureProvider(conf = {}) {
   if (conf.provider) {
     return conf.provider
   } else if (conf.web3) {
@@ -20,7 +20,7 @@ function configureProvider (conf = {}) {
   }
 }
 
-function attributeToHex (key, value) {
+function attributeToHex(key, value) {
   if (Buffer.isBuffer(value)) {
     return `0x${value.toString('hex')}`
   }
@@ -38,16 +38,16 @@ function attributeToHex (key, value) {
   return `0x${Buffer.from(value).toString('hex')}`
 }
 
-export function createKeyPair () {
+export function createKeyPair() {
   const kp = secp256k1.genKeyPair()
   const publicKey = kp.getPublic('hex')
   const privateKey = kp.getPrivate('hex')
   const address = toEthereumAddress(publicKey)
-  return {address, privateKey}
+  return { address, privateKey }
 }
 
 class EthrDID {
-  constructor (conf = {}) {
+  constructor(conf = {}) {
     const provider = configureProvider(conf)
     const eth = new Eth(provider)
     const registryAddress = conf.registry || REGISTRY
@@ -63,53 +63,55 @@ class EthrDID {
     }
   }
 
-  async lookupOwner (cache = true) {
+  async lookupOwner(cache = true) {
     if (cache && this.owner) return this.owner
     const result = await this.registry.identityOwner(this.address)
     return result['0']
   }
 
-  async changeOwner (newOwner) {
+  async changeOwner(newOwner) {
     const owner = await this.lookupOwner()
-    const txHash = await this.registry.changeOwner(this.address, newOwner, {from: owner})
+    const txHash = await this.registry.changeOwner(this.address, newOwner, { from: owner })
     this.owner = newOwner
     return txHash
   }
 
-  async addDelegate (delegate, options = {}) {
+  async addDelegate(delegate, options = {}) {
     const delegateType = options.delegateType || Secp256k1VerificationKey2018
     const expiresIn = options.expiresIn || 86400
     const owner = await this.lookupOwner()
-    return this.registry.addDelegate(this.address, delegateType, delegate, expiresIn, {from: owner})
+    return this.registry.addDelegate(this.address, delegateType, delegate, expiresIn, { from: owner })
   }
 
-  async revokeDelegate (delegate, delegateType = Secp256k1VerificationKey2018) {
+  async revokeDelegate(delegate, delegateType = Secp256k1VerificationKey2018) {
     const owner = await this.lookupOwner()
-    return this.registry.revokeDelegate(this.address, delegateType, delegate, {from: owner})
+    return this.registry.revokeDelegate(this.address, delegateType, delegate, { from: owner })
   }
 
-  async setAttribute (key, value, expiresIn = 86400) {
+  async setAttribute(key, value, expiresIn = 86400) {
     const owner = await this.lookupOwner()
-    return this.registry.setAttribute(this.address, stringToBytes32(key), attributeToHex(key, value), expiresIn, {from: owner})
+    return this.registry.setAttribute(this.address, stringToBytes32(key), attributeToHex(key, value), expiresIn, {
+      from: owner,
+    })
   }
 
   // Create a temporary signing delegate able to sign JWT on behalf of identity
-  async createSigningDelegate (delegateType = Secp256k1VerificationKey2018, expiresIn = 86400) {
+  async createSigningDelegate(delegateType = Secp256k1VerificationKey2018, expiresIn = 86400) {
     const kp = createKeyPair()
     this.signer = SimpleSigner(kp.privateKey)
-    const txHash = await this.addDelegate(kp.address, {delegateType, expiresIn})
-    return {kp, txHash}
+    const txHash = await this.addDelegate(kp.address, { delegateType, expiresIn })
+    return { kp, txHash }
   }
 
-  async signJWT (payload, expiresIn) {
+  async signJWT(payload, expiresIn) {
     if (typeof this.signer !== 'function') throw new Error('No signer configured')
-    const options = {signer: this.signer, alg: 'ES256K-R', issuer: this.did}
+    const options = { signer: this.signer, alg: 'ES256K-R', issuer: this.did }
     if (expiresIn) options.expiresIn = expiresIn
     return createJWT(payload, options)
   }
 
-  async verifyJWT (jwt, audience=this.did) {
-    return verifyJWT(jwt, {audience})
+  async verifyJWT(jwt, audience = this.did) {
+    return verifyJWT(jwt, { audience })
   }
 }
 EthrDID.createKeyPair = createKeyPair
