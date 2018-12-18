@@ -2,7 +2,7 @@
 title: "Ethr DID"
 index: 0
 category: "ethr-did"
-type: "landingPage"
+type: "landing"
 source: "https://github.com/uport-project/ethr-did/blob/develop/docs/index.md"
 ---
 
