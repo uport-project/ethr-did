@@ -88,9 +88,18 @@ class EthrDID {
     return this.registry.revokeDelegate(this.address, delegateType, delegate, {from: owner})
   }
 
-  async setAttribute (key, value, expiresIn = 86400) {
+  async setAttribute (key, value, expiresIn = 86400, gasLimit) {
     const owner = await this.lookupOwner()
-    return this.registry.setAttribute(this.address, stringToBytes32(key), attributeToHex(key, value), expiresIn, {from: owner})
+    return this.registry.setAttribute(
+      this.address,
+      stringToBytes32(key),
+      attributeToHex(key, value),
+      expiresIn,
+      {
+        from: owner,
+        gas: gasLimit
+      }
+    )
   }
 
   // Create a temporary signing delegate able to sign JWT on behalf of identity
