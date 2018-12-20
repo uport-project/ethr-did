@@ -527,8 +527,7 @@ describe('EthrDID', () => {
             -----END PUBLIC KEY-----`
 
     beforeAll(async () => {
-      const rsa4096PublicKeyHex = Buffer.from(rsa4096PublicKey)
-      await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKeyHex, 86400, 200000)
+      await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKey, 86400, 200000)
     })
 
     it('should create add the large RSA key in the hex format', async () => {
