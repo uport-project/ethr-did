@@ -509,4 +509,32 @@ describe('EthrDID', () => {
       })
     })
   })
+
+  describe('Large key', () => {
+    const rsa4096PublicKey = `-----BEGIN PUBLIC KEY-----
+            MIICIjANBgkqhkiG9w0BAQEFAAOCAg8AMIICCgKCAgEAolN9csarxOP++9pbjLE/
+            /ybicmTGL0+or6LmLkos9YEXOb8w1RaoQoLuPNbCqfHlnbiPdvl9zdVHCswf9DwK
+            Ba6ecs0Vr3OW3FTSyejHiqinkfmEgRKOoAf7S8nQcsiDzANPondL+1z+dgmo8nTK
+            9806ei8LYzKzLjpi+SmdtTVvUQZGuxAT1GuzzT5jyE+MyR2zwSaCTyNC6zwnk51i
+            z+zf8WRNe32WtBLhNbz6MKlwup1CSear9oeZQJRQspkud7b84Clv6QeOCPqMuRLy
+            ibM8J+BC5cRyxVyV2rHshvD134cbR6uEIsggoC9NvvZcaJlcG25gA7rUrIJ8CGEG
+            9WZsmqUfrykOJ3HFqGyJZlpVq0hHM6ikcexdbqPFcwj9Vcx3yecb6WABZCeYVHDw
+            3AoGu/Y/m2xJ7L3iPCWcpB94y0e7Yp3M6S8Y4RpL2iEykCXd7CVYVV1QVPz4/5D8
+            mT4S4PG0I0/yBbblUz9CcYSJ/9eFOekSRY7TAEEJcrBY7MkXZcNRwcFtgi9PWpaC
+            XTsIYri2eBKqAgFT9xaPiFCFYJlpfUe81pgp+5mZsObYlB0AKJb7o0rRa5XLO4JL
+            ZiovTaqHZW9gvO3KZyJNYx7XM9Vjwm4FB5NUxSvqHJyUgGC6H7jwK2wKtrThrjkt
+            P9+7B63q+4nzilC9UUHEIosCAwEAAQ==
+            -----END PUBLIC KEY-----`
+
+    beforeAll(async () => {
+      await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKey, 86400, 200000)
+    })
+
+    it('should create add the large RSA key in the hex format', async () => {
+      const didDocument = await resolve(did)
+      const returnedValue = didDocument.publicKey[6].value
+      const returnedValueStr = Buffer.from(returnedValue.substring(2), 'hex').toString()
+      expect(returnedValueStr).toEqual(rsa4096PublicKey)
+    })
+  })
 })
