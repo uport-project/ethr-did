@@ -3,10 +3,10 @@ import Eth from 'ethjs-query'
 import EthContract from 'ethjs-contract'
 import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
 import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
-import { ec as EC } from 'elliptic'
 import { toEthereumAddress } from 'did-jwt/lib/Digest'
 import { Buffer } from 'buffer'
 import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
+const EC = require('elliptic').ec
 const secp256k1 = new EC('secp256k1')
 const { Secp256k1VerificationKey2018 } = delegateTypes
 
@@ -38,15 +38,7 @@ function attributeToHex (key, value) {
   return `0x${Buffer.from(value).toString('hex')}`
 }
 
-export function createKeyPair () {
-  const kp = secp256k1.genKeyPair()
-  const publicKey = kp.getPublic('hex')
-  const privateKey = kp.getPrivate('hex')
-  const address = toEthereumAddress(publicKey)
-  return {address, privateKey}
-}
-
-class EthrDID {
+export default class EthrDID {
   constructor (conf = {}) {
     const provider = configureProvider(conf)
     const eth = new Eth(provider)
@@ -63,6 +55,14 @@ class EthrDID {
     }
   }
 
+  static createKeyPair () {
+    const kp = secp256k1.genKeyPair()
+    const publicKey = kp.getPublic('hex')
+    const privateKey = kp.getPrivate('hex')
+    const address = toEthereumAddress(publicKey)
+    return { address, privateKey }
+  }
+
   async lookupOwner (cache = true) {
     if (cache && this.owner) return this.owner
     const result = await this.registry.identityOwner(this.address)
@@ -71,7 +71,9 @@ class EthrDID {
 
   async changeOwner (newOwner) {
     const owner = await this.lookupOwner()
-    const txHash = await this.registry.changeOwner(this.address, newOwner, {from: owner})
+    const txHash = await this.registry.changeOwner(this.address, newOwner, {
+      from: owner
+    })
     this.owner = newOwner
     return txHash
   }
@@ -80,37 +82,60 @@ class EthrDID {
     const delegateType = options.delegateType || Secp256k1VerificationKey2018
     const expiresIn = options.expiresIn || 86400
     const owner = await this.lookupOwner()
-    return this.registry.addDelegate(this.address, delegateType, delegate, expiresIn, {from: owner})
+    return this.registry.addDelegate(
+      this.address,
+      delegateType,
+      delegate,
+      expiresIn,
+      { from: owner }
+    )
   }
 
   async revokeDelegate (delegate, delegateType = Secp256k1VerificationKey2018) {
     const owner = await this.lookupOwner()
-    return this.registry.revokeDelegate(this.address, delegateType, delegate, {from: owner})
+    return this.registry.revokeDelegate(this.address, delegateType, delegate, {
+      from: owner
+    })
   }
 
-  async setAttribute (key, value, expiresIn = 86400) {
+  async setAttribute (key, value, expiresIn = 86400, gasLimit) {
     const owner = await this.lookupOwner()
-    return this.registry.setAttribute(this.address, stringToBytes32(key), attributeToHex(key, value), expiresIn, {from: owner})
+    return this.registry.setAttribute(
+      this.address,
+      stringToBytes32(key),
+      attributeToHex(key, value),
+      expiresIn,
+      {
+        from: owner,
+        gas: gasLimit
+      }
+    )
   }
 
   // Create a temporary signing delegate able to sign JWT on behalf of identity
-  async createSigningDelegate (delegateType = Secp256k1VerificationKey2018, expiresIn = 86400) {
-    const kp = createKeyPair()
+  async createSigningDelegate (
+    delegateType = Secp256k1VerificationKey2018,
+    expiresIn = 86400
+  ) {
+    const kp = EthrDID.createKeyPair()
     this.signer = SimpleSigner(kp.privateKey)
-    const txHash = await this.addDelegate(kp.address, {delegateType, expiresIn})
-    return {kp, txHash}
+    const txHash = await this.addDelegate(kp.address, {
+      delegateType,
+      expiresIn
+    })
+    return { kp, txHash }
   }
 
   async signJWT (payload, expiresIn) {
-    if (typeof this.signer !== 'function') throw new Error('No signer configured')
-    const options = {signer: this.signer, alg: 'ES256K-R', issuer: this.did}
+    if (typeof this.signer !== 'function') {
+      throw new Error('No signer configured')
+    }
+    const options = { signer: this.signer, alg: 'ES256K-R', issuer: this.did }
     if (expiresIn) options.expiresIn = expiresIn
     return createJWT(payload, options)
   }
 
-  async verifyJWT (jwt, audience=this.did) {
-    return verifyJWT(jwt, {audience})
+  async verifyJWT (jwt, audience = this.did) {
+    return verifyJWT(jwt, { audience })
   }
 }
-EthrDID.createKeyPair = createKeyPair
-module.exports = EthrDID
