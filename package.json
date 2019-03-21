@@ -1,6 +1,6 @@
 {
   "name": "ethr-did",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "Create and manage DID documents for ethereum addresses",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
