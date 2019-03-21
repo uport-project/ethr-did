@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "description": "Create and manage DID documents for ethereum addresses",
   "main": "lib/index.js",
+  "module": "lib/index.esm.js",
+  "umd:main": "lib/index.umd.js",
+  "source": "src/index.js",
   "repository": {
     "type": "git",
     "url": "https://github.com/uport-project/ethr-did.git"
   },
   "files": [
-    "dist",
     "lib",
     "src",
     "LICENSE",
@@ -18,10 +20,12 @@
   "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
   "license": "Apache-2.0",
   "scripts": {
-    "test": "jest",
-    "build:es5": "./node_modules/.bin/babel src -d lib",
-    "build:webpack": "./node_modules/.bin/webpack",
-    "build": "yarn build:es5 && yarn test && yarn build:webpack"
+    "format": "prettier-standard 'src/**/*.js'",
+    "test": "./node_modules/.bin/standard && ./node_modules/.bin/jest",
+    "test:ci": "./node_modules/.bin/standard && ./node_modules/.bin/jest -u --coverage",
+    "build:js": "./node_modules/.bin/microbundle",
+    "build": "npm run format && npm run build:js && npm run test",
+    "prepare": "npm run build"
   },
   "jest": {
     "coverageDirectory": "./coverage/",
@@ -29,33 +33,37 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "babel-cli": "^6.26.0",
-    "babel-core": "^6.26.0",
-    "babel-jest": "^22.4.3",
-    "babel-plugin-transform-es2015-modules-umd": "^6.24.1",
-    "babel-plugin-transform-object-rest-spread": "^6.26.0",
-    "babel-plugin-transform-runtime": "^6.23.0",
-    "babel-preset-env": "^1.6.1",
-    "ethr-did-registry": "^0.0.3",
-    "ganache-cli": "^6.1.0",
-    "jest": "^22.4.3",
+    "@babel/cli": "^7.2.3",
+    "@babel/core": "^7.3.3",
+    "@babel/plugin-transform-runtime": "^7.2.0",
+    "@babel/preset-env": "^7.3.1",
+    "babel-jest": "^24.1.0",
+    "eslint": "^5.14.1",
+    "eslint-config-standard": "^12.0.0",
+    "eslint-plugin-import": "^2.16.0",
+    "eslint-plugin-jest": "^22.3.0",
+    "eslint-plugin-node": "^8.0.1",
+    "eslint-plugin-promise": "^4.0.1",
+    "eslint-plugin-standard": "^4.0.0",
+    "ethr-did-registry": "0.0.3",
+    "ganache-cli": "^6.4.1",
+    "jest": "^24.5.0",
+    "microbundle": "^0.11.0",
+    "prettier-standard": "^9.1.1",
     "regenerator-runtime": "^0.11.1",
-    "standard": "^11.0.0",
-    "truffle-contract": "^3.0.5",
-    "web3": "^1.0.0-beta.34",
-    "webpack": "^4.5.0",
-    "webpack-cli": "^2.0.14"
+    "standard": "^12.0.1",
+    "truffle-contract": "^3.0.7",
+    "web3": "1.0.0-beta.34"
   },
   "dependencies": {
-    "babel-plugin-module-resolver": "^3.1.1",
-    "babel-runtime": "^6.26.0",
+    "@babel/runtime": "^7.3.1",
     "buffer": "^5.1.0",
-    "did-jwt": "^0.0.8",
-    "did-resolver": "^0.0.4",
+    "did-jwt": "^0.1.1",
+    "did-resolver": "^0.0.6",
     "ethjs-contract": "^0.1.9",
     "ethjs-provider-http": "^0.1.6",
-    "ethjs-query": "^0.3.5",
-    "ethr-did-resolver": "^0.1.1"
+    "ethjs-query": "^0.3.8",
+    "ethr-did-resolver": "^0.2.0"
   },
   "standard": {
     "ignore": [
