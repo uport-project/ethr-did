@@ -4,6 +4,7 @@
   "description": "Create and manage DID documents for ethereum addresses",
   "main": "lib/index.js",
   "module": "lib/index.esm.js",
+  "umd:main": "lib/index.umd.js",
   "source": "src/index.js",
   "repository": {
     "type": "git",
@@ -21,6 +22,7 @@
   "scripts": {
     "format": "prettier-standard 'src/**/*.js'",
     "test": "./node_modules/.bin/standard && ./node_modules/.bin/jest",
+    "test:ci": "./node_modules/.bin/standard && ./node_modules/.bin/jest -u --coverage",
     "build:js": "./node_modules/.bin/microbundle",
     "build": "npm run format && npm run build:js && npm run test",
     "prepare": "npm run build"
