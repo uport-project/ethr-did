@@ -64,7 +64,7 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 | key | description| required |
 |-----|------------|----------|
 |`address`|Ethereum address representing Identity| yes |
-|`registry`| registry address (defaults to `0xc1b66dea11f8f321b7981e1666fdaf3637fe0f61`) | no |
+|`registry`| registry address (defaults to `0xdca7ef03e98e0dc2b855be647c39abe984fcf21b`) | no |
 |`provider`| web3 provider | no |
 |`web3`| preconfigured web3 object | no |
 |`rpcUrl`| JSON-RPC endpoint url | no |
