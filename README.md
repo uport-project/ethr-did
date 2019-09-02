@@ -71,3 +71,11 @@ const ethrDid = new EthrDID({address: '0x...', privateKey: '...', provider})
 |`signer`| [Signing function](https://github.com/uport-project/did-jwt#signer-functions)| either `signer` or `privateKey` |
 |`privateKey`| Hex encoded private key | yes* |
 
+**Note**
+An instance created using only an address can only be used to encapsulate an external ethr-did (one where there is no access to the private key).
+This instance will not have the ability to sign anything, but it can be used for a subset of actions:
+
+* provide its own address (`ethrDid.address`)
+* provide the full DID string (`ethrDid.did`)
+* lookup its owner `await ethrDid.lookupOwner()`
+* verify a JWT `await ethrDid.verifyJwt(jwt)`
