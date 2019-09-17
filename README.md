@@ -9,6 +9,8 @@
 
 [DID Specification](https://w3c-ccg.github.io/did-spec/) | [ERC-1056](https://github.com/ethereum/EIPs/issues/1056) | [Getting Started](/docs/guides/index.md)
 
+[FAQ and helpdesk support](http://bit.ly/uPort_helpdesk)
+
 This library conforms to [ERC-1056](https://github.com/ethereum/EIPs/issues/1056) and is intended to use Ethereum addresses as fully self-managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs), it allows you to easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [DID-JWT](https://github.com/uport-project/did-jwt) library.
 
 A DID is an Identifier that allows you to lookup a DID document that can be used to authenticate you and messages created by you.
