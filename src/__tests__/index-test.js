@@ -640,10 +640,41 @@ describe('EthrDID', () => {
         plainDid = new EthrDID({ ...kp, provider, registry: registry.address })
         plainDid
           .signJWT({ hello: 'world' })
-          .then(jwt =>
-            verifyJWT(jwt, resolver).then(
-              ({ payload }) => expect(payload).toBeDefined(),
-              error => expect(error).toBeNull()
+          .then(jwt => verifyJWT(jwt, { resolver }))
+          .then(({ payload }) => expect(payload).toBeDefined())
+      })
+    })
+  })
+
+  describe('verifyJWT', () => {
+    const ethrDid = new EthrDID(EthrDID.createKeyPair())
+    const resolver = new Resolver(getResolver())
+    const did = ethrDid.did
+
+    it('verifies the signature of the JWT', () => {
+      return ethrDid
+        .signJWT({ hello: 'friend' })
+        .then(jwt => plainDid.verifyJWT(jwt, resolver))
+        .then(({ issuer }) => expect(issuer).toEqual(did))
+    })
+
+    describe('uses did for verifying aud claim', () => {
+      it('verifies the signature of the JWT', () => {
+        return ethrDid
+          .signJWT({ hello: 'friend', aud: plainDid.did })
+          .then(jwt => plainDid.verifyJWT(jwt, resolver))
+          .then(({ issuer }) => expect(issuer).toEqual(did))
+      })
+
+      it('fails if wrong did', () => {
+        return ethrDid
+          .signJWT({ hello: 'friend', aud: plainDid.did })
+          .then(jwt => plainDid.verifyJWT(jwt, resolver))
+          .catch(error =>
+            expect(error.message).toEqual(
+              `JWT audience does not match your DID: aud: ${
+                ethrDid.did
+              } !== yours: ${plainDid.did}`
             )
           )
       })
@@ -679,43 +710,6 @@ describe('EthrDID', () => {
       const didDocument = await resolver.resolve(did)
       const returnedValue = didDocument.publicKey[6].publicKeyPem
       expect(returnedValue).toEqual(rsa4096PublicKey)
-    })
-  })
-
-  describe('verifyJWT', () => {
-    beforeAll(() => {
-      plainDid = new EthrDID(EthrDID.createKeyPair())
-      resolver = new Resolver(getResolver())
-      did = plainDid.did
-    })
-
-    it('verifies the signature of the JWT', () => {
-      return plainDid
-        .signJWT({ hello: 'friend' })
-        .then(jwt => plainDid.verifyJWT(jwt, resolver))
-        .then(({ issuer }) => expect(issuer).toEqual(did))
-    })
-
-    describe('uses did for verifying aud claim', () => {
-      it('verifies the signature of the JWT', () => {
-        return plainDid
-          .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt, resolver))
-          .then(({ issuer }) => expect(issuer).toEqual(did))
-      })
-
-      it('fails if wrong did', () => {
-        return plainDid
-          .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt, resolver))
-          .catch(error =>
-            expect(error.message).toEqual(
-              `JWT audience does not match your DID: aud: ${
-                plainDid.did
-              } !== yours: ${plainDid.did}`
-            )
-          )
-      })
     })
   })
 })
