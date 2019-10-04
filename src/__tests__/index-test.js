@@ -1,5 +1,5 @@
-import resolve from 'did-resolver'
-import register, { delegateTypes } from 'ethr-did-resolver'
+import { Resolver } from 'did-resolver'
+import { getResolver, delegateTypes } from 'ethr-did-resolver'
 import EthrDID from '../index.js'
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
@@ -23,7 +23,8 @@ describe('EthrDID', () => {
     owner,
     delegate1,
     delegate2,
-    provider
+    provider,
+    resolver
 
   beforeAll(async () => {
     provider = ganache.provider()
@@ -54,7 +55,9 @@ describe('EthrDID', () => {
       registry: registry.address,
       address: identity
     })
-    register({ provider, registry: registry.address })
+    resolver = new Resolver(
+      getResolver({ provider, registry: registry.address })
+    )
   })
 
   describe('presets', () => {
@@ -82,7 +85,7 @@ describe('EthrDID', () => {
       })
 
       it('resolves document', () => {
-        return expect(resolve(did)).resolves.toEqual({
+        return expect(resolver.resolve(did)).resolves.toEqual({
           '@context': 'https://w3id.org/did/v1',
           id: did,
           publicKey: [
@@ -110,7 +113,7 @@ describe('EthrDID', () => {
         })
 
         it('resolves document', () => {
-          return expect(resolve(did)).resolves.toEqual({
+          return expect(resolver.resolve(did)).resolves.toEqual({
             '@context': 'https://w3id.org/did/v1',
             id: did,
             publicKey: [
@@ -146,7 +149,7 @@ describe('EthrDID', () => {
         })
 
         it('resolves document', () => {
-          return expect(resolve(did)).resolves.toEqual({
+          return expect(resolver.resolve(did)).resolves.toEqual({
             '@context': 'https://w3id.org/did/v1',
             id: did,
             publicKey: [
@@ -189,7 +192,7 @@ describe('EthrDID', () => {
         })
 
         it('resolves document', () => {
-          return expect(resolve(did)).resolves.toEqual({
+          return expect(resolver.resolve(did)).resolves.toEqual({
             '@context': 'https://w3id.org/did/v1',
             id: did,
             publicKey: [
@@ -230,7 +233,7 @@ describe('EthrDID', () => {
         })
 
         it('resolves document', () => {
-          return expect(resolve(did)).resolves.toEqual({
+          return expect(resolver.resolve(did)).resolves.toEqual({
             '@context': 'https://w3id.org/did/v1',
             id: did,
             publicKey: [
@@ -259,7 +262,7 @@ describe('EthrDID', () => {
         })
 
         it('resolves document', () => {
-          return expect(resolve(did)).resolves.toEqual({
+          return expect(resolver.resolve(did)).resolves.toEqual({
             '@context': 'https://w3id.org/did/v1',
             id: did,
             publicKey: [
@@ -303,7 +306,7 @@ describe('EthrDID', () => {
           })
 
           it('resolves document', () => {
-            return expect(resolve(did)).resolves.toEqual({
+            return expect(resolver.resolve(did)).resolves.toEqual({
               '@context': 'https://w3id.org/did/v1',
               id: did,
               publicKey: [
@@ -351,7 +354,7 @@ describe('EthrDID', () => {
           })
 
           it('resolves document', () => {
-            return expect(resolve(did)).resolves.toEqual({
+            return expect(resolver.resolve(did)).resolves.toEqual({
               '@context': 'https://w3id.org/did/v1',
               id: did,
               publicKey: [
@@ -409,7 +412,7 @@ describe('EthrDID', () => {
           })
 
           it('resolves document', () => {
-            return expect(resolve(did)).resolves.toEqual({
+            return expect(resolver.resolve(did)).resolves.toEqual({
               '@context': 'https://w3id.org/did/v1',
               id: did,
               publicKey: [
@@ -472,7 +475,7 @@ describe('EthrDID', () => {
             )
           })
           it('resolves document', () => {
-            return expect(resolve(did)).resolves.toEqual({
+            return expect(resolver.resolve(did)).resolves.toEqual({
               '@context': 'https://w3id.org/did/v1',
               id: did,
               publicKey: [
@@ -551,7 +554,7 @@ describe('EthrDID', () => {
       })
 
       it('resolves document', () => {
-        return expect(resolve(did)).resolves.toEqual({
+        return expect(resolver.resolve(did)).resolves.toEqual({
           '@context': 'https://w3id.org/did/v1',
           id: did,
           publicKey: [
@@ -617,7 +620,7 @@ describe('EthrDID', () => {
 
       it('should sign valid jwt', () => {
         return ethrDid.signJWT({ hello: 'world' }).then(jwt =>
-          verifyJWT(jwt).then(
+          verifyJWT(jwt, { resolver }).then(
             ({ payload, signer }) =>
               expect(signer).toEqual({
                 id: `${did}#delegate-5`,
@@ -638,40 +641,9 @@ describe('EthrDID', () => {
         plainDid
           .signJWT({ hello: 'world' })
           .then(jwt =>
-            verifyJWT(jwt).then(
+            verifyJWT(jwt, resolver).then(
               ({ payload }) => expect(payload).toBeDefined(),
               error => expect(error).toBeNull()
-            )
-          )
-      })
-    })
-  })
-
-  describe('verifyJWT', () => {
-    it('verifies the signature of the JWT', () => {
-      return ethrDid
-        .signJWT({ hello: 'friend' })
-        .then(jwt => plainDid.verifyJWT(jwt))
-        .then(({ issuer }) => expect(issuer).toEqual(did))
-    })
-
-    describe('uses did for verifying aud claim', () => {
-      it('verifies the signature of the JWT', () => {
-        return ethrDid
-          .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt))
-          .then(({ issuer }) => expect(issuer).toEqual(did))
-      })
-
-      it('fails if wrong did', () => {
-        return ethrDid
-          .signJWT({ hello: 'friend', aud: ethrDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt))
-          .catch(error =>
-            expect(error.message).toEqual(
-              `JWT audience does not match your DID: aud: ${
-                ethrDid.did
-              } !== yours: ${plainDid.did}`
             )
           )
       })
@@ -704,9 +676,46 @@ describe('EthrDID', () => {
     })
 
     it('should create add the large RSA key in the hex format', async () => {
-      const didDocument = await resolve(did)
+      const didDocument = await resolver.resolve(did)
       const returnedValue = didDocument.publicKey[6].publicKeyPem
       expect(returnedValue).toEqual(rsa4096PublicKey)
+    })
+  })
+
+  describe('verifyJWT', () => {
+    beforeAll(() => {
+      plainDid = new EthrDID(EthrDID.createKeyPair())
+      resolver = new Resolver(getResolver())
+      did = plainDid.did
+    })
+
+    it('verifies the signature of the JWT', () => {
+      return plainDid
+        .signJWT({ hello: 'friend' })
+        .then(jwt => plainDid.verifyJWT(jwt, resolver))
+        .then(({ issuer }) => expect(issuer).toEqual(did))
+    })
+
+    describe('uses did for verifying aud claim', () => {
+      it('verifies the signature of the JWT', () => {
+        return plainDid
+          .signJWT({ hello: 'friend', aud: plainDid.did })
+          .then(jwt => plainDid.verifyJWT(jwt, resolver))
+          .then(({ issuer }) => expect(issuer).toEqual(did))
+      })
+
+      it('fails if wrong did', () => {
+        return plainDid
+          .signJWT({ hello: 'friend', aud: plainDid.did })
+          .then(jwt => plainDid.verifyJWT(jwt, resolver))
+          .catch(error =>
+            expect(error.message).toEqual(
+              `JWT audience does not match your DID: aud: ${
+                plainDid.did
+              } !== yours: ${plainDid.did}`
+            )
+          )
+      })
     })
   })
 })
