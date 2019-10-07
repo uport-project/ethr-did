@@ -2,8 +2,7 @@ import HttpProvider from 'ethjs-provider-http'
 import Eth from 'ethjs-query'
 import EthContract from 'ethjs-contract'
 import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
-import { createJWT, verifyJWT, SimpleSigner } from 'did-jwt'
-import { toEthereumAddress } from 'did-jwt/lib/Digest'
+import { createJWT, verifyJWT, SimpleSigner, toEthereumAddress } from 'did-jwt'
 import { Buffer } from 'buffer'
 import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
 const EC = require('elliptic').ec
@@ -135,7 +134,7 @@ export default class EthrDID {
     return createJWT(payload, options)
   }
 
-  async verifyJWT (jwt, audience = this.did) {
-    return verifyJWT(jwt, { audience })
+  async verifyJWT (jwt, resolver, audience = this.did) {
+    return verifyJWT(jwt, { resolver, audience })
   }
 }
