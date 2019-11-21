@@ -13,6 +13,10 @@
 
 This library conforms to [ERC-1056](https://github.com/ethereum/EIPs/issues/1056) and is intended to use Ethereum addresses as fully self-managed [Decentralized Identifiers](https://w3c-ccg.github.io/did-spec/#decentralized-identifiers-dids) (DIDs), it allows you to easily create and manage keys for these identities.  It also lets you sign standards compliant [JSON Web Tokens (JWT)](https://jwt.io) that can be consumed using the [DID-JWT](https://github.com/uport-project/did-jwt) library.
 
+This library can be used to create a new ethr-did identity.  It allows ethr-did identities to be represented as an object that can perform actions such as updating its did-document, signing messages, and verifying messages from other dids.
+
+Use this if you are looking for the easiest way to start using ethr-did identities, and want high-level abstractions to access its entire range of capabilities.  It encapsulates all the functionality of [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver) and [ethr-did-registry](https://github.com/uport-project/ethr-did-registry).
+
 A DID is an Identifier that allows you to lookup a DID document that can be used to authenticate you and messages created by you.
 
 Ethr-DID provides a scalable identity method for Ethereum addresses that gives any Ethereum address the ability to collect on-chain and off-chain data. Because Ethr-DID allows any Ethereum key pair to become an identity, it is more scalable and privacy-preserving than smart contract based identity methods, like our previous [Proxy Contract](https://github.com/uport-project/uport-identity/blob/develop/docs/reference/proxy.md).
