@@ -1,6 +1,6 @@
 import { Resolver } from 'did-resolver'
 import { getResolver, delegateTypes } from 'ethr-did-resolver'
-import EthrDID from '../index.js'
+import EthrDID from '../index'
 import Contract from 'truffle-contract'
 import DidRegistryContract from 'ethr-did-registry'
 import Web3 from 'web3'
