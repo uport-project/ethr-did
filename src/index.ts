@@ -2,22 +2,13 @@ import HttpProvider from 'ethjs-provider-http'
 import Eth from 'ethjs-query'
 import EthContract from 'ethjs-contract'
 import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
-import { createJWT, verifyJWT, SimpleSigner, toEthereumAddress } from 'did-jwt'
+import { createJWT, verifyJWT, SimpleSigner, toEthereumAddress, Signer } from 'did-jwt'
 import { Buffer } from 'buffer'
 import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
 const EC = require('elliptic').ec
 const secp256k1 = new EC('secp256k1')
 const { Secp256k1VerificationKey2018 } = delegateTypes
 
-function configureProvider (conf = {}) {
-  if (conf.provider) {
-    return conf.provider
-  } else if (conf.web3) {
-    return conf.web3.currentProvider
-  } else {
-    return new HttpProvider(conf.rpcUrl || 'https://mainnet.infura.io/ethr-did')
-  }
-}
 
 function attributeToHex (key, value) {
   if (Buffer.isBuffer(value)) {
@@ -37,9 +28,25 @@ function attributeToHex (key, value) {
   return `0x${Buffer.from(value).toString('hex')}`
 }
 
+interface IConfig {
+  address: string
+  registry?: string
+  signer?: Signer
+  privateKey?: string
+  rpcUrl?: string
+  provider?: any
+  web3?: any
+}
+
 export default class EthrDID {
-  constructor (conf = {}) {
-    const provider = configureProvider(conf)
+  public did: string
+  private registry: any
+  private address: string
+  private signer: Signer
+  private owner?: string
+
+  constructor (conf: IConfig) {
+    const provider = this.configureProvider(conf)
     const eth = new Eth(provider)
     const registryAddress = conf.registry || REGISTRY
     const DidReg = new EthContract(eth)(DidRegistryContract)
@@ -54,6 +61,17 @@ export default class EthrDID {
     }
   }
 
+  private configureProvider (conf: IConfig) {
+    if (conf.provider) {
+      return conf.provider
+    } else if (conf.web3) {
+      return conf.web3.currentProvider
+    } else {
+      return new HttpProvider(conf.rpcUrl || 'https://mainnet.infura.io/ethr-did')
+    }
+  }
+
+  
   static createKeyPair () {
     const kp = secp256k1.genKeyPair()
     const publicKey = kp.getPublic('hex')
@@ -77,9 +95,7 @@ export default class EthrDID {
     return txHash
   }
 
-  async addDelegate (delegate, options = {}) {
-    const delegateType = options.delegateType || Secp256k1VerificationKey2018
-    const expiresIn = options.expiresIn || 86400
+  async addDelegate (delegate, {delegateType = Secp256k1VerificationKey2018, expiresIn = 86400}) {
     const owner = await this.lookupOwner()
     return this.registry.addDelegate(
       this.address,
@@ -138,16 +154,16 @@ export default class EthrDID {
     return { kp, txHash }
   }
 
-  async signJWT (payload, expiresIn) {
+  async signJWT (payload, expiresIn?: number) {
     if (typeof this.signer !== 'function') {
       throw new Error('No signer configured')
     }
     const options = { signer: this.signer, alg: 'ES256K-R', issuer: this.did }
-    if (expiresIn) options.expiresIn = expiresIn
+    if (expiresIn) options['expiresIn'] = expiresIn
     return createJWT(payload, options)
   }
 
-  async verifyJWT (jwt, resolver, audience = this.did) {
+  async verifyJWT (jwt, resolver, audience = this.did): Promise<any> {
     return verifyJWT(jwt, { resolver, audience })
   }
 }
