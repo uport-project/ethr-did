@@ -111,6 +111,18 @@ export default class EthrDID {
     )
   }
 
+  async revokeAttribute (key, value) {
+    const owner = await this.lookupOwner()
+    return this.registry.revokeAttribute(
+      this.address,
+      stringToBytes32(key),
+      attributeToHex(key, value),
+      {
+        from: owner
+      }
+    )
+  }
+
   // Create a temporary signing delegate able to sign JWT on behalf of identity
   async createSigningDelegate (
     delegateType = Secp256k1VerificationKey2018,
