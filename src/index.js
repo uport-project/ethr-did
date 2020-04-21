@@ -111,14 +111,15 @@ export default class EthrDID {
     )
   }
 
-  async revokeAttribute (key, value) {
+  async revokeAttribute (key, value, gasLimit) {
     const owner = await this.lookupOwner()
     return this.registry.revokeAttribute(
       this.address,
       stringToBytes32(key),
       attributeToHex(key, value),
       {
-        from: owner
+        from: owner,
+        gas: gasLimit
       }
     )
   }
