@@ -46,7 +46,7 @@ export default class EthrDID {
     this.registry = DidReg.at(registryAddress)
     this.address = conf.address
     if (!this.address) throw new Error('No address is set for EthrDid')
-    this.did = `did:ethr:${this.address}`
+    this.did = `did:${conf.method || 'ethr'}:${this.address}`
     if (conf.signer) {
       this.signer = conf.signer
     } else if (conf.privateKey) {
