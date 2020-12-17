@@ -9,3 +9,4 @@ coverage
 *.tgz
 
 .DS_Store
+/.idea/
