@@ -46,27 +46,27 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "@types/jest": "^24.9.0",
-    "ganache-cli": "^6.8.2",
-    "jest": "^24.9.0",
-    "microbundle": "^0.11.0",
-    "prettier": "^1.19.1",
-    "truffle-contract": "^3.0.8",
-    "ts-jest": "^24.3.0",
+    "@types/jest": "^26.0.19",
+    "ganache-cli": "^6.12.1",
+    "jest": "^26.6.3",
+    "microbundle": "^0.12.4",
+    "prettier": "^2.2.1",
+    "truffle-contract": "^4.0.31",
+    "ts-jest": "^26.4.4",
     "ts-lint": "^4.5.1",
     "tslint-config-prettier": "^1.18.0",
     "tslint-eslint-rules": "^5.4.0",
-    "typescript": "^3.7.5",
-    "web3": "1.0.0-beta.34"
+    "typescript": "^4.1.3",
+    "web3": "^1.3.0"
   },
   "dependencies": {
-    "buffer": "^5.4.3",
-    "did-jwt": "^3.0.0",
-    "did-resolver": "^1.1.0",
-    "ethjs-contract": "^0.1.9",
+    "buffer": "^6.0.3",
+    "did-jwt": "^4.8.0",
+    "did-resolver": "^2.1.2",
+    "ethjs-contract": "^0.2.3",
     "ethjs-provider-http": "^0.1.6",
     "ethjs-query": "^0.3.8",
     "ethr-did-registry": "0.0.3",
-    "ethr-did-resolver": "^1.0.3"
+    "ethr-did-resolver": "^3.0.3"
   }
 }
