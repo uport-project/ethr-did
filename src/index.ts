@@ -1,16 +1,234 @@
-import HttpProvider from 'ethjs-provider-http'
-import Eth from 'ethjs-query'
-import EthContract from 'ethjs-contract'
-import DidRegistryContract from 'ethr-did-resolver/contracts/ethr-did-registry.json'
-import { createJWT, verifyJWT, SimpleSigner, toEthereumAddress, Signer } from 'did-jwt'
-import { Buffer } from 'buffer'
-import { REGISTRY, stringToBytes32, delegateTypes } from 'ethr-did-resolver'
-const EC = require('elliptic').ec
-const secp256k1 = new EC('secp256k1')
-const { Secp256k1VerificationKey2018 } = delegateTypes
+import { createJWT, verifyJWT, Signer as JWTSigner, ES256KSigner } from 'did-jwt'
+import { Signer as TxSigner } from '@ethersproject/abstract-signer'
+import { CallOverrides } from '@ethersproject/contracts'
+import { computeAddress } from '@ethersproject/transactions'
+import { getAddress } from '@ethersproject/address'
+import { Wallet } from '@ethersproject/wallet'
+import { REGISTRY, EthrDidController } from 'ethr-did-resolver'
+import { Resolvable } from 'did-resolver'
+import { ec as EC } from 'elliptic'
+const secp256k1: any = new EC('secp256k1')
 
+export enum DelegateTypes {
+  veriKey = 'veriKey',
+  sigAuth = 'sigAuth',
+  enc = 'enc',
+}
 
-function attributeToHex (key, value) {
+interface IConfig {
+  identifier: string
+  chainNameOrId?: string
+
+  registry?: string
+
+  signer?: JWTSigner
+  txSigner?: TxSigner
+  privateKey?: string
+
+  rpcUrl?: string
+  provider?: any
+  web3?: any
+}
+
+export type KeyPair = {
+  address: string
+  privateKey: string
+  publicKey: string
+}
+
+export class EthrDID {
+  public did: string
+  public address: string
+  public signer?: JWTSigner
+  private owner?: string
+  private controller?: EthrDidController
+
+  constructor(conf: IConfig) {
+    const { address, publicKey, network } = interpretIdentifier(conf.identifier)
+
+    if (conf.provider || conf.rpcUrl || conf.web3) {
+      let txSigner = conf.txSigner
+      if (conf.privateKey && typeof txSigner === 'undefined') {
+        txSigner = new Wallet(conf.privateKey)
+      }
+
+      this.controller = new EthrDidController(
+        conf.identifier,
+        undefined,
+        txSigner,
+        conf.chainNameOrId,
+        conf.provider || conf.web3?.currentProvider,
+        conf.rpcUrl,
+        conf.registry || REGISTRY
+      )
+      this.did = this.controller.did
+    } else {
+      const net = network || conf.chainNameOrId
+      let networkString = net ? `${net}:` : ''
+      if (networkString in ['mainnet:', '0x1:']) {
+        networkString = ''
+      }
+      this.did =
+        typeof publicKey === 'string' ? `did:ethr:${networkString}${publicKey}` : `did:ethr:${networkString}${address}`
+    }
+
+    this.address = address
+
+    if (conf.signer) {
+      this.signer = conf.signer
+    } else if (conf.privateKey) {
+      this.signer = ES256KSigner(conf.privateKey, true)
+    }
+  }
+
+  static createKeyPair(): KeyPair {
+    const kp = secp256k1.genKeyPair()
+    const privateKey = kp.getPrivate('hex')
+    const publicKey = '0x' + kp.getPublic(true, 'hex')
+    const address = computeAddress(publicKey)
+    return { address, privateKey, publicKey }
+  }
+
+  async lookupOwner(cache = true): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    if (cache && this.owner) return this.owner
+    const result = await this.controller?.getOwner(this.address)
+    return result
+  }
+
+  async changeOwner(newOwner: string, txOptions?: CallOverrides): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    const owner = await this.lookupOwner()
+    const receipt = await this.controller.changeOwner(newOwner, {
+      ...txOptions,
+      from: owner,
+    })
+    this.owner = newOwner
+    return receipt.transactionHash
+  }
+
+  async addDelegate(
+    delegate: string,
+    { delegateType = DelegateTypes.veriKey, expiresIn = 86400 },
+    txOptions: CallOverrides = {}
+  ): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    const owner = await this.lookupOwner()
+    const receipt = await this.controller.addDelegate(delegateType, delegate, expiresIn, { ...txOptions, from: owner })
+    return receipt.transactionHash
+  }
+
+  async revokeDelegate(
+    delegate: string,
+    delegateType = DelegateTypes.veriKey,
+    txOptions: CallOverrides = {}
+  ): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    const owner = await this.lookupOwner()
+    const receipt = await this.controller.revokeDelegate(delegateType, delegate, { ...txOptions, from: owner })
+    return receipt.transactionHash
+  }
+
+  async setAttribute(
+    key: string,
+    value: string | Uint8Array,
+    expiresIn = 86400,
+    /** @deprecated, please use txOptions.gasLimit */
+    gasLimit?: number,
+    txOptions: CallOverrides = {}
+  ): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    const owner = await this.lookupOwner()
+    const receipt = await this.controller.setAttribute(key, attributeToHex(key, value), expiresIn, {
+      gasLimit,
+      ...txOptions,
+      from: owner,
+    })
+    return receipt.transactionHash
+  }
+
+  async revokeAttribute(
+    key: string,
+    value: string | Uint8Array,
+    /** @deprecated please use `txOptions.gasLimit` */
+    gasLimit?: number,
+    txOptions: CallOverrides = {}
+  ): Promise<string> {
+    if (typeof this.controller === 'undefined') {
+      throw new Error('a web3 provider configuration is needed for network operations')
+    }
+    const owner = await this.lookupOwner()
+    const receipt = await this.controller.revokeAttribute(key, attributeToHex(key, value), {
+      gasLimit,
+      ...txOptions,
+      from: owner,
+    })
+    return receipt.transactionHash
+  }
+
+  // Create a temporary signing delegate able to sign JWT on behalf of identity
+  async createSigningDelegate(
+    delegateType = DelegateTypes.veriKey,
+    expiresIn = 86400
+  ): Promise<{
+    kp: KeyPair
+    txHash: string
+  }> {
+    const kp = EthrDID.createKeyPair()
+    this.signer = ES256KSigner(kp.privateKey, true)
+    const txHash = await this.addDelegate(kp.address, {
+      delegateType,
+      expiresIn,
+    })
+    return { kp, txHash }
+  }
+
+  async signJWT(payload: any, expiresIn?: number): Promise<string> {
+    if (typeof this.signer !== 'function') {
+      throw new Error('No signer configured')
+    }
+    const options = {
+      signer: this.signer,
+      alg: 'ES256K-R',
+      issuer: this.did,
+    }
+    if (expiresIn) (<any>options)['expiresIn'] = expiresIn
+    return createJWT(payload, options)
+  }
+
+  async verifyJWT(jwt: string, resolver: Resolvable, audience = this.did): Promise<any> {
+    return verifyJWT(jwt, { resolver, audience })
+  }
+}
+
+function interpretIdentifier(identifier: string): { address: string; publicKey?: string; network?: string } {
+  let input = identifier
+  let network = undefined
+  if (input.startsWith('did:ethr')) {
+    const components = input.split(':')
+    input = components[components.length - 1]
+    if (components.length === 4) {
+      network = components[2]
+    }
+  }
+  if (input.length > 42) {
+    return { address: computeAddress(input), publicKey: input, network }
+  } else {
+    return { address: getAddress(input), network } // checksum address
+  }
+}
+
+function attributeToHex(key: string, value: string | Uint8Array): string {
   if (Buffer.isBuffer(value)) {
     return `0x${value.toString('hex')}`
   }
@@ -19,151 +237,11 @@ function attributeToHex (key, value) {
     const encoding = match[6]
     // TODO add support for base58
     if (encoding === 'base64') {
-      return `0x${Buffer.from(value, 'base64').toString('hex')}`
+      return `0x${Buffer.from(<string>value, 'base64').toString('hex')}`
     }
   }
-  if (value.match(/^0x[0-9a-fA-F]*$/)) {
-    return value
+  if ((<string>value).match(/^0x[0-9a-fA-F]*$/)) {
+    return <string>value
   }
   return `0x${Buffer.from(value).toString('hex')}`
-}
-
-interface IConfig {
-  address: string
-  registry?: string
-  signer?: Signer
-  privateKey?: string
-  rpcUrl?: string
-  provider?: any
-  web3?: any
-}
-
-export default class EthrDID {
-  public did: string
-  private registry: any
-  private address: string
-  private signer: Signer
-  private owner?: string
-
-  constructor (conf: IConfig) {
-    const provider = this.configureProvider(conf)
-    const eth = new Eth(provider)
-    const registryAddress = conf.registry || REGISTRY
-    const DidReg = new EthContract(eth)(DidRegistryContract)
-    this.registry = DidReg.at(registryAddress)
-    this.address = conf.address
-    if (!this.address) throw new Error('No address is set for EthrDid')
-    this.did = `did:ethr:${this.address}`
-    if (conf.signer) {
-      this.signer = conf.signer
-    } else if (conf.privateKey) {
-      this.signer = SimpleSigner(conf.privateKey)
-    }
-  }
-
-  private configureProvider (conf: IConfig) {
-    if (conf.provider) {
-      return conf.provider
-    } else if (conf.web3) {
-      return conf.web3.currentProvider
-    } else {
-      return new HttpProvider(conf.rpcUrl || 'https://mainnet.infura.io/ethr-did')
-    }
-  }
-
-  
-  static createKeyPair () {
-    const kp = secp256k1.genKeyPair()
-    const publicKey = kp.getPublic('hex')
-    const privateKey = kp.getPrivate('hex')
-    const address = toEthereumAddress(publicKey)
-    return { address, privateKey }
-  }
-
-  async lookupOwner (cache = true) {
-    if (cache && this.owner) return this.owner
-    const result = await this.registry.identityOwner(this.address)
-    return result['0']
-  }
-
-  async changeOwner (newOwner) {
-    const owner = await this.lookupOwner()
-    const txHash = await this.registry.changeOwner(this.address, newOwner, {
-      from: owner
-    })
-    this.owner = newOwner
-    return txHash
-  }
-
-  async addDelegate (delegate, {delegateType = Secp256k1VerificationKey2018, expiresIn = 86400}) {
-    const owner = await this.lookupOwner()
-    return this.registry.addDelegate(
-      this.address,
-      delegateType,
-      delegate,
-      expiresIn,
-      { from: owner }
-    )
-  }
-
-  async revokeDelegate (delegate, delegateType = Secp256k1VerificationKey2018) {
-    const owner = await this.lookupOwner()
-    return this.registry.revokeDelegate(this.address, delegateType, delegate, {
-      from: owner
-    })
-  }
-
-  async setAttribute (key, value, expiresIn = 86400, gasLimit) {
-    const owner = await this.lookupOwner()
-    return this.registry.setAttribute(
-      this.address,
-      stringToBytes32(key),
-      attributeToHex(key, value),
-      expiresIn,
-      {
-        from: owner,
-        gas: gasLimit
-      }
-    )
-  }
-
-  async revokeAttribute (key, value, gasLimit) {
-    const owner = await this.lookupOwner()
-    return this.registry.revokeAttribute(
-      this.address,
-      stringToBytes32(key),
-      attributeToHex(key, value),
-      {
-        from: owner,
-        gas: gasLimit
-      }
-    )
-  }
-
-  // Create a temporary signing delegate able to sign JWT on behalf of identity
-  async createSigningDelegate (
-    delegateType = Secp256k1VerificationKey2018,
-    expiresIn = 86400
-  ) {
-    const kp = EthrDID.createKeyPair()
-    this.signer = SimpleSigner(kp.privateKey)
-    const txHash = await this.addDelegate(kp.address, {
-      delegateType,
-      expiresIn
-    })
-    return { kp, txHash }
-  }
-
-  async signJWT (payload, expiresIn?: number) {
-    if (typeof this.signer !== 'function') {
-      throw new Error('No signer configured')
-    }
-    const options = { signer: this.signer, alg: 'ES256K-R', issuer: this.did }
-    if (expiresIn) options['expiresIn'] = expiresIn
-    return createJWT(payload, options)
-  }
-
-  async verifyJWT (jwt, resolver, audience = this.did): Promise<any> {
-    return verifyJWT(jwt, { resolver, audience })
-  }
 }
