@@ -97,7 +97,7 @@ describe('EthrDID', () => {
       describe('add signing delegate', () => {
         beforeAll(async () => {
           const txHash = await ethrDid.addDelegate(delegate1, {
-            expiresIn: 100,
+            expiresIn: 86400,
           })
           await provider.waitForTransaction(txHash)
         })
@@ -280,7 +280,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Secp256k1/veriKey',
               '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
-              10
+              86400
             )
           })
 
@@ -321,7 +321,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
-              10
+              86400
             )
           })
 
@@ -368,7 +368,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'),
-              10
+              86400
             )
           })
 
@@ -420,7 +420,7 @@ describe('EthrDID', () => {
       describe('service endpoints', () => {
         describe('HubService', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 100)
+            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 86400)
           })
           it('resolves document', async () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
@@ -692,7 +692,7 @@ describe('EthrDID', () => {
         provider,
         registry,
       })
-      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', `0x${publicKeyHex}`, 10)
+      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', `0x${publicKeyHex}`, 86400)
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {
@@ -717,7 +717,7 @@ describe('EthrDID', () => {
         provider,
         registry,
       })
-      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', publicKeyBase58, 10)
+      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', publicKeyBase58, 86400)
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {
