@@ -1,3 +1,10 @@
+# [2.1.0](https://github.com/uport-project/ethr-did/compare/2.0.0...2.1.0) (2021-04-15)
+
+
+### Features
+
+* add support for base58 key encoding ([#62](https://github.com/uport-project/ethr-did/issues/62)) ([d0b26af](https://github.com/uport-project/ethr-did/commit/d0b26afdb4ea0a4c78a91f2b0216625d938b53d7)), closes [#60](https://github.com/uport-project/ethr-did/issues/60)
+
 # [2.0.0](https://github.com/uport-project/ethr-did/compare/1.3.0...2.0.0) (2021-04-15)
 
 
