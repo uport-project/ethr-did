@@ -97,7 +97,7 @@ describe('EthrDID', () => {
       describe('add signing delegate', () => {
         beforeAll(async () => {
           const txHash = await ethrDid.addDelegate(delegate1, {
-            expiresIn: 100,
+            expiresIn: 86400,
           })
           await provider.waitForTransaction(txHash)
         })
@@ -280,7 +280,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Secp256k1/veriKey',
               '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
-              10
+              86400
             )
           })
 
@@ -321,7 +321,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
-              10
+              86400
             )
           })
 
@@ -368,7 +368,7 @@ describe('EthrDID', () => {
             await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'),
-              10
+              86400
             )
           })
 
@@ -420,7 +420,7 @@ describe('EthrDID', () => {
       describe('service endpoints', () => {
         describe('HubService', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 100)
+            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 86400)
           })
           it('resolves document', async () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
@@ -604,13 +604,11 @@ describe('EthrDID', () => {
 
     describe('plain vanilla keypair account', () => {
       it('should sign valid jwt', async () => {
-        const kp: KeyPair = EthrDID.createKeyPair()
+        const kp: KeyPair = EthrDID.createKeyPair('dev')
         plainDid = new EthrDID({
-          identifier: kp.publicKey,
-          privateKey: kp.privateKey,
+          ...kp,
           provider,
           registry: registry,
-          chainNameOrId: 'dev',
         })
         const jwt = await plainDid.signJWT({ hello: 'world' })
         const { payload } = await verifyJWT(jwt, { resolver })
@@ -620,16 +618,11 @@ describe('EthrDID', () => {
   })
 
   describe('verifyJWT', () => {
-    const kp: KeyPair = EthrDID.createKeyPair()
-    const ethrDid = new EthrDID({
-      identifier: kp.publicKey,
-      privateKey: kp.privateKey,
-      chainNameOrId: 'dev',
-    })
-    const did = ethrDid.did
+    const ethrDidAsIssuer = new EthrDID(EthrDID.createKeyPair('dev'))
+    const did = ethrDidAsIssuer.did
 
     it('verifies the signature of the JWT', async () => {
-      return ethrDid
+      return ethrDidAsIssuer
         .signJWT({ hello: 'friend' })
         .then((jwt) => plainDid.verifyJWT(jwt, resolver))
         .then(({ issuer }) => expect(issuer).toEqual(did))
@@ -637,19 +630,19 @@ describe('EthrDID', () => {
 
     describe('uses did for verifying aud claim', () => {
       it('verifies the signature of the JWT', () => {
-        return ethrDid
+        return ethrDidAsIssuer
           .signJWT({ hello: 'friend', aud: plainDid.did })
           .then((jwt) => plainDid.verifyJWT(jwt, resolver))
           .then(({ issuer }) => expect(issuer).toEqual(did))
       })
 
       it('fails if wrong did', () => {
-        return ethrDid
+        return ethrDidAsIssuer
           .signJWT({ hello: 'friend', aud: plainDid.did })
           .then((jwt) => plainDid.verifyJWT(jwt, resolver))
           .catch((error) =>
             expect(error.message).toEqual(
-              `JWT audience does not match your DID: aud: ${ethrDid.did} !== yours: ${plainDid.did}`
+              `JWT audience does not match your DID: aud: ${ethrDidAsIssuer.did} !== yours: ${plainDid.did}`
             )
           )
       })
@@ -679,9 +672,67 @@ describe('EthrDID', () => {
     it('should create add the large RSA key in the hex format', async () => {
       const didDocument = (await resolver.resolve(did)).didDocument
       const pk = didDocument?.verificationMethod?.find((pk) => {
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         return typeof (<any>pk).publicKeyPem !== 'undefined'
       })
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       expect((<any>pk).publicKeyPem).toEqual(rsa4096PublicKey)
+    })
+  })
+
+  describe('base58 key', () => {
+    const publicKeyBase58 = 'SYnSwQmBmVwrHoGo6mnqFCX28sr3UzAZw9yyiBTLaf2foDfxDTgNdpn3MPD4gUGi4cgunK8cnGbPS5yjVh5uAXGr'
+
+    it('supports base58 keys as hexstring', async () => {
+      const publicKeyHex =
+        '04fdd57adec3d438ea237fe46b33ee1e016eda6b585c3e27ea66686c2ea535847946393f8145252eea68afe67e287b3ed9b31685ba6c3b00060a73b9b1242d68f7'
+      const did = `did:ethr:dev:${delegate1}`
+      const didController = new EthrDID({
+        identifier: did,
+        provider,
+        registry,
+      })
+      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', `0x${publicKeyHex}`, 86400)
+      const doc = (await resolver.resolve(did)).didDocument
+      expect(doc?.verificationMethod).toEqual([
+        {
+          blockchainAccountId: `${delegate1}@eip155:1337`,
+          controller: did,
+          id: `${did}#controller`,
+          type: 'EcdsaSecp256k1RecoveryMethod2020',
+        },
+        {
+          controller: did,
+          id: `${did}#delegate-1`,
+          publicKeyBase58,
+          type: 'EcdsaSecp256k1VerificationKey2019',
+        },
+      ])
+    })
+
+    it('supports base58 keys as string', async () => {
+      const did = `did:ethr:dev:${delegate2}`
+      const didController = new EthrDID({
+        identifier: did,
+        provider,
+        registry,
+      })
+      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', publicKeyBase58, 86400)
+      const doc = (await resolver.resolve(did)).didDocument
+      expect(doc?.verificationMethod).toEqual([
+        {
+          blockchainAccountId: `${delegate2}@eip155:1337`,
+          controller: did,
+          id: `${did}#controller`,
+          type: 'EcdsaSecp256k1RecoveryMethod2020',
+        },
+        {
+          controller: did,
+          id: `${did}#delegate-1`,
+          publicKeyBase58,
+          type: 'EcdsaSecp256k1VerificationKey2019',
+        },
+      ])
     })
   })
 })
