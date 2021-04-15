@@ -1,63 +1,52 @@
-import { Resolver } from 'did-resolver'
-import { getResolver, delegateTypes } from 'ethr-did-resolver'
-import EthrDID from '../index'
-import Contract from 'truffle-contract'
+import { Resolver, Resolvable } from 'did-resolver'
+import { Contract, ContractFactory } from '@ethersproject/contracts'
+import { JsonRpcProvider } from '@ethersproject/providers'
+import { getResolver } from 'ethr-did-resolver'
+import { EthrDID, DelegateTypes, KeyPair } from '../index'
+import { createProvider, sleep } from './testUtils'
 import DidRegistryContract from 'ethr-did-registry'
-import Web3 from 'web3'
-import ganache from 'ganache-cli'
 import { verifyJWT } from 'did-jwt'
 
-const { Secp256k1SignatureAuthentication2018 } = delegateTypes
-
-function sleep (seconds) {
-  return new Promise(resolve => setTimeout(resolve, seconds * 1000))
-}
-
 describe('EthrDID', () => {
-  let ethrDid,
-    plainDid,
-    registry,
-    accounts,
-    did,
-    identity,
-    owner,
-    delegate1,
-    delegate2,
-    provider,
-    resolver
+  let ethrDid: EthrDID,
+    plainDid: EthrDID,
+    registry: string,
+    accounts: string[],
+    did: string,
+    identity: string,
+    owner: string,
+    delegate1: string,
+    delegate2: string,
+    resolver: Resolvable
+
+  const provider: JsonRpcProvider = createProvider()
 
   beforeAll(async () => {
-    provider = ganache.provider()
-    const DidReg = Contract(DidRegistryContract)
-    const web3 = new Web3()
-    web3.setProvider(provider)
-    const getAccounts = () =>
-      new Promise((resolve, reject) =>
-        web3.eth.getAccounts((error, accounts) =>
-          error ? reject(error) : resolve(accounts)
-        )
-      )
-    DidReg.setProvider(provider)
-    accounts = await getAccounts()
-    identity = accounts[1].toLowerCase()
-    owner = accounts[2].toLowerCase()
-    delegate1 = accounts[3].toLowerCase()
-    delegate2 = accounts[4].toLowerCase()
-    did = `did:ethr:${identity}`
+    const factory = ContractFactory.fromSolidity(DidRegistryContract).connect(provider.getSigner(0))
 
-    registry = await DidReg.new({
-      from: accounts[0],
-      gasPrice: 100000000000,
-      gas: 4712388
-    })
+    let registryContract: Contract
+    registryContract = await factory.deploy()
+    registryContract = await registryContract.deployed()
+
+    await registryContract.deployTransaction.wait()
+
+    registry = registryContract.address
+
+    accounts = await provider.listAccounts()
+
+    identity = accounts[1]
+    owner = accounts[2]
+    delegate1 = accounts[3]
+    delegate2 = accounts[4]
+    did = `did:ethr:dev:${identity}`
+
+    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: 1337 }))
     ethrDid = new EthrDID({
       provider,
-      registry: registry.address,
-      address: identity
+      registry,
+      identifier: identity,
+      chainNameOrId: 'dev',
     })
-    resolver = new Resolver(
-      getResolver({ provider, registry: registry.address })
-    )
   })
 
   describe('presets', () => {
@@ -84,24 +73,22 @@ describe('EthrDID', () => {
         return expect(ethrDid.lookupOwner()).resolves.toEqual(owner)
       })
 
-      it('resolves document', () => {
-        return expect(resolver.resolve(did)).resolves.toEqual({
-          '@context': 'https://w3id.org/did/v1',
+      it('resolves document', async () => {
+        return expect((await resolver.resolve(did)).didDocument).toEqual({
+          '@context': [
+            'https://www.w3.org/ns/did/v1',
+            'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+          ],
           id: did,
-          publicKey: [
+          verificationMethod: [
             {
               id: `${did}#controller`,
-              type: 'Secp256k1VerificationKey2018',
+              type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              ethereumAddress: owner
-            }
+              blockchainAccountId: `${owner}@eip155:1337`,
+            },
           ],
-          authentication: [
-            {
-              type: 'Secp256k1SignatureAuthentication2018',
-              publicKey: `${did}#controller`
-            }
-          ]
+          authentication: [`${did}#controller`],
         })
       })
     })
@@ -109,33 +96,35 @@ describe('EthrDID', () => {
     describe('delegates', () => {
       describe('add signing delegate', () => {
         beforeAll(async () => {
-          await ethrDid.addDelegate(delegate1, { expiresIn: 2 })
+          const txHash = await ethrDid.addDelegate(delegate1, {
+            expiresIn: 100,
+          })
+          await provider.waitForTransaction(txHash)
         })
 
-        it('resolves document', () => {
-          return expect(resolver.resolve(did)).resolves.toEqual({
-            '@context': 'https://w3id.org/did/v1',
+        it('resolves document', async () => {
+          const resolution = await resolver.resolve(did)
+          return expect(resolution.didDocument).toEqual({
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+            ],
             id: did,
-            publicKey: [
+            verificationMethod: [
               {
                 id: `${did}#controller`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: owner
+                blockchainAccountId: `${owner}@eip155:1337`,
               },
               {
                 id: `${did}#delegate-1`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: delegate1
-              }
+                blockchainAccountId: `${delegate1}@eip155:1337`,
+              },
             ],
-            authentication: [
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#controller`
-              }
-            ]
+            authentication: [`${did}#controller`],
           })
         })
       })
@@ -143,113 +132,71 @@ describe('EthrDID', () => {
       describe('add auth delegate', () => {
         beforeAll(async () => {
           await ethrDid.addDelegate(delegate2, {
-            delegateType: Secp256k1SignatureAuthentication2018,
-            expiresIn: 10
+            delegateType: DelegateTypes.sigAuth,
+            expiresIn: 2,
           })
         })
 
-        it('resolves document', () => {
-          return expect(resolver.resolve(did)).resolves.toEqual({
-            '@context': 'https://w3id.org/did/v1',
+        it('resolves document', async () => {
+          return expect((await resolver.resolve(did)).didDocument).toEqual({
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+            ],
             id: did,
-            publicKey: [
+            verificationMethod: [
               {
                 id: `${did}#controller`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: owner
+                blockchainAccountId: `${owner}@eip155:1337`,
               },
               {
                 id: `${did}#delegate-1`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: delegate1
+                blockchainAccountId: `${delegate1}@eip155:1337`,
               },
               {
                 id: `${did}#delegate-2`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: delegate2
-              }
-            ],
-            authentication: [
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#controller`
+                blockchainAccountId: `${delegate2}@eip155:1337`,
               },
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#delegate-2`
-              }
-            ]
+            ],
+            authentication: [`${did}#controller`, `${did}#delegate-2`],
           })
         })
       })
 
       describe('expire automatically', () => {
         beforeAll(async () => {
-          await sleep(3)
+          await sleep(4)
         })
 
-        it('resolves document', () => {
-          return expect(resolver.resolve(did)).resolves.toEqual({
-            '@context': 'https://w3id.org/did/v1',
+        it('resolves document', async () => {
+          const resolution = await resolver.resolve(did)
+          return expect(resolution.didDocument).toEqual({
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+            ],
             id: did,
-            publicKey: [
+            verificationMethod: [
               {
                 id: `${did}#controller`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: owner
+                blockchainAccountId: `${owner}@eip155:1337`,
               },
               {
                 id: `${did}#delegate-1`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: delegate2
-              }
-            ],
-            authentication: [
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#controller`
+                blockchainAccountId: `${delegate1}@eip155:1337`,
               },
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#delegate-1`
-              }
-            ]
-          })
-        })
-      })
-
-      describe('revokes delegate', () => {
-        beforeAll(async () => {
-          await ethrDid.revokeDelegate(
-            delegate2,
-            Secp256k1SignatureAuthentication2018
-          )
-          await sleep(1)
-        })
-
-        it('resolves document', () => {
-          return expect(resolver.resolve(did)).resolves.toEqual({
-            '@context': 'https://w3id.org/did/v1',
-            id: did,
-            publicKey: [
-              {
-                id: `${did}#controller`,
-                type: 'Secp256k1VerificationKey2018',
-                controller: did,
-                ethereumAddress: owner
-              }
             ],
-            authentication: [
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#controller`
-              }
-            ]
+            authentication: [`${did}#controller`],
           })
         })
       })
@@ -257,38 +204,70 @@ describe('EthrDID', () => {
       describe('re-add auth delegate', () => {
         beforeAll(async () => {
           await ethrDid.addDelegate(delegate2, {
-            delegateType: Secp256k1SignatureAuthentication2018
+            delegateType: DelegateTypes.sigAuth,
           })
         })
 
-        it('resolves document', () => {
-          return expect(resolver.resolve(did)).resolves.toEqual({
-            '@context': 'https://w3id.org/did/v1',
+        it('resolves document', async () => {
+          return expect((await resolver.resolve(did)).didDocument).toEqual({
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+            ],
             id: did,
-            publicKey: [
+            verificationMethod: [
               {
                 id: `${did}#controller`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: owner
+                blockchainAccountId: `${owner}@eip155:1337`,
               },
               {
                 id: `${did}#delegate-1`,
-                type: 'Secp256k1VerificationKey2018',
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: delegate2
-              }
-            ],
-            authentication: [
-              {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#controller`
+                blockchainAccountId: `${delegate1}@eip155:1337`,
               },
               {
-                type: 'Secp256k1SignatureAuthentication2018',
-                publicKey: `${did}#delegate-1`
-              }
-            ]
+                id: `${did}#delegate-3`,
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
+                controller: did,
+                blockchainAccountId: `${delegate2}@eip155:1337`,
+              },
+            ],
+            authentication: [`${did}#controller`, `${did}#delegate-3`],
+          })
+        })
+      })
+
+      describe('revokes delegate', () => {
+        beforeAll(async () => {
+          await ethrDid.revokeDelegate(delegate2, DelegateTypes.sigAuth)
+        })
+
+        it('resolves document', async () => {
+          const resolution = await resolver.resolve(did)
+          return expect(resolution.didDocument).toEqual({
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+            ],
+            id: did,
+            verificationMethod: [
+              {
+                id: `${did}#controller`,
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
+                controller: did,
+                blockchainAccountId: `${owner}@eip155:1337`,
+              },
+              {
+                id: `${did}#delegate-1`,
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
+                controller: did,
+                blockchainAccountId: `${delegate1}@eip155:1337`,
+              },
+            ],
+            authentication: [`${did}#controller`],
           })
         })
       })
@@ -305,41 +284,34 @@ describe('EthrDID', () => {
             )
           })
 
-          it('resolves document', () => {
-            return expect(resolver.resolve(did)).resolves.toEqual({
-              '@context': 'https://w3id.org/did/v1',
+          it('resolves document', async () => {
+            return expect((await resolver.resolve(did)).didDocument).toEqual({
+              '@context': [
+                'https://www.w3.org/ns/did/v1',
+                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+              ],
               id: did,
-              publicKey: [
+              verificationMethod: [
                 {
                   id: `${did}#controller`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: owner
+                  blockchainAccountId: `${owner}@eip155:1337`,
                 },
                 {
                   id: `${did}#delegate-1`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: delegate2
+                  blockchainAccountId: `${delegate1}@eip155:1337`,
                 },
                 {
-                  id: `${did}#delegate-2`,
-                  type: 'Secp256k1VerificationKey2018',
+                  id: `${did}#delegate-5`,
+                  type: 'EcdsaSecp256k1VerificationKey2019',
                   controller: did,
-                  publicKeyHex:
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
-                }
+                  publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
+                },
               ],
-              authentication: [
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#controller`
-                },
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#delegate-1`
-                }
-              ]
+              authentication: [`${did}#controller`],
             })
           })
         })
@@ -353,48 +325,40 @@ describe('EthrDID', () => {
             )
           })
 
-          it('resolves document', () => {
-            return expect(resolver.resolve(did)).resolves.toEqual({
-              '@context': 'https://w3id.org/did/v1',
+          it('resolves document', async () => {
+            return expect((await resolver.resolve(did)).didDocument).toEqual({
+              '@context': [
+                'https://www.w3.org/ns/did/v1',
+                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+              ],
               id: did,
-              publicKey: [
+              verificationMethod: [
                 {
                   id: `${did}#controller`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: owner
+                  blockchainAccountId: `${owner}@eip155:1337`,
                 },
                 {
                   id: `${did}#delegate-1`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: delegate2
+                  blockchainAccountId: `${delegate1}@eip155:1337`,
                 },
                 {
-                  id: `${did}#delegate-2`,
-                  type: 'Secp256k1VerificationKey2018',
+                  id: `${did}#delegate-5`,
+                  type: 'EcdsaSecp256k1VerificationKey2019',
                   controller: did,
-                  publicKeyHex:
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
+                  publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
                 },
                 {
-                  id: `${did}#delegate-3`,
+                  id: `${did}#delegate-6`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64:
-                    'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx'
-                }
-              ],
-              authentication: [
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#controller`
+                  publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
                 },
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#delegate-1`
-                }
-              ]
+              ],
+              authentication: [`${did}#controller`],
             })
           })
         })
@@ -403,63 +367,51 @@ describe('EthrDID', () => {
           beforeAll(async () => {
             await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
-              Buffer.from(
-                'f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72',
-                'hex'
-              ),
+              Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'),
               10
             )
           })
 
-          it('resolves document', () => {
-            return expect(resolver.resolve(did)).resolves.toEqual({
-              '@context': 'https://w3id.org/did/v1',
+          it('resolves document', async () => {
+            return expect((await resolver.resolve(did)).didDocument).toEqual({
+              '@context': [
+                'https://www.w3.org/ns/did/v1',
+                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+              ],
               id: did,
-              publicKey: [
+              verificationMethod: [
                 {
                   id: `${did}#controller`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: owner
+                  blockchainAccountId: `${owner}@eip155:1337`,
                 },
                 {
                   id: `${did}#delegate-1`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: delegate2
+                  blockchainAccountId: `${delegate1}@eip155:1337`,
                 },
                 {
-                  id: `${did}#delegate-2`,
-                  type: 'Secp256k1VerificationKey2018',
+                  id: `${did}#delegate-5`,
+                  type: 'EcdsaSecp256k1VerificationKey2019',
                   controller: did,
-                  publicKeyHex:
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
+                  publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
                 },
                 {
-                  id: `${did}#delegate-3`,
+                  id: `${did}#delegate-6`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64:
-                    'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx'
+                  publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
                 },
                 {
-                  id: `${did}#delegate-4`,
+                  id: `${did}#delegate-7`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64:
-                    '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
-                }
+                  publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty',
+                },
               ],
-              authentication: [
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#controller`
-                },
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#delegate-1`
-                }
-              ]
+              authentication: [`${did}#controller`],
             })
           })
         })
@@ -468,131 +420,103 @@ describe('EthrDID', () => {
       describe('service endpoints', () => {
         describe('HubService', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute(
-              'did/svc/HubService',
-              'https://hubs.uport.me',
-              10
-            )
+            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 100)
           })
-          it('resolves document', () => {
-            return expect(resolver.resolve(did)).resolves.toEqual({
-              '@context': 'https://w3id.org/did/v1',
+          it('resolves document', async () => {
+            return expect((await resolver.resolve(did)).didDocument).toEqual({
+              '@context': [
+                'https://www.w3.org/ns/did/v1',
+                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+              ],
               id: did,
-              publicKey: [
+              verificationMethod: [
                 {
                   id: `${did}#controller`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: owner
+                  blockchainAccountId: `${owner}@eip155:1337`,
                 },
                 {
                   id: `${did}#delegate-1`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: delegate2
+                  blockchainAccountId: `${delegate1}@eip155:1337`,
                 },
                 {
-                  id: `${did}#delegate-2`,
-                  type: 'Secp256k1VerificationKey2018',
+                  id: `${did}#delegate-5`,
+                  type: 'EcdsaSecp256k1VerificationKey2019',
                   controller: did,
-                  publicKeyHex:
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
+                  publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
                 },
                 {
-                  id: `${did}#delegate-3`,
+                  id: `${did}#delegate-6`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64: Buffer.from(
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
-                    'hex'
-                  ).toString('base64')
+                  publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
                 },
                 {
-                  id: `${did}#delegate-4`,
+                  id: `${did}#delegate-7`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64:
-                    '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
-                }
-              ],
-              authentication: [
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#controller`
+                  publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty',
                 },
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#delegate-1`
-                }
               ],
+              authentication: [`${did}#controller`],
               service: [
                 {
+                  id: 'did:ethr:dev:0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf#service-1',
                   type: 'HubService',
-                  serviceEndpoint: 'https://hubs.uport.me'
-                }
-              ]
+                  serviceEndpoint: 'https://hubs.uport.me',
+                },
+              ],
             })
           })
         })
 
         describe('revoke HubService', () => {
           beforeAll(async () => {
-            await ethrDid.revokeAttribute(
-              'did/svc/HubService',
-              'https://hubs.uport.me'
-            )
+            await ethrDid.revokeAttribute('did/svc/HubService', 'https://hubs.uport.me')
           })
-          it('resolves document', () => {
-            return expect(resolver.resolve(did)).resolves.toEqual({
-              '@context': 'https://w3id.org/did/v1',
+          it('resolves document', async () => {
+            return expect((await resolver.resolve(did)).didDocument).toEqual({
+              '@context': [
+                'https://www.w3.org/ns/did/v1',
+                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+              ],
               id: did,
-              publicKey: [
+              verificationMethod: [
                 {
                   id: `${did}#controller`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: owner
+                  blockchainAccountId: `${owner}@eip155:1337`,
                 },
                 {
                   id: `${did}#delegate-1`,
-                  type: 'Secp256k1VerificationKey2018',
+                  type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  ethereumAddress: delegate2
+                  blockchainAccountId: `${delegate1}@eip155:1337`,
                 },
                 {
-                  id: `${did}#delegate-2`,
-                  type: 'Secp256k1VerificationKey2018',
+                  id: `${did}#delegate-5`,
+                  type: 'EcdsaSecp256k1VerificationKey2019',
                   controller: did,
-                  publicKeyHex:
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
+                  publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
                 },
                 {
-                  id: `${did}#delegate-3`,
+                  id: `${did}#delegate-6`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64: Buffer.from(
-                    '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
-                    'hex'
-                  ).toString('base64')
+                  publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
                 },
                 {
-                  id: `${did}#delegate-4`,
+                  id: `${did}#delegate-7`,
                   type: 'Ed25519VerificationKey2018',
                   controller: did,
-                  publicKeyBase64:
-                    '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
-                }
+                  publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty',
+                },
               ],
-              authentication: [
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#controller`
-                },
-                {
-                  type: 'Secp256k1SignatureAuthentication2018',
-                  publicKey: `${did}#delegate-1`
-                }
-              ]
+              authentication: [`${did}#controller`],
             })
           })
         })
@@ -603,113 +527,111 @@ describe('EthrDID', () => {
   describe('signJWT', () => {
     describe('No signer configured', () => {
       it('should fail', () => {
-        return expect(ethrDid.signJWT({ hello: 'world' })).rejects.toEqual(
-          new Error('No signer configured')
-        )
+        return expect(ethrDid.signJWT({ hello: 'world' })).rejects.toEqual(new Error('No signer configured'))
       })
     })
 
     describe('creating a signing Delegate', () => {
-      let kp
+      let kp: KeyPair
       beforeAll(async () => {
         kp = (await ethrDid.createSigningDelegate()).kp
       })
 
-      it('resolves document', () => {
-        return expect(resolver.resolve(did)).resolves.toEqual({
-          '@context': 'https://w3id.org/did/v1',
+      it('resolves document', async () => {
+        return expect((await resolver.resolve(did)).didDocument).toEqual({
+          '@context': [
+            'https://www.w3.org/ns/did/v1',
+            'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+          ],
           id: did,
-          publicKey: [
+          verificationMethod: [
             {
               id: `${did}#controller`,
-              type: 'Secp256k1VerificationKey2018',
+              type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              ethereumAddress: owner
+              blockchainAccountId: `${owner}@eip155:1337`,
             },
             {
               id: `${did}#delegate-1`,
-              type: 'Secp256k1VerificationKey2018',
+              type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              ethereumAddress: delegate2
-            },
-            {
-              id: `${did}#delegate-2`,
-              type: 'Secp256k1VerificationKey2018',
-              controller: did,
-              publicKeyHex:
-                '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71'
-            },
-            {
-              id: `${did}#delegate-3`,
-              type: 'Ed25519VerificationKey2018',
-              controller: did,
-              publicKeyBase64: Buffer.from(
-                '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
-                'hex'
-              ).toString('base64')
-            },
-            {
-              id: `${did}#delegate-4`,
-              type: 'Ed25519VerificationKey2018',
-              controller: did,
-              publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty'
+              blockchainAccountId: `${delegate1}@eip155:1337`,
             },
             {
               id: `${did}#delegate-5`,
-              type: 'Secp256k1VerificationKey2018',
+              type: 'EcdsaSecp256k1VerificationKey2019',
               controller: did,
-              ethereumAddress: kp.address
-            }
-          ],
-          authentication: [
-            {
-              type: 'Secp256k1SignatureAuthentication2018',
-              publicKey: `${did}#controller`
+              publicKeyHex: '02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
             },
             {
-              type: 'Secp256k1SignatureAuthentication2018',
-              publicKey: `${did}#delegate-1`
-            }
-          ]
+              id: `${did}#delegate-6`,
+              type: 'Ed25519VerificationKey2018',
+              controller: did,
+              publicKeyBase64: 'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
+            },
+            {
+              id: `${did}#delegate-7`,
+              type: 'Ed25519VerificationKey2018',
+              controller: did,
+              publicKeyBase64: '8rl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2ty',
+            },
+            {
+              id: `${did}#delegate-8`,
+              type: 'EcdsaSecp256k1RecoveryMethod2020',
+              controller: did,
+              blockchainAccountId: `${kp.address}@eip155:1337`,
+            },
+          ],
+          authentication: [`${did}#controller`],
         })
       })
 
       it('should sign valid jwt', () => {
-        return ethrDid.signJWT({ hello: 'world' }).then(jwt =>
+        return ethrDid.signJWT({ hello: 'world' }).then((jwt: string) =>
           verifyJWT(jwt, { resolver }).then(
-            ({ payload, signer }) =>
+            ({ signer }) =>
               expect(signer).toEqual({
-                id: `${did}#delegate-5`,
-                type: 'Secp256k1VerificationKey2018',
+                id: `${did}#delegate-8`,
+                type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                ethereumAddress: kp.address
+                blockchainAccountId: `${kp.address}@eip155:1337`,
               }),
-            error => expect(error).toBeNull()
+            (error) => expect(error).toBeNull()
           )
         )
       })
     })
 
     describe('plain vanilla keypair account', () => {
-      it('should sign valid jwt', () => {
-        const kp = EthrDID.createKeyPair()
-        plainDid = new EthrDID({ ...kp, provider, registry: registry.address })
-        plainDid
-          .signJWT({ hello: 'world' })
-          .then(jwt => verifyJWT(jwt, { resolver }))
-          .then(({ payload }) => expect(payload).toBeDefined())
+      it('should sign valid jwt', async () => {
+        const kp: KeyPair = EthrDID.createKeyPair()
+        plainDid = new EthrDID({
+          identifier: kp.publicKey,
+          privateKey: kp.privateKey,
+          provider,
+          registry: registry,
+          chainNameOrId: 'dev',
+        })
+        const jwt = await plainDid.signJWT({ hello: 'world' })
+        const { payload } = await verifyJWT(jwt, { resolver })
+        expect(payload).toBeDefined()
       })
     })
   })
 
   describe('verifyJWT', () => {
-    const ethrDid = new EthrDID(EthrDID.createKeyPair())
+    const kp: KeyPair = EthrDID.createKeyPair()
+    const ethrDid = new EthrDID({
+      identifier: kp.publicKey,
+      privateKey: kp.privateKey,
+      chainNameOrId: 'dev',
+    })
     const did = ethrDid.did
 
-    it('verifies the signature of the JWT', () => {
+    it('verifies the signature of the JWT', async () => {
       return ethrDid
         .signJWT({ hello: 'friend' })
-        .then(jwt => plainDid.verifyJWT(jwt, resolver))
+        .then((jwt) => plainDid.verifyJWT(jwt, resolver))
         .then(({ issuer }) => expect(issuer).toEqual(did))
     })
 
@@ -717,19 +639,17 @@ describe('EthrDID', () => {
       it('verifies the signature of the JWT', () => {
         return ethrDid
           .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt, resolver))
+          .then((jwt) => plainDid.verifyJWT(jwt, resolver))
           .then(({ issuer }) => expect(issuer).toEqual(did))
       })
 
       it('fails if wrong did', () => {
         return ethrDid
           .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then(jwt => plainDid.verifyJWT(jwt, resolver))
-          .catch(error =>
+          .then((jwt) => plainDid.verifyJWT(jwt, resolver))
+          .catch((error) =>
             expect(error.message).toEqual(
-              `JWT audience does not match your DID: aud: ${
-                ethrDid.did
-              } !== yours: ${plainDid.did}`
+              `JWT audience does not match your DID: aud: ${ethrDid.did} !== yours: ${plainDid.did}`
             )
           )
       })
@@ -753,18 +673,15 @@ describe('EthrDID', () => {
             -----END PUBLIC KEY-----`
 
     beforeAll(async () => {
-      await ethrDid.setAttribute(
-        'did/pub/Rsa/veriKey/pem',
-        rsa4096PublicKey,
-        86400,
-        200000
-      )
+      await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKey, 86400, 200000)
     })
 
     it('should create add the large RSA key in the hex format', async () => {
-      const didDocument = await resolver.resolve(did)
-      const returnedValue = didDocument.publicKey[6].publicKeyPem
-      expect(returnedValue).toEqual(rsa4096PublicKey)
+      const didDocument = (await resolver.resolve(did)).didDocument
+      const pk = didDocument?.verificationMethod?.find((pk) => {
+        return typeof (<any>pk).publicKeyPem !== 'undefined'
+      })
+      expect((<any>pk).publicKeyPem).toEqual(rsa4096PublicKey)
     })
   })
 })
