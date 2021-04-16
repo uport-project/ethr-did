@@ -3,14 +3,13 @@ import { Signer as TxSigner } from '@ethersproject/abstract-signer'
 import { CallOverrides } from '@ethersproject/contracts'
 import { computeAddress } from '@ethersproject/transactions'
 import { computePublicKey } from '@ethersproject/signing-key'
-import { getAddress } from '@ethersproject/address'
 import { Provider } from '@ethersproject/providers'
 import { Wallet } from '@ethersproject/wallet'
 import * as base64 from '@ethersproject/base64'
 import { hexlify, hexValue, isBytes } from '@ethersproject/bytes'
 import { Base58 } from '@ethersproject/basex'
 import { toUtf8Bytes } from '@ethersproject/strings'
-import { REGISTRY, EthrDidController } from 'ethr-did-resolver'
+import { REGISTRY, EthrDidController, interpretIdentifier } from 'ethr-did-resolver'
 import { Resolvable } from 'did-resolver'
 
 export enum DelegateTypes {
@@ -222,23 +221,6 @@ export class EthrDID {
 
   async verifyJWT(jwt: string, resolver: Resolvable, audience = this.did): Promise<JWTVerified> {
     return verifyJWT(jwt, { resolver, audience })
-  }
-}
-
-function interpretIdentifier(identifier: string): { address: string; publicKey?: string; network?: string } {
-  let input = identifier
-  let network = undefined
-  if (input.startsWith('did:ethr')) {
-    const components = input.split(':')
-    input = components[components.length - 1]
-    if (components.length >= 4) {
-      network = components.splice(2, components.length - 3).join(':')
-    }
-  }
-  if (input.length > 42) {
-    return { address: computeAddress(input), publicKey: input, network }
-  } else {
-    return { address: getAddress(input), network } // checksum address
   }
 }
 
