@@ -1,3 +1,10 @@
+## [2.1.1](https://github.com/uport-project/ethr-did/compare/2.1.0...2.1.1) (2021-04-16)
+
+
+### Bug Fixes
+
+* **deps:** bump ethr-did-resolver to 4.2.0 ([9b4e1b2](https://github.com/uport-project/ethr-did/commit/9b4e1b2f3347062aba104e7b28b280c3d01bc64c))
+
 # [2.1.0](https://github.com/uport-project/ethr-did/compare/2.0.0...2.1.0) (2021-04-15)
 
 
