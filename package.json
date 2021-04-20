@@ -52,7 +52,7 @@
     "testEnvironment": "node"
   },
   "devDependencies": {
-    "@ethersproject/contracts": "5.1.0",
+    "@ethersproject/contracts": "5.1.1",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
     "@types/jest": "26.0.22",
