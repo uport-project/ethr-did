@@ -89,6 +89,7 @@ describe('EthrDID', () => {
             },
           ],
           authentication: [`${did}#controller`],
+          assertionMethod: [`${did}#controller`],
         })
       })
     })
@@ -125,6 +126,7 @@ describe('EthrDID', () => {
               },
             ],
             authentication: [`${did}#controller`],
+            assertionMethod: [`${did}#controller`, `${did}#delegate-1`],
           })
         })
       })
@@ -165,13 +167,14 @@ describe('EthrDID', () => {
               },
             ],
             authentication: [`${did}#controller`, `${did}#delegate-2`],
+            assertionMethod: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-2`],
           })
         })
       })
 
       describe('expire automatically', () => {
         beforeAll(async () => {
-          await sleep(4)
+          await sleep(5)
         })
 
         it('resolves document', async () => {
@@ -197,6 +200,7 @@ describe('EthrDID', () => {
               },
             ],
             authentication: [`${did}#controller`],
+            assertionMethod: [`${did}#controller`, `${did}#delegate-1`],
           })
         })
       })
@@ -236,6 +240,7 @@ describe('EthrDID', () => {
               },
             ],
             authentication: [`${did}#controller`, `${did}#delegate-3`],
+            assertionMethod: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-3`],
           })
         })
       })
@@ -268,6 +273,7 @@ describe('EthrDID', () => {
               },
             ],
             authentication: [`${did}#controller`],
+            assertionMethod: [`${did}#controller`, `${did}#delegate-1`],
           })
         })
       })
@@ -312,6 +318,7 @@ describe('EthrDID', () => {
                 },
               ],
               authentication: [`${did}#controller`],
+              assertionMethod: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-5`],
             })
           })
         })
@@ -359,6 +366,7 @@ describe('EthrDID', () => {
                 },
               ],
               authentication: [`${did}#controller`],
+              assertionMethod: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-5`, `${did}#delegate-6`],
             })
           })
         })
@@ -412,6 +420,13 @@ describe('EthrDID', () => {
                 },
               ],
               authentication: [`${did}#controller`],
+              assertionMethod: [
+                `${did}#controller`,
+                `${did}#delegate-1`,
+                `${did}#delegate-5`,
+                `${did}#delegate-6`,
+                `${did}#delegate-7`,
+              ],
             })
           })
         })
@@ -462,6 +477,13 @@ describe('EthrDID', () => {
                 },
               ],
               authentication: [`${did}#controller`],
+              assertionMethod: [
+                `${did}#controller`,
+                `${did}#delegate-1`,
+                `${did}#delegate-5`,
+                `${did}#delegate-6`,
+                `${did}#delegate-7`,
+              ],
               service: [
                 {
                   id: 'did:ethr:dev:0x7E5F4552091A69125d5DfCb7b8C2659029395Bdf#service-1',
@@ -517,6 +539,13 @@ describe('EthrDID', () => {
                 },
               ],
               authentication: [`${did}#controller`],
+              assertionMethod: [
+                `${did}#controller`,
+                `${did}#delegate-1`,
+                `${did}#delegate-5`,
+                `${did}#delegate-6`,
+                `${did}#delegate-7`,
+              ],
             })
           })
         })
@@ -583,6 +612,14 @@ describe('EthrDID', () => {
             },
           ],
           authentication: [`${did}#controller`],
+          assertionMethod: [
+            `${did}#controller`,
+            `${did}#delegate-1`,
+            `${did}#delegate-5`,
+            `${did}#delegate-6`,
+            `${did}#delegate-7`,
+            `${did}#delegate-8`,
+          ],
         })
       })
 
