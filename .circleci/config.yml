@@ -80,7 +80,7 @@ jobs:
   verify-unit-tests:
     working_directory: ~/project
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:15
     steps:
       - checkout
       - *restore-npm-cache
@@ -102,7 +102,7 @@ jobs:
   run-semantic-release:
     working_directory: ~/project
     docker:
-      - image: circleci/node:12
+      - image: circleci/node:15
     steps:
       - checkout:
           path: ~/project
