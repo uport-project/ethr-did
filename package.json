@@ -59,7 +59,7 @@
     "@typescript-eslint/eslint-plugin": "4.22.1",
     "@typescript-eslint/parser": "4.22.1",
     "codecov": "3.8.2",
-    "eslint": "7.25.0",
+    "eslint": "7.26.0",
     "eslint-config-prettier": "8.3.0",
     "ethr-did-registry": "0.0.3",
     "ganache-cli": "6.12.2",
