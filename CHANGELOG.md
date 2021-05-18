@@ -1,3 +1,10 @@
+## [2.1.4](https://github.com/uport-project/ethr-did/compare/2.1.3...2.1.4) (2021-05-18)
+
+
+### Bug Fixes
+
+* **deps:** bump did-jwt@5.4.0 ([60ea36c](https://github.com/uport-project/ethr-did/commit/60ea36c7e78d186f2f3b40ee47d7eb65837298ff))
+
 ## [2.1.3](https://github.com/uport-project/ethr-did/compare/2.1.2...2.1.3) (2021-04-26)
 
 
