@@ -80,19 +80,18 @@ For example:
 
 ## Configuration
 
-```js
-import EthrDID from 'ethr-did'
+```typescript
+import { EthrDID } from 'ethr-did'
 
-// Assume web3 object is configured either manually or injected using metamask
-
-
-const ethrDid = new EthrDID({identifier: '0x...', privateKey: '...', provider})
+const chainNameOrId = 1 // mainnet
+const provider = InfuraProvider(<infura project ID>, chainNameOrId)
+const ethrDid = new EthrDID({identifier: '0x...', privateKey: '...', provider, chainNameOrId})
 ```
 
 | key | description| required |
 |-----|------------|----------|
 |`identifier`|Ethereum address, public key or a full `did:ethr` representing Identity| yes |
-|`chainNameOrId`|The name or chainId of the ethereum network (defaults to 'mainnet') | no |
+|`chainNameOrId`|The name or chainId of the ethereum network (defaults to 'mainnet') | no, but recommended |
 |`registry`| registry address (defaults to `0xdca7ef03e98e0dc2b855be647c39abe984fcf21b`) | no |
 |`provider`| web3 provider | either `provider` or `web3` or `rpcUrl` |
 |`web3`| preconfigured web3 object | either `provider` or `web3` or `rpcUrl` |
@@ -101,11 +100,17 @@ const ethrDid = new EthrDID({identifier: '0x...', privateKey: '...', provider})
 |`txSigner`| [Ethers.js Signer](https://docs.ethers.io/v5/api/signer/#Signer)| either `txSigner` or `privateKey` |
 |`privateKey`| Hex encoded private key | yes* |
 
+If `privateKey` is specified, then `signer` and `txSigner` don't need to be used.
+Otherwise, a `txSigner` is required to perform CRUD operations on the DID document, and a `signer` is required to sign JWTs.
+To generate valid JWT, the `signer` must use one of the keys listed in the DID document.
+To be able to perform CRUD operations, the `txSigner` must be backed by the key that governs the `owner` property.
+See https://github.com/uport-project/ethr-did-registry#looking-up-identity-ownership
+
 ## Notes
 
 ### Readonly ethr-did
-An instance created using only an address can only be used to encapsulate an external ethr-did (one where there is no
-access to the private key). This instance will not have the ability to sign anything, but it can be used for a subset of
+An instance created using only an address or publicKey (without access to a privateKey or to signers) can only be used to
+encapsulate an external ethr-did . This instance will not have the ability to sign anything, but it can be used for a subset of
 actions:
 
 * provide its own address (`ethrDid.address`)
@@ -117,4 +122,11 @@ actions:
 EthrDid can be configured to control a DID on any ethereum network.
 To do this, you mush specify the `chainNameOrId` during construction.
 Example:
-`new EthrDid({ address, 'rsk' }).did`
+```ts
+console.log( new EthrDid({ '0xb9c5714089478a327f09197987f16f9e5d936e8a', 'rinkeby' }).did )
+// did:ethr:rinkeby:0xb9c5714089478a327f09197987f16f9e5d936e8a
+```
+
+If this property is not specified, then the library will attempt to infer it from the `provider` configuration or from the
+`identifier` if it is specified as a DID. But, be warned that it may lead to inconsistencies since the inference is not perfect.
+It is highly recommended that you use a `chainNameOrId` property to match the `provider`.
