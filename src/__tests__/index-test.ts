@@ -7,6 +7,8 @@ import { createProvider, sleep } from './testUtils'
 import DidRegistryContract from 'ethr-did-registry'
 import { verifyJWT } from 'did-jwt'
 
+jest.setTimeout(30000)
+
 describe('EthrDID', () => {
   let ethrDid: EthrDID,
     plainDid: EthrDID,
