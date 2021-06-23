@@ -56,6 +56,7 @@ An example of a DID document resolved using the Ethr-Did-Resolver:
       blockchainAccountId: `did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a@eip155:1`
     }
   ],
+  assertionMethod: [`did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller`],
   authentication: [`did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller`]
 }
 ```
@@ -134,3 +135,9 @@ console.log( new EthrDid({ '0xb9c5714089478a327f09197987f16f9e5d936e8a', 'rinkeb
 If this property is not specified, then the library will attempt to infer it from the `provider` configuration or from
 the `identifier` if it is specified as a DID. But, be warned that it may lead to inconsistencies since the inference is
 not perfect. It is highly recommended that you use a `chainNameOrId` property to match the `provider`.
+
+### More
+
+See [the guide](./docs/guides/index.md) to get a better idea about the capabilities of this lib. And, of course, make
+sure to familiarize yourself with
+the [`did:ethr` spec](https://github.com/decentralized-identity/ethr-did-resolver/blob/master/doc/did-method-spec.md)
