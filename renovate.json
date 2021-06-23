@@ -20,8 +20,7 @@
         "major"
       ],
       "groupName": "did-dependencies",
-      "commitMessagePrefix": "fix(deps):",
-      "automerge": true
+      "commitMessagePrefix": "fix(deps):"
     },
     {
       "matchDepTypes": [
@@ -31,13 +30,6 @@
       "schedule": [
         "before 5am on Monday"
       ]
-    },
-    {
-      "matchUpdateTypes": [
-        "minor",
-        "patch"
-      ],
-      "automerge": true
     }
   ]
 }
