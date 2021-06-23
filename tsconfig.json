@@ -1,7 +1,5 @@
 {
   "compilerOptions": {
-    "preserveConstEnums": true,
-    "sourceMap": true,
     "target": "ES2018",
     "module": "esnext",
     "lib": [
@@ -9,14 +7,23 @@
       "es6",
       "es2015.promise"
     ],
-    "moduleResolution": "node",
-    "esModuleInterop": true,
-    "downlevelIteration": true,
+    "declaration": true,
+    "declarationMap": true,
+    "sourceMap": true,
+    "outDir": "lib",
     "strict": true,
-    "resolveJsonModule": true
+    "noImplicitThis": false,
+    "moduleResolution": "node",
+    "types": [
+      "jest"
+    ],
+    "allowSyntheticDefaultImports": true,
+    "esModuleInterop": true
   },
   "exclude": [
-    "**/__tests__/**/*",
-    "**/build/**/*"
+    "**/__tests__/*",
+    "node_modules",
+    "lib",
+    "esm"
   ]
 }
