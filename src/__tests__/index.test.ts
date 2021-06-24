@@ -135,10 +135,11 @@ describe('EthrDID', () => {
 
       describe('add auth delegate', () => {
         beforeAll(async () => {
-          await ethrDid.addDelegate(delegate2, {
+          const txHash = await ethrDid.addDelegate(delegate2, {
             delegateType: DelegateTypes.sigAuth,
             expiresIn: 2,
           })
+          await provider.waitForTransaction(txHash)
         })
 
         it('resolves document', async () => {
@@ -209,9 +210,10 @@ describe('EthrDID', () => {
 
       describe('re-add auth delegate', () => {
         beforeAll(async () => {
-          await ethrDid.addDelegate(delegate2, {
+          const txHash = await ethrDid.addDelegate(delegate2, {
             delegateType: DelegateTypes.sigAuth,
           })
+          await provider.waitForTransaction(txHash)
         })
 
         it('resolves document', async () => {
@@ -249,7 +251,8 @@ describe('EthrDID', () => {
 
       describe('revokes delegate', () => {
         beforeAll(async () => {
-          await ethrDid.revokeDelegate(delegate2, DelegateTypes.sigAuth)
+          const txHash = await ethrDid.revokeDelegate(delegate2, DelegateTypes.sigAuth)
+          await provider.waitForTransaction(txHash)
         })
 
         it('resolves document', async () => {
@@ -285,11 +288,12 @@ describe('EthrDID', () => {
       describe('publicKey', () => {
         describe('Secp256k1VerificationKey2018', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute(
+            const txHash = await ethrDid.setAttribute(
               'did/pub/Secp256k1/veriKey',
               '0x02b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b71',
               86400
             )
+            await provider.waitForTransaction(txHash)
           })
 
           it('resolves document', async () => {
@@ -327,11 +331,12 @@ describe('EthrDID', () => {
 
         describe('Base64 Encoded Key', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute(
+            const txHash = await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               'Arl8MN52fwhM4wgBaO4pMFO6M7I11xFqMmPSnxRQk2tx',
               86400
             )
+            await provider.waitForTransaction(txHash)
           })
 
           it('resolves document', async () => {
@@ -375,11 +380,12 @@ describe('EthrDID', () => {
 
         describe('Use Buffer', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute(
+            const txHash = await ethrDid.setAttribute(
               'did/pub/Ed25519/veriKey/base64',
               Buffer.from('f2b97c30de767f084ce3080168ee293053ba33b235d7116a3263d29f1450936b72', 'hex'),
               86400
             )
+            await provider.waitForTransaction(txHash)
           })
 
           it('resolves document', async () => {
@@ -437,7 +443,8 @@ describe('EthrDID', () => {
       describe('service endpoints', () => {
         describe('HubService', () => {
           beforeAll(async () => {
-            await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 86400)
+            const txHash = await ethrDid.setAttribute('did/svc/HubService', 'https://hubs.uport.me', 86400)
+            await provider.waitForTransaction(txHash)
           })
           it('resolves document', async () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
@@ -499,7 +506,8 @@ describe('EthrDID', () => {
 
         describe('revoke HubService', () => {
           beforeAll(async () => {
-            await ethrDid.revokeAttribute('did/svc/HubService', 'https://hubs.uport.me')
+            const txHash = await ethrDid.revokeAttribute('did/svc/HubService', 'https://hubs.uport.me')
+            await provider.waitForTransaction(txHash)
           })
           it('resolves document', async () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
@@ -641,7 +649,7 @@ describe('EthrDID', () => {
       })
     })
 
-    describe('plain vanilla keypair account', () => {
+    describe('plain vanilla key pair account', () => {
       it('should sign valid jwt', async () => {
         const kp: KeyPair = EthrDID.createKeyPair('dev')
         plainDid = new EthrDID({
@@ -661,6 +669,7 @@ describe('EthrDID', () => {
     const did = ethrDidAsIssuer.did
 
     it('verifies the signature of the JWT', async () => {
+      expect.assertions(1)
       return ethrDidAsIssuer
         .signJWT({ hello: 'friend' })
         .then((jwt) => plainDid.verifyJWT(jwt, resolver))
@@ -669,21 +678,21 @@ describe('EthrDID', () => {
 
     describe('uses did for verifying aud claim', () => {
       it('verifies the signature of the JWT', () => {
+        expect.assertions(1)
         return ethrDidAsIssuer
           .signJWT({ hello: 'friend', aud: plainDid.did })
           .then((jwt) => plainDid.verifyJWT(jwt, resolver))
           .then(({ issuer }) => expect(issuer).toEqual(did))
       })
 
-      it('fails if wrong did', () => {
-        return ethrDidAsIssuer
-          .signJWT({ hello: 'friend', aud: plainDid.did })
-          .then((jwt) => plainDid.verifyJWT(jwt, resolver))
-          .catch((error) =>
-            expect(error.message).toEqual(
-              `JWT audience does not match your DID: aud: ${ethrDidAsIssuer.did} !== yours: ${plainDid.did}`
-            )
-          )
+      it('fails if wrong did is used as audience', async () => {
+        expect.assertions(1)
+        const signed = await ethrDidAsIssuer.signJWT({ hello: 'friend', aud: 'some random audience' })
+        try {
+          await plainDid.verifyJWT(signed, resolver)
+        } catch (e) {
+          expect(e).toEqual(Error(`JWT audience does not match your DID or callback url`))
+        }
       })
     })
   })
@@ -705,7 +714,8 @@ describe('EthrDID', () => {
             -----END PUBLIC KEY-----`
 
     beforeAll(async () => {
-      await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKey, 86400, 200000)
+      const txHash = await ethrDid.setAttribute('did/pub/Rsa/veriKey/pem', rsa4096PublicKey, 86400, 200000)
+      await provider.waitForTransaction(txHash)
     })
 
     it('should create add the large RSA key in the hex format', async () => {
@@ -731,7 +741,8 @@ describe('EthrDID', () => {
         provider,
         registry,
       })
-      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', `0x${publicKeyHex}`, 86400)
+      const txHash = await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', `0x${publicKeyHex}`, 86400)
+      await provider.waitForTransaction(txHash)
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {
@@ -756,7 +767,8 @@ describe('EthrDID', () => {
         provider,
         registry,
       })
-      await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', publicKeyBase58, 86400)
+      const txHash = await didController.setAttribute('did/pub/Secp256k1/veriKey/base58', publicKeyBase58, 86400)
+      await provider.waitForTransaction(txHash)
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {

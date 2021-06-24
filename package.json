@@ -28,7 +28,7 @@
     "build:js": "microbundle --compress=false",
     "build": "yarn lint && yarn build:js && yarn test",
     "format": "prettier --write \"src/**/*.[jt]s\"",
-    "lint": "eslint \"src/**/*.[jt]s\"",
+    "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
     "prepare": "yarn build",
     "prepublishOnly": "yarn test:ci && yarn format && yarn lint",
     "release": "semantic-release --debug"
@@ -43,7 +43,7 @@
     ],
     "testEnvironment": "node",
     "testMatch": [
-      "**/__tests__/**/*-test.[jt]s"
+      "**/__tests__/**/*.test.[jt]s"
     ]
   },
   "devDependencies": {
