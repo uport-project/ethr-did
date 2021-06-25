@@ -12,7 +12,6 @@
     "sourceMap": true,
     "outDir": "lib",
     "strict": true,
-    "noImplicitThis": false,
     "moduleResolution": "node",
     "types": [
       "jest"
