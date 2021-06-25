@@ -1,35 +1,60 @@
 ---
 name: Bug report
 about: Create a report to help us improve
+title: "[BUG]"
+labels: bug
+assignees: ''
 
 ---
 
-**Describe the bug**
-A clear and concise description of what the bug is.
+### Prerequisites
 
-**To Reproduce**
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+Please answer the following questions for yourself before submitting an issue.
 
-**Expected behavior**
-A clear and concise description of what you expected to happen.
+- [ ] I am running the latest version
+- [ ] I checked the documentation and found no answer
+- [ ] I checked to make sure that this issue has not already been filed
 
-**Screenshots**
-If applicable, add screenshots to help explain your problem.
+**YOU MAY DELETE THE PREREQUISITES SECTION** if you're sure you checked all the boxes.
 
-**Desktop (please complete the following information):**
- - OS: [e.g. iOS]
- - Browser [e.g. chrome, safari]
- - Version [e.g. 22]
+### Current Behavior
 
-**Smartphone (please complete the following information):**
- - Device: [e.g. iPhone6]
- - OS: [e.g. iOS8.1]
- - Browser [e.g. stock browser, safari]
- - Version [e.g. 22]
+What is the current behavior?
 
-**Additional context**
-Add any other context about the problem here.
+### Expected Behavior
+
+Please describe the behavior you are expecting
+
+### Failure Information
+
+Please help provide information about the failure.
+
+#### Steps to Reproduce
+
+Please provide detailed steps for reproducing the issue.
+
+1. step 1
+2. step 2
+3. you get it...
+
+#### Environment Details
+
+Please provide any relevant information about your setup. This is important in case the issue is not reproducible except for under certain conditions.
+
+* node/browser version:
+* OS Version:
+* Device details:
+
+#### Failure Logs/Screenshots
+
+Please include any relevant log snippets or files here.
+Create a [GIST](https://gist.github.com) which is a paste of your _full or sanitized_ logs, and link them here.
+Please do _NOT_ paste your full logs here, as it will make this issue very long and hard to read!
+
+#### Alternatives you considered
+
+Please provide details about an environment where this bug does not occur.
+
+---
+
+> **Don't paste private keys anywhere public!**

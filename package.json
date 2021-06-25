@@ -1,74 +1,73 @@
 {
   "name": "ethr-did",
   "version": "2.1.4",
-  "description": "Create and manage DID documents for ethereum addresses",
-  "main": "lib/index.js",
-  "module": "lib/index.esm.js",
-  "umd:main": "lib/index.umd.js",
-  "types": "lib/index.d.ts",
+  "description": "Create, manage and use did:ethr identifiers",
   "source": "src/index.ts",
+  "main": "lib/index.js",
+  "module": "lib/index.module.js",
+  "unpkg": "lib/index.umd.js",
+  "types": "lib/index.d.ts",
+  "umd:main": "lib/index.umd.js",
   "repository": {
     "type": "git",
-    "url": "https://github.com/uport-project/ethr-did.git"
+    "url": "git@github.com:uport-project/ethr-did.git"
   },
   "files": [
     "lib",
     "src",
     "LICENSE"
   ],
-  "author": "Pelle Braendgaard <pelle.braendgaard@consensys.net>",
+  "author": "Pelle Braendgaard",
+  "contributors": [
+    "Mircea Nistor <mircea.nistor@mesh.xyz>"
+  ],
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest -u --coverage",
+    "test:ci": "jest --coverage && codecov",
+    "build:js": "microbundle --compress=false",
+    "build": "yarn lint && yarn build:js && yarn test",
     "format": "prettier --write \"src/**/*.[jt]s\"",
-    "lint": "eslint \"src/**/*.[jt]s\"",
-    "build:js": "microbundle",
-    "build": "npm run lint && npm run build:js && npm run test",
-    "prepare": "npm run build",
+    "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
+    "prepare": "yarn build",
+    "prepublishOnly": "yarn test:ci && yarn format && yarn lint",
     "release": "semantic-release --debug"
   },
   "jest": {
-    "transform": {
-      "^.+\\.tsx?$": "ts-jest"
-    },
-    "testMatch": [
-      "**/__tests__/**/*-test.[jt]s?(x)"
-    ],
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
-    "coverageDirectory": "./coverage/",
+    "clearMocks": true,
     "collectCoverageFrom": [
       "src/**/*.{ts,tsx}",
       "!src/**/*.d.ts",
-      "!**/node_modules/**"
+      "!**/node_modules/**",
+      "!**/__tests__/**"
     ],
-    "testEnvironment": "node"
+    "testEnvironment": "node",
+    "testMatch": [
+      "**/__tests__/**/*.test.[jt]s"
+    ]
   },
   "devDependencies": {
-    "@ethersproject/contracts": "5.1.1",
+    "@babel/core": "7.14.6",
+    "@babel/preset-env": "7.14.7",
+    "@babel/preset-typescript": "7.14.5",
+    "@ethersproject/contracts": "5.3.0",
     "@semantic-release/changelog": "5.0.1",
     "@semantic-release/git": "9.0.0",
     "@types/jest": "26.0.23",
-    "@typescript-eslint/eslint-plugin": "4.24.0",
-    "@typescript-eslint/parser": "4.24.0",
+    "@typescript-eslint/eslint-plugin": "4.28.0",
+    "@typescript-eslint/parser": "4.28.0",
     "codecov": "3.8.2",
-    "eslint": "7.26.0",
+    "eslint": "7.29.0",
     "eslint-config-prettier": "8.3.0",
+    "eslint-plugin-jest": "24.3.6",
+    "eslint-plugin-prettier": "3.4.0",
     "ethr-did-registry": "0.0.3",
     "ganache-cli": "6.12.2",
     "jest": "27.0.5",
-    "microbundle": "0.13.0",
-    "prettier": "2.3.0",
-    "semantic-release": "17.4.3",
-    "ts-jest": "27.0.3",
-    "typescript": "4.2.4"
+    "microbundle": "0.13.3",
+    "prettier": "2.3.1",
+    "semantic-release": "17.4.4",
+    "typescript": "4.3.4"
   },
   "dependencies": {
     "@ethersproject/abstract-signer": "^5.1.0",
