@@ -691,7 +691,7 @@ describe('EthrDID', () => {
         try {
           await plainDid.verifyJWT(signed, resolver)
         } catch (e) {
-          expect(e).toEqual(Error(`JWT audience does not match your DID or callback url`))
+          expect(e).toEqual(Error(`invalid_config: JWT audience does not match your DID or callback url`))
         }
       })
     })
