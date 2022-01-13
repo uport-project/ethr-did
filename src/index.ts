@@ -1,4 +1,4 @@
-import { createJWT, verifyJWT, Signer as JWTSigner, ES256KSigner, JWTVerified } from 'did-jwt'
+import { createJWT, ES256KSigner, JWTVerified, Signer as JWTSigner, verifyJWT } from 'did-jwt'
 import { Signer as TxSigner } from '@ethersproject/abstract-signer'
 import { CallOverrides } from '@ethersproject/contracts'
 import { computeAddress } from '@ethersproject/transactions'
@@ -9,7 +9,7 @@ import * as base64 from '@ethersproject/base64'
 import { hexlify, hexValue, isBytes } from '@ethersproject/bytes'
 import { Base58 } from '@ethersproject/basex'
 import { toUtf8Bytes } from '@ethersproject/strings'
-import { REGISTRY, EthrDidController, interpretIdentifier } from 'ethr-did-resolver'
+import { EthrDidController, interpretIdentifier, REGISTRY } from 'ethr-did-resolver'
 import { Resolvable } from 'did-resolver'
 
 export enum DelegateTypes {
@@ -25,6 +25,7 @@ interface IConfig {
   registry?: string
 
   signer?: JWTSigner
+  alg?: 'ES256K' | 'ES256K-R'
   txSigner?: TxSigner
   privateKey?: string
 
@@ -50,6 +51,7 @@ export class EthrDID {
   public did: string
   public address: string
   public signer?: JWTSigner
+  public alg?: 'ES256K' | 'ES256K-R'
   private owner?: string
   private controller?: EthrDidController
 
@@ -83,8 +85,15 @@ export class EthrDID {
     this.address = address
     if (conf.signer) {
       this.signer = conf.signer
+      this.alg = conf.alg
+      if (!this.alg) {
+        console.warn(
+          'A JWT signer was specified but no algorithm was set. Please set the `alg` parameter when calling `new EthrDID()`'
+        )
+      }
     } else if (conf.privateKey) {
       this.signer = ES256KSigner(conf.privateKey, true)
+      this.alg = 'ES256K-R'
     }
   }
 
@@ -103,8 +112,7 @@ export class EthrDID {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     if (cache && this.owner) return this.owner
-    const result = await this.controller?.getOwner(this.address)
-    return result
+    return this.controller?.getOwner(this.address)
   }
 
   async changeOwner(newOwner: string, txOptions?: CallOverrides): Promise<string> {
