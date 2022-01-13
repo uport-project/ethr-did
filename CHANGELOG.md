@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/uport-project/ethr-did/compare/2.1.6...2.2.0) (2022-01-13)
+
+
+### Features
+
+* add option to specify JWT signing algorithm ([8ad8bbd](https://github.com/uport-project/ethr-did/commit/8ad8bbd5ef9efdd91c8f82f0792328da89c43e3b))
+
 ## [2.1.6](https://github.com/uport-project/ethr-did/compare/2.1.5...2.1.6) (2022-01-13)
 
 
