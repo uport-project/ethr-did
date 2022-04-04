@@ -2906,10 +2906,10 @@
   resolved "https://registry.yarnpkg.com/@stablelib/wipe/-/wipe-1.0.1.tgz#d21401f1d59ade56a62e139462a97f104ed19a36"
   integrity sha512-WfqfX/eXGiAd3RJe4VU2snh/ZPwtSjLG4ynQ/vYzvghTh7dHFcI1wl+nrkWG6lGhukOxOsUHfv8dUXr58D0ayg==
 
-"@stablelib/x25519@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@stablelib/x25519/-/x25519-1.0.1.tgz#bcd6132ac4dd94f28f1479e228c85b3468d6ed27"
-  integrity sha512-nmyUI2ZArxYDh1PhdoSCPEtlTYE0DYugp2qqx8OtjrX3Hmh7boIlDsD0X71ihAxzxqJf3TyQqN/p58ToWhnp+Q==
+"@stablelib/x25519@^1.0.2":
+  version "1.0.2"
+  resolved "https://registry.yarnpkg.com/@stablelib/x25519/-/x25519-1.0.2.tgz#ae21e2ab668076ec2eb2b4853b82a27fab045fa1"
+  integrity sha512-wTR0t0Bp1HABLFRbYaE3vFLuco2QbAg6QvxBnzi5j9qjhYezWHW7OiCZyaWbt25UkSaoolUUT4Il0nS/2vcbSw==
   dependencies:
     "@stablelib/keyagreement" "^1.0.1"
     "@stablelib/random" "^1.0.1"
@@ -3944,10 +3944,10 @@ caniuse-lite@^1.0.30001286:
   resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001299.tgz#d753bf6444ed401eb503cbbe17aa3e1451b5a68c"
   integrity sha512-iujN4+x7QzqA2NCSrS5VUy+4gLmRd4xv6vbBBsmfVqTx8bLAD8097euLqQgKxSVLvxjSDcvF1T/i9ocgnUFexw==
 
-canonicalize@^1.0.5:
-  version "1.0.5"
-  resolved "https://registry.yarnpkg.com/canonicalize/-/canonicalize-1.0.5.tgz#b43b390ce981d397908bb847c3a8d9614323a47b"
-  integrity sha512-mAjKJPIyP0xqqv6IAkvso07StOmz6cmGtNDg3pXCSzXVZOqka7StIkAhJl/zHOi4M2CgpYfD6aeRWbnrmtvBEA==
+canonicalize@^1.0.8:
+  version "1.0.8"
+  resolved "https://registry.yarnpkg.com/canonicalize/-/canonicalize-1.0.8.tgz#24d1f1a00ed202faafd9bf8e63352cd4450c6df1"
+  integrity sha512-0CNTVCLZggSh7bc5VkX5WWPWO+cyZbNd07IHIsSXLia/eAq+r836hgk+8BKoEh7949Mda87VUOitx5OddVj64A==
 
 cardinal@^2.1.1:
   version "2.1.1"
@@ -4655,22 +4655,22 @@ dezalgo@^1.0.0:
     asap "^2.0.0"
     wrappy "1"
 
-did-jwt@^5.12.3:
-  version "5.12.3"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-5.12.3.tgz#f4961b3d3e8f0b69c2bea08809df5e49ec3daa1d"
-  integrity sha512-/aENag1/Mu4eCwMD62X/ZOV63hkXqpRxyriJP1z/8qL44ZpdwBvvL00so+YtDcTk/xHm3t0OEe6ATvvjNYPMCA==
+did-jwt@^6.0.0:
+  version "6.0.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-6.0.0.tgz#f07897cb8eb2e1ef975570fc6340b6fae28125a2"
+  integrity sha512-ZtpKcE/vD2CkVRiRbr/43qTYItCkV1QEIG5inMwEnuMzmf+otUhX/xkLMOsQPLmRN8nqTJo58bGXRCsKf5L2rw==
   dependencies:
     "@stablelib/ed25519" "^1.0.2"
     "@stablelib/random" "^1.0.1"
     "@stablelib/sha256" "^1.0.1"
-    "@stablelib/x25519" "^1.0.1"
+    "@stablelib/x25519" "^1.0.2"
     "@stablelib/xchacha20poly1305" "^1.0.1"
     bech32 "^2.0.0"
-    canonicalize "^1.0.5"
+    canonicalize "^1.0.8"
     did-resolver "^3.1.5"
     elliptic "^6.5.4"
     js-sha3 "^0.8.0"
-    multiformats "^9.4.10"
+    multiformats "^9.6.4"
     uint8arrays "^3.0.0"
 
 did-resolver@^3.1.5:
@@ -7600,10 +7600,15 @@ ms@2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.2.tgz#d09d1f357b443f493382a8eb3ccd183872ae6009"
   integrity sha512-sGkPx+VjMtmA6MX27oA4FBFELFCZZ4S4XqeGOXCv68tT+jb3vk/RyaKWP0PTKyWtmLSM0b+adUTEvbs1PEaH2w==
 
-multiformats@^9.4.10, multiformats@^9.4.2:
+multiformats@^9.4.2:
   version "9.4.10"
   resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.4.10.tgz#d654d06b28cc066506e4e59b246d65267fb6b93b"
   integrity sha512-BwWGvgqB/5J/cnWaOA0sXzJ+UGl+kyFAw3Sw1L6TN4oad34C9OpW+GCpYTYPDp4pUaXDC1EjvB3yv9Iodo1EhA==
+
+multiformats@^9.6.4:
+  version "9.6.4"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.6.4.tgz#5dce1f11a407dbb69aa612cb7e5076069bb759ca"
+  integrity sha512-fCCB6XMrr6CqJiHNjfFNGT0v//dxOBMrOMqUIzpPc/mmITweLEyhvMpY9bF+jZ9z3vaMAau5E8B68DW77QMXkg==
 
 mute-stream@~0.0.4:
   version "0.0.8"
