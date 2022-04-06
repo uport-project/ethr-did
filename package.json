@@ -25,11 +25,9 @@
   "scripts": {
     "test": "jest",
     "test:ci": "jest --coverage && codecov",
-    "build:js": "microbundle --compress=false",
-    "build": "yarn lint && yarn build:js && yarn test",
+    "build": "microbundle --compress=false",
     "format": "prettier --write \"src/**/*.[jt]s\"",
     "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
-    "prepare": "yarn build",
     "prepublishOnly": "yarn test:ci && yarn format && yarn lint",
     "release": "semantic-release --debug"
   },
@@ -50,7 +48,7 @@
     "@babel/core": "7.16.7",
     "@babel/preset-env": "7.16.7",
     "@babel/preset-typescript": "7.16.7",
-    "@ethersproject/contracts": "5.5.0",
+    "@ethersproject/contracts": "5.6.0",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/git": "10.0.1",
     "@types/jest": "27.4.0",
@@ -70,17 +68,17 @@
     "typescript": "4.5.4"
   },
   "dependencies": {
-    "@ethersproject/abstract-signer": "^5.5.0",
-    "@ethersproject/base64": "^5.5.0",
-    "@ethersproject/basex": "^5.5.0",
-    "@ethersproject/bytes": "^5.5.0",
-    "@ethersproject/providers": "^5.5.0",
-    "@ethersproject/signing-key": "^5.5.0",
-    "@ethersproject/strings": "^5.5.0",
-    "@ethersproject/transactions": "^5.5.0",
+    "@ethersproject/abstract-signer": "^5.6.0",
+    "@ethersproject/base64": "^5.6.0",
+    "@ethersproject/basex": "^5.6.0",
+    "@ethersproject/bytes": "^5.6.1",
+    "@ethersproject/providers": "^5.6.2",
+    "@ethersproject/signing-key": "^5.6.0",
+    "@ethersproject/strings": "^5.6.0",
+    "@ethersproject/transactions": "^5.6.0",
     "@ethersproject/wallet": "^5.5.0",
-    "did-jwt": "^5.12.3",
-    "did-resolver": "^3.1.5",
-    "ethr-did-resolver": "^5.0.3"
+    "did-jwt": "^6.0.0",
+    "did-resolver": "^3.2.0",
+    "ethr-did-resolver": "^5.0.4"
   }
 }

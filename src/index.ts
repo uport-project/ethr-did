@@ -1,4 +1,4 @@
-import { createJWT, ES256KSigner, JWTVerified, Signer as JWTSigner, verifyJWT } from 'did-jwt'
+import { createJWT, ES256KSigner, hexToBytes, JWTVerified, Signer as JWTSigner, verifyJWT } from 'did-jwt'
 import { Signer as TxSigner } from '@ethersproject/abstract-signer'
 import { CallOverrides } from '@ethersproject/contracts'
 import { computeAddress } from '@ethersproject/transactions'
@@ -92,7 +92,7 @@ export class EthrDID {
         )
       }
     } else if (conf.privateKey) {
-      this.signer = ES256KSigner(conf.privateKey, true)
+      this.signer = ES256KSigner(hexToBytes(conf.privateKey), true)
       this.alg = 'ES256K-R'
     }
   }
@@ -204,7 +204,7 @@ export class EthrDID {
     expiresIn = 86400
   ): Promise<{ kp: KeyPair; txHash: string }> {
     const kp = EthrDID.createKeyPair()
-    this.signer = ES256KSigner(kp.privateKey, true)
+    this.signer = ES256KSigner(hexToBytes(kp.privateKey), true)
     const txHash = await this.addDelegate(kp.address, {
       delegateType,
       expiresIn,
