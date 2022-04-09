@@ -1,3 +1,10 @@
+## [2.2.2](https://github.com/uport-project/ethr-did/compare/2.2.1...2.2.2) (2022-04-09)
+
+
+### Bug Fixes
+
+* **ci:** add build step before test and release ([#90](https://github.com/uport-project/ethr-did/issues/90)) ([e4b9834](https://github.com/uport-project/ethr-did/commit/e4b9834816e55ef0e8d2f3f0f185d77afe0191fc)), closes [#89](https://github.com/uport-project/ethr-did/issues/89)
+
 ## [2.2.1](https://github.com/uport-project/ethr-did/compare/2.2.0...2.2.1) (2022-04-06)
 
 
