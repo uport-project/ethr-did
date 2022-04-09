@@ -22,5 +22,6 @@ jobs:
           key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
 
       - run: yarn install --frozen-lockfile
+      - run: yarn run build
       - run: yarn run lint
       - run: yarn run test:ci
