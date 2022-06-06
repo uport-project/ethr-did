@@ -2,21 +2,28 @@
   "name": "ethr-did",
   "version": "2.2.2",
   "description": "Create, manage and use did:ethr identifiers",
+  "type": "module",
   "source": "src/index.ts",
-  "main": "lib/index.js",
-  "module": "lib/index.module.js",
-  "unpkg": "lib/index.umd.js",
-  "types": "lib/index.d.ts",
-  "umd:main": "lib/index.umd.js",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:uport-project/ethr-did.git"
-  },
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.module.js",
+  "unpkg": "./lib/index.umd.js",
+  "types": "./lib/index.d.ts",
+  "umd:main": "./lib/index.umd.js",
   "files": [
     "lib",
     "src",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "require": "./lib/index.cjs",
+      "import": "./lib/index.module.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:uport-project/ethr-did.git"
+  },
   "author": "Pelle Braendgaard",
   "contributors": [
     "Mircea Nistor <mircea.nistor@mesh.xyz>"
@@ -24,7 +31,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --coverage && codecov",
+    "test:ci": "jest --coverage",
     "build": "microbundle --compress=false",
     "format": "prettier --write \"src/**/*.[jt]s\"",
     "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
@@ -54,7 +61,6 @@
     "@types/jest": "27.4.0",
     "@typescript-eslint/eslint-plugin": "5.9.0",
     "@typescript-eslint/parser": "5.9.0",
-    "codecov": "3.8.2",
     "eslint": "8.6.0",
     "eslint-config-prettier": "8.3.0",
     "eslint-plugin-jest": "26.1.0",
