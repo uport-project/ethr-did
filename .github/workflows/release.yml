@@ -12,24 +12,17 @@ jobs:
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
-      - name: Use Node.js
+
+      - name: "Setup node with cache"
         uses: actions/setup-node@v3
         with:
-          node-version: '14.x'
-
-      - name: Get yarn cache directory path
-        id: yarn-cache-dir-path
-        run: echo "::set-output name=dir::$(yarn cache dir)"
-      - uses: actions/cache@v3
-        id: yarn-cache
-        with:
-          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
-          key: ${{ runner.os }}-yarn-${{ hashFiles('**/package.json') }}
+          node-version: 14
+          cache: 'yarn'
 
       - run: yarn install --frozen-lockfile
       - run: yarn build
 
-      - name: setup git coordinates
+      - name: "Setup git coordinates"
         run: |
           git config user.name uport-automation-bot
           git config user.email devops@uport.me
