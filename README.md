@@ -39,25 +39,25 @@ aggregate to form a DID's DID document using
 the [Ethr-Did-Resolver](https://github.com/decentralized-identity/ethr-did-resolver)
 .
 
-An example of a DID document resolved using the Ethr-Did-Resolver:
+An example of a DID document resolved using the [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver):
 
-```javascript
+```json5
 {
   '@context': [
     'https://www.w3.org/ns/did/v1',
-    'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld'
+    'https://w3id.org/security/suites/secp256k1recovery-2020/v2'
   ],
   id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
   verificationMethod: [
     {
-      id: `did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller`,
+      id: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller',
       type: 'EcdsaSecp256k1RecoveryMethod2020',
-      controller: did,
-      blockchainAccountId: `did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a@eip155:1`
+      controller: 'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a',
+      blockchainAccountId: 'eip155:1:0xb9c5714089478a327f09197987f16f9e5d936e8a'
     }
   ],
-  assertionMethod: [`did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller`],
-  authentication: [`did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller`]
+  assertionMethod: ['did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller'],
+  authentication: ['did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller']
 }
 ```
 
@@ -85,7 +85,7 @@ For example:
 import { EthrDID } from 'ethr-did'
 
 const chainNameOrId = 1 // mainnet
-const provider = InfuraProvider(<infura project ID>, chainNameOrId)
+const provider = InfuraProvider("<infura project ID>", chainNameOrId)
 const ethrDid = new EthrDID({identifier: '0x...', privateKey: '...', provider, chainNameOrId})
 ```
 
@@ -128,8 +128,8 @@ EthrDid can be configured to control a DID on any ethereum network. To do this, 
 during construction. Example:
 
 ```ts
-console.log( new EthrDid({ '0xb9c5714089478a327f09197987f16f9e5d936e8a', 'rinkeby' }).did )
-// did:ethr:rinkeby:0xb9c5714089478a327f09197987f16f9e5d936e8a
+console.log( new EthrDID({ identifier: '0xb9c5714089478a327f09197987f16f9e5d936e8a', chainNameOrId: 'rinkeby' }).did )
+// did:ethr:rinkeby:0xB9C5714089478a327F09197987f16f9E5d936E8a
 ```
 
 If this property is not specified, then the library will attempt to infer it from the `provider` configuration or from

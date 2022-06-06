@@ -40,7 +40,7 @@ const ethrDidOnGoerli = new EthrDID({...keypair, chainNameOrId})
 
 If you use a built-in web3 provider like metamask you can use one of your metamask addresses as your identifier.
 
-```js
+```typescript
 const provider = new Web3Provider((window as any).ethereum);
 const chainNameOrId = (await provider.getNetwork()).chainId
 const accounts = await provider.listAccounts()
@@ -90,7 +90,7 @@ const didDocument = (await didResolver.resolve(ethrDidOnRinkeby.did)).didDocumen
  {
   "@context": [
     "https://www.w3.org/ns/did/v1",
-    "https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld"
+    "https://w3id.org/security/suites/secp256k1recovery-2020/v2"
   ],
   "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
   "verificationMethod": [
@@ -98,7 +98,7 @@ const didDocument = (await didResolver.resolve(ethrDidOnRinkeby.did)).didDocumen
       "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
       "type": "EcdsaSecp256k1RecoveryMethod2020",
       "controller": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
-      "blockchainAccountId": "0x80155C25E363Ee9e1BbBCC08cD5Df7CD249A98C4@eip155:4"
+      "blockchainAccountId": "eip155:4:0x80155C25E363Ee9e1BbBCC08cD5Df7CD249A98C4"
     },
     {
       "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey",
