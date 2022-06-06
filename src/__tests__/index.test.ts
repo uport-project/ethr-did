@@ -77,17 +77,14 @@ describe('EthrDID', () => {
 
       it('resolves document', async () => {
         return expect((await resolver.resolve(did)).didDocument).toEqual({
-          '@context': [
-            'https://www.w3.org/ns/did/v1',
-            'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-          ],
+          '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
           id: did,
           verificationMethod: [
             {
               id: `${did}#controller`,
               type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              blockchainAccountId: `${owner}@eip155:1337`,
+              blockchainAccountId: `eip155:1337:${owner}`,
             },
           ],
           authentication: [`${did}#controller`],
@@ -108,23 +105,20 @@ describe('EthrDID', () => {
         it('resolves document', async () => {
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': [
-              'https://www.w3.org/ns/did/v1',
-              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-            ],
+            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
             id: did,
             verificationMethod: [
               {
                 id: `${did}#controller`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${owner}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${owner}`,
               },
               {
                 id: `${did}#delegate-1`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate1}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate1}`,
               },
             ],
             authentication: [`${did}#controller`],
@@ -144,29 +138,26 @@ describe('EthrDID', () => {
 
         it('resolves document', async () => {
           return expect((await resolver.resolve(did)).didDocument).toEqual({
-            '@context': [
-              'https://www.w3.org/ns/did/v1',
-              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-            ],
+            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
             id: did,
             verificationMethod: [
               {
                 id: `${did}#controller`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${owner}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${owner}`,
               },
               {
                 id: `${did}#delegate-1`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate1}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate1}`,
               },
               {
                 id: `${did}#delegate-2`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate2}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate2}`,
               },
             ],
             authentication: [`${did}#controller`, `${did}#delegate-2`],
@@ -183,23 +174,20 @@ describe('EthrDID', () => {
         it('resolves document', async () => {
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': [
-              'https://www.w3.org/ns/did/v1',
-              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-            ],
+            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
             id: did,
             verificationMethod: [
               {
                 id: `${did}#controller`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${owner}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${owner}`,
               },
               {
                 id: `${did}#delegate-1`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate1}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate1}`,
               },
             ],
             authentication: [`${did}#controller`],
@@ -218,29 +206,26 @@ describe('EthrDID', () => {
 
         it('resolves document', async () => {
           return expect((await resolver.resolve(did)).didDocument).toEqual({
-            '@context': [
-              'https://www.w3.org/ns/did/v1',
-              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-            ],
+            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
             id: did,
             verificationMethod: [
               {
                 id: `${did}#controller`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${owner}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${owner}`,
               },
               {
                 id: `${did}#delegate-1`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate1}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate1}`,
               },
               {
                 id: `${did}#delegate-3`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate2}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate2}`,
               },
             ],
             authentication: [`${did}#controller`, `${did}#delegate-3`],
@@ -250,31 +235,27 @@ describe('EthrDID', () => {
       })
 
       describe('revokes delegate', () => {
-        beforeAll(async () => {
+        it('resolves document', async () => {
           const txHash = await ethrDid.revokeDelegate(delegate2, DelegateTypes.sigAuth)
           await provider.waitForTransaction(txHash)
-        })
+          await sleep(2) // this smells but for some reason ganache is not updating :(
 
-        it('resolves document', async () => {
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': [
-              'https://www.w3.org/ns/did/v1',
-              'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-            ],
+            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
             id: did,
             verificationMethod: [
               {
                 id: `${did}#controller`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${owner}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${owner}`,
               },
               {
                 id: `${did}#delegate-1`,
                 type: 'EcdsaSecp256k1RecoveryMethod2020',
                 controller: did,
-                blockchainAccountId: `${delegate1}@eip155:1337`,
+                blockchainAccountId: `eip155:1337:${delegate1}`,
               },
             ],
             authentication: [`${did}#controller`],
@@ -300,7 +281,7 @@ describe('EthrDID', () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
               '@context': [
                 'https://www.w3.org/ns/did/v1',
-                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+                'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
               ],
               id: did,
               verificationMethod: [
@@ -308,13 +289,13 @@ describe('EthrDID', () => {
                   id: `${did}#controller`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${owner}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${owner}`,
                 },
                 {
                   id: `${did}#delegate-1`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${delegate1}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${delegate1}`,
                 },
                 {
                   id: `${did}#delegate-5`,
@@ -343,7 +324,7 @@ describe('EthrDID', () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
               '@context': [
                 'https://www.w3.org/ns/did/v1',
-                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+                'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
               ],
               id: did,
               verificationMethod: [
@@ -351,13 +332,13 @@ describe('EthrDID', () => {
                   id: `${did}#controller`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${owner}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${owner}`,
                 },
                 {
                   id: `${did}#delegate-1`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${delegate1}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${delegate1}`,
                 },
                 {
                   id: `${did}#delegate-5`,
@@ -392,7 +373,7 @@ describe('EthrDID', () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
               '@context': [
                 'https://www.w3.org/ns/did/v1',
-                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+                'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
               ],
               id: did,
               verificationMethod: [
@@ -400,13 +381,13 @@ describe('EthrDID', () => {
                   id: `${did}#controller`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${owner}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${owner}`,
                 },
                 {
                   id: `${did}#delegate-1`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${delegate1}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${delegate1}`,
                 },
                 {
                   id: `${did}#delegate-5`,
@@ -450,7 +431,7 @@ describe('EthrDID', () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
               '@context': [
                 'https://www.w3.org/ns/did/v1',
-                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+                'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
               ],
               id: did,
               verificationMethod: [
@@ -458,13 +439,13 @@ describe('EthrDID', () => {
                   id: `${did}#controller`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${owner}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${owner}`,
                 },
                 {
                   id: `${did}#delegate-1`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${delegate1}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${delegate1}`,
                 },
                 {
                   id: `${did}#delegate-5`,
@@ -513,7 +494,7 @@ describe('EthrDID', () => {
             return expect((await resolver.resolve(did)).didDocument).toEqual({
               '@context': [
                 'https://www.w3.org/ns/did/v1',
-                'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
+                'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
               ],
               id: did,
               verificationMethod: [
@@ -521,13 +502,13 @@ describe('EthrDID', () => {
                   id: `${did}#controller`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${owner}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${owner}`,
                 },
                 {
                   id: `${did}#delegate-1`,
                   type: 'EcdsaSecp256k1RecoveryMethod2020',
                   controller: did,
-                  blockchainAccountId: `${delegate1}@eip155:1337`,
+                  blockchainAccountId: `eip155:1337:${delegate1}`,
                 },
                 {
                   id: `${did}#delegate-5`,
@@ -578,23 +559,20 @@ describe('EthrDID', () => {
 
       it('resolves document', async () => {
         return expect((await resolver.resolve(did)).didDocument).toEqual({
-          '@context': [
-            'https://www.w3.org/ns/did/v1',
-            'https://identity.foundation/EcdsaSecp256k1RecoverySignature2020/lds-ecdsa-secp256k1-recovery2020-0.0.jsonld',
-          ],
+          '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
           id: did,
           verificationMethod: [
             {
               id: `${did}#controller`,
               type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              blockchainAccountId: `${owner}@eip155:1337`,
+              blockchainAccountId: `eip155:1337:${owner}`,
             },
             {
               id: `${did}#delegate-1`,
               type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              blockchainAccountId: `${delegate1}@eip155:1337`,
+              blockchainAccountId: `eip155:1337:${delegate1}`,
             },
             {
               id: `${did}#delegate-5`,
@@ -618,7 +596,7 @@ describe('EthrDID', () => {
               id: `${did}#delegate-8`,
               type: 'EcdsaSecp256k1RecoveryMethod2020',
               controller: did,
-              blockchainAccountId: `${kp.address}@eip155:1337`,
+              blockchainAccountId: `eip155:1337:${kp.address}`,
             },
           ],
           authentication: [`${did}#controller`],
@@ -633,19 +611,17 @@ describe('EthrDID', () => {
         })
       })
 
-      it('should sign valid jwt', () => {
-        return ethrDid.signJWT({ hello: 'world' }).then((jwt: string) =>
-          verifyJWT(jwt, { resolver }).then(
-            ({ signer }) =>
-              expect(signer).toEqual({
-                id: `${did}#delegate-8`,
-                type: 'EcdsaSecp256k1RecoveryMethod2020',
-                controller: did,
-                blockchainAccountId: `${kp.address}@eip155:1337`,
-              }),
-            (error) => expect(error).toBeNull()
-          )
-        )
+      it('should sign valid jwt', async () => {
+        expect.assertions(1)
+        const jwt = await ethrDid.signJWT({ hello: 'world' })
+        const verification = await verifyJWT(jwt, { resolver })
+        const { signer } = verification
+        expect(signer).toEqual({
+          id: `${did}#delegate-8`,
+          type: 'EcdsaSecp256k1RecoveryMethod2020',
+          controller: did,
+          blockchainAccountId: `eip155:1337:${kp.address}`,
+        })
       })
     })
 
@@ -746,7 +722,7 @@ describe('EthrDID', () => {
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {
-          blockchainAccountId: `${delegate1}@eip155:1337`,
+          blockchainAccountId: `eip155:1337:${delegate1}`,
           controller: did,
           id: `${did}#controller`,
           type: 'EcdsaSecp256k1RecoveryMethod2020',
@@ -772,7 +748,7 @@ describe('EthrDID', () => {
       const doc = (await resolver.resolve(did)).didDocument
       expect(doc?.verificationMethod).toEqual([
         {
-          blockchainAccountId: `${delegate2}@eip155:1337`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
           controller: did,
           id: `${did}#controller`,
           type: 'EcdsaSecp256k1RecoveryMethod2020',

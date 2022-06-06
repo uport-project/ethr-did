@@ -2,21 +2,28 @@
   "name": "ethr-did",
   "version": "2.2.2",
   "description": "Create, manage and use did:ethr identifiers",
+  "type": "module",
   "source": "src/index.ts",
-  "main": "lib/index.js",
-  "module": "lib/index.module.js",
-  "unpkg": "lib/index.umd.js",
-  "types": "lib/index.d.ts",
-  "umd:main": "lib/index.umd.js",
-  "repository": {
-    "type": "git",
-    "url": "git@github.com:uport-project/ethr-did.git"
-  },
+  "main": "./lib/index.cjs",
+  "module": "./lib/index.module.js",
+  "unpkg": "./lib/index.umd.js",
+  "types": "./lib/index.d.ts",
+  "umd:main": "./lib/index.umd.js",
   "files": [
     "lib",
     "src",
     "LICENSE"
   ],
+  "exports": {
+    ".": {
+      "require": "./lib/index.cjs",
+      "import": "./lib/index.module.js"
+    }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:uport-project/ethr-did.git"
+  },
   "author": "Pelle Braendgaard",
   "contributors": [
     "Mircea Nistor <mircea.nistor@mesh.xyz>"
@@ -24,7 +31,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "test": "jest",
-    "test:ci": "jest --coverage && codecov",
+    "test:ci": "jest --coverage",
     "build": "microbundle --compress=false",
     "format": "prettier --write \"src/**/*.[jt]s\"",
     "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
@@ -45,40 +52,39 @@
     ]
   },
   "devDependencies": {
-    "@babel/core": "7.16.7",
-    "@babel/preset-env": "7.16.7",
-    "@babel/preset-typescript": "7.16.7",
-    "@ethersproject/contracts": "5.6.0",
+    "@babel/core": "7.18.2",
+    "@babel/preset-env": "7.17.12",
+    "@babel/preset-typescript": "7.17.12",
+    "@ethersproject/contracts": "5.6.2",
     "@semantic-release/changelog": "6.0.1",
     "@semantic-release/git": "10.0.1",
-    "@types/jest": "27.4.0",
-    "@typescript-eslint/eslint-plugin": "5.9.0",
-    "@typescript-eslint/parser": "5.9.0",
-    "codecov": "3.8.2",
-    "eslint": "8.6.0",
-    "eslint-config-prettier": "8.3.0",
-    "eslint-plugin-jest": "26.1.0",
+    "@types/jest": "28.1.1",
+    "@typescript-eslint/eslint-plugin": "5.27.0",
+    "@typescript-eslint/parser": "5.27.0",
+    "eslint": "8.17.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-jest": "26.5.3",
     "eslint-plugin-prettier": "4.0.0",
     "ethr-did-registry": "0.0.3",
-    "ganache-cli": "6.12.2",
+    "ganache": "7.2.0",
     "jest": "28.1.0",
-    "microbundle": "0.14.2",
-    "prettier": "2.5.1",
+    "microbundle": "0.15.0",
+    "prettier": "2.6.2",
     "semantic-release": "19.0.2",
-    "typescript": "4.5.4"
+    "typescript": "4.7.3"
   },
   "dependencies": {
-    "@ethersproject/abstract-signer": "^5.6.0",
-    "@ethersproject/base64": "^5.6.0",
-    "@ethersproject/basex": "^5.6.0",
+    "@ethersproject/abstract-signer": "^5.6.2",
+    "@ethersproject/base64": "^5.6.1",
+    "@ethersproject/basex": "^5.6.1",
     "@ethersproject/bytes": "^5.6.1",
-    "@ethersproject/providers": "^5.6.2",
-    "@ethersproject/signing-key": "^5.6.0",
-    "@ethersproject/strings": "^5.6.0",
-    "@ethersproject/transactions": "^5.6.0",
-    "@ethersproject/wallet": "^5.5.0",
-    "did-jwt": "^6.0.0",
-    "did-resolver": "^3.2.0",
-    "ethr-did-resolver": "^5.0.4"
+    "@ethersproject/providers": "^5.6.8",
+    "@ethersproject/signing-key": "^5.6.2",
+    "@ethersproject/strings": "^5.6.1",
+    "@ethersproject/transactions": "^5.6.2",
+    "@ethersproject/wallet": "^5.6.2",
+    "did-jwt": "^6.1.2",
+    "did-resolver": "^3.2.2",
+    "ethr-did-resolver": "^6.0.1"
   }
 }
