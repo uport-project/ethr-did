@@ -1,3 +1,10 @@
+## [2.2.3](https://github.com/uport-project/ethr-did/compare/2.2.2...2.2.3) (2022-06-06)
+
+
+### Bug Fixes
+
+* **ci:** groom the build scripts and dependencies ([#97](https://github.com/uport-project/ethr-did/issues/97)) ([0a29790](https://github.com/uport-project/ethr-did/commit/0a29790861d3f779cba26866b709719e1cebb4d4))
+
 ## [2.2.2](https://github.com/uport-project/ethr-did/compare/2.2.1...2.2.2) (2022-04-09)
 
 
