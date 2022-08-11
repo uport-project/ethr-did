@@ -1,3 +1,10 @@
+## [2.2.4](https://github.com/uport-project/ethr-did/compare/2.2.3...2.2.4) (2022-08-11)
+
+
+### Bug Fixes
+
+* **deps:** bump did-jwt, did-resolver, and ethr-did-resolver packages ([#101](https://github.com/uport-project/ethr-did/issues/101)) ([a0946b3](https://github.com/uport-project/ethr-did/commit/a0946b3bdd00dce1096eb2000421c7f392b46185))
+
 ## [2.2.3](https://github.com/uport-project/ethr-did/compare/2.2.2...2.2.3) (2022-06-06)
 
 
