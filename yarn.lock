@@ -4831,18 +4831,21 @@ ethr-did-registry@^1.0.0:
   resolved "https://registry.yarnpkg.com/ethr-did-registry/-/ethr-did-registry-1.0.0.tgz#9fc076c5dd06288d79d4682ad7dd9b05832e8661"
   integrity sha512-9Gl3WcogECcdIjCjFbTKtmkz18VlQf50qE9iELnLIYVsEZo+hB38ApwOd83sYMGAjSs2c1dlzUI96H9kyvfl7w==
 
-ethr-did-resolver@^6.1.0:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-6.1.0.tgz#9f72d1e186932941ca0b165a598f6929c34c81dd"
-  integrity sha512-nsTt4QHHNGxviAIn2z6de8wyEYdc48Hcx3VtSB4Vt3a1hXPin7GZaiSFRDsf/nT/U8RPKRwSgy8i21RV3mCsZw==
+ethr-did-resolver@^6.2.0:
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-6.2.0.tgz#4b36c0b8def3cc8d7d16e23cefdb5420740a40b3"
+  integrity sha512-cIzwcKBabioJHOUSQ/FDBo9JaUJ4mHAyLocMjmaEDFB4pdHeHHNEr38b7rR+WSsh51oyhiqw6RFkw1hcCpTnDg==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     "@ethersproject/abstract-signer" "^5.6.2"
     "@ethersproject/address" "^5.6.1"
     "@ethersproject/basex" "^5.6.1"
     "@ethersproject/bignumber" "^5.6.2"
+    "@ethersproject/bytes" "^5.6.1"
     "@ethersproject/contracts" "^5.6.2"
+    "@ethersproject/keccak256" "^5.6.1"
     "@ethersproject/providers" "^5.6.8"
+    "@ethersproject/signing-key" "^5.6.2"
     "@ethersproject/transactions" "^5.6.2"
     did-resolver "^4.0.0"
     ethr-did-registry "^1.0.0"
