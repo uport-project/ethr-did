@@ -1,7 +1,8 @@
+[![Discord](https://img.shields.io/discord/878293684620234752?logo=discord&logoColor=white&style=flat-square)](https://discord.gg/huwyNfVkhe)
 [![npm](https://img.shields.io/npm/dt/ethr-did.svg)](https://www.npmjs.com/package/ethr-did)
 [![npm](https://img.shields.io/npm/v/ethr-did.svg)](https://www.npmjs.com/package/ethr-did)
 [![GitHub Discussions](https://img.shields.io/github/discussions/uport-project/veramo?style=flat)](https://github.com/uport-project/veramo/discussions)
-[![Twitter Follow](https://img.shields.io/twitter/follow/uport_me.svg?style=social&label=Follow)](https://twitter.com/uport_me)
+[![Twitter Follow](https://img.shields.io/twitter/follow/veramolabs.svg?style=social&label=Follow)](https://twitter.com/veramolabs)
 
 # Ethr-DID Library
 
