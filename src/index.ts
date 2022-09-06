@@ -233,7 +233,6 @@ export class EthrDID {
     key: string,
     value: string | Uint8Array,
     expiresIn = 86400,
-    /** @deprecated, please use txOptions.gasLimit */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
@@ -261,7 +260,6 @@ export class EthrDID {
     value: string | Uint8Array,
     expiresIn = 86400,
     signature: MetaSignature,
-    /** @deprecated, please use txOptions.gasLimit */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
@@ -280,7 +278,6 @@ export class EthrDID {
   async revokeAttribute(
     key: string,
     value: string | Uint8Array,
-    /** @deprecated please use `txOptions.gasLimit` */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
@@ -307,7 +304,6 @@ export class EthrDID {
     key: string,
     value: string | Uint8Array,
     signature: MetaSignature,
-    /** @deprecated please use `txOptions.gasLimit` */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
