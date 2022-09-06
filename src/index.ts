@@ -233,6 +233,7 @@ export class EthrDID {
     key: string,
     value: string | Uint8Array,
     expiresIn = 86400,
+    /** @deprecated, please use txOptions.gasLimit */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
@@ -278,6 +279,7 @@ export class EthrDID {
   async revokeAttribute(
     key: string,
     value: string | Uint8Array,
+    /** @deprecated, please use txOptions.gasLimit */
     gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
