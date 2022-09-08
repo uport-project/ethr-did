@@ -1,11 +1,13 @@
-import { Resolver, Resolvable } from 'did-resolver'
+import { Resolvable, Resolver } from 'did-resolver'
 import { Contract, ContractFactory } from '@ethersproject/contracts'
 import { JsonRpcProvider } from '@ethersproject/providers'
 import { getResolver } from 'ethr-did-resolver'
-import { EthrDID, DelegateTypes, KeyPair } from '../index'
+import { DelegateTypes, EthrDID, KeyPair } from '../index'
 import { createProvider, sleep } from './testUtils'
 import DidRegistryContract from 'ethr-did-registry'
 import { verifyJWT } from 'did-jwt'
+import { arrayify } from '@ethersproject/bytes'
+import { SigningKey } from '@ethersproject/signing-key'
 
 jest.setTimeout(30000)
 
@@ -760,6 +762,196 @@ describe('EthrDID', () => {
           type: 'EcdsaSecp256k1VerificationKey2019',
         },
       ])
+    })
+  })
+})
+
+describe('EthrDID (Meta Transactions)', () => {
+  let ethrDid: EthrDID,
+    walletSigner: EthrDID,
+    registry: string,
+    registryContract: Contract,
+    accounts: string[],
+    did: string,
+    identity: string,
+    owner: string,
+    delegate1: string,
+    delegate2: string,
+    walletIdentity: string,
+    resolver: Resolvable
+
+  const provider: JsonRpcProvider = createProvider()
+
+  beforeAll(async () => {
+    const factory = ContractFactory.fromSolidity(DidRegistryContract).connect(provider.getSigner(0))
+
+    registryContract = await factory.deploy()
+    registryContract = await registryContract.deployed()
+
+    await registryContract.deployTransaction.wait()
+
+    registry = registryContract.address
+
+    accounts = await provider.listAccounts()
+
+    identity = accounts[1]
+    owner = accounts[2]
+    delegate1 = accounts[3]
+    delegate2 = accounts[4]
+    walletIdentity = accounts[5]
+    did = `did:ethr:dev:${identity}`
+
+    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: 1337 }))
+    ethrDid = new EthrDID({
+      provider,
+      registry,
+      identifier: identity,
+      chainNameOrId: 'dev',
+    })
+    walletSigner = new EthrDID({
+      provider,
+      registry,
+      identifier: identity,
+      txSigner: provider.getSigner(walletIdentity),
+      chainNameOrId: 'dev',
+    })
+  })
+
+  const currentOwnerPrivateKey = arrayify('0x0000000000000000000000000000000000000000000000000000000000000001')
+
+  it('add delegates via meta transaction', async () => {
+    // Add first delegate
+    const delegateType = DelegateTypes.sigAuth
+    const exp = 86400
+    const hash1 = await ethrDid.createAddDelegateHash(delegateType, delegate1, exp)
+    const signature1 = new SigningKey(currentOwnerPrivateKey).signDigest(hash1)
+
+    await walletSigner.addDelegateSigned(
+      delegate1,
+      {
+        sigV: signature1.v,
+        sigR: signature1.r,
+        sigS: signature1.s,
+      },
+      { delegateType: DelegateTypes.sigAuth, expiresIn: exp }
+    )
+
+    // Add second delegate
+    const hash2 = await ethrDid.createAddDelegateHash(delegateType, delegate2, exp)
+    const signature2 = new SigningKey(currentOwnerPrivateKey).signDigest(hash2)
+
+    await walletSigner.addDelegateSigned(
+      delegate2,
+      {
+        sigV: signature2.v,
+        sigR: signature2.r,
+        sigS: signature2.s,
+      },
+      { delegateType: DelegateTypes.sigAuth, expiresIn: exp }
+    )
+  })
+
+  it('remove delegate1 via meta transaction', async () => {
+    const delegateType = DelegateTypes.sigAuth
+    const hash = await ethrDid.createRevokeDelegateHash(delegateType, delegate1)
+    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+
+    await walletSigner.revokeDelegateSigned(delegate1, DelegateTypes.sigAuth, {
+      sigV: signature.v,
+      sigR: signature.r,
+      sigS: signature.s,
+    })
+  })
+
+  it('add attributes via meta transaction', async () => {
+    // Add first attribute
+    const attributeName = 'did/svc/testService'
+    const serviceEndpointParams = { uri: 'https://didcomm.example.com', transportType: 'http' }
+    const attributeValue = JSON.stringify(serviceEndpointParams)
+    const attributeExpiration = 86400
+    const hash1 = await ethrDid.createSetAttributeHash(attributeName, attributeValue, attributeExpiration)
+    const signature1 = new SigningKey(currentOwnerPrivateKey).signDigest(hash1)
+
+    await walletSigner.setAttributeSigned(attributeName, attributeValue, attributeExpiration, {
+      sigV: signature1.v,
+      sigR: signature1.r,
+      sigS: signature1.s,
+    })
+
+    // Add second attribute
+    const attributeName2 = 'did/svc/test2Service'
+    const hash2 = await ethrDid.createSetAttributeHash(attributeName2, attributeValue, attributeExpiration)
+    const signature2 = new SigningKey(currentOwnerPrivateKey).signDigest(hash2)
+
+    await walletSigner.setAttributeSigned(attributeName2, attributeValue, attributeExpiration, {
+      sigV: signature2.v,
+      sigR: signature2.r,
+      sigS: signature2.s,
+    })
+  })
+
+  it('revoke attribute for testService via meta transaction', async () => {
+    const attributeName = 'did/svc/testService'
+    const serviceEndpointParams = { uri: 'https://didcomm.example.com', transportType: 'http' }
+    const attributeValue = JSON.stringify(serviceEndpointParams)
+    const hash = await ethrDid.createRevokeAttributeHash(attributeName, attributeValue)
+    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+
+    await walletSigner.revokeAttributeSigned(attributeName, attributeValue, {
+      sigV: signature.v,
+      sigR: signature.r,
+      sigS: signature.s,
+    })
+  })
+
+  it('change owner via meta transaction', async () => {
+    const nextOwner = accounts[2]
+    const hash = await ethrDid.createChangeOwnerHash(nextOwner)
+    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+
+    await walletSigner.changeOwnerSigned(nextOwner, {
+      sigV: signature.v,
+      sigR: signature.r,
+      sigS: signature.s,
+    })
+  })
+
+  it('resolves document and verify changes', async () => {
+    const nextOwner = accounts[2]
+    const resolved = await resolver.resolve(did)
+    expect(resolved.didDocumentMetadata).toEqual({
+      versionId: '8',
+      updated: expect.anything(),
+    })
+    expect(resolved.didDocument).toEqual({
+      '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
+      id: did,
+      verificationMethod: [
+        {
+          id: `${did}#controller`,
+          type: 'EcdsaSecp256k1RecoveryMethod2020',
+          controller: did,
+          blockchainAccountId: `eip155:1337:${nextOwner}`,
+        },
+        {
+          id: `${did}#delegate-2`,
+          type: 'EcdsaSecp256k1RecoveryMethod2020',
+          controller: did,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        },
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
+      service: [
+        {
+          id: `${did}#service-2`,
+          type: 'test2Service',
+          serviceEndpoint: {
+            uri: 'https://didcomm.example.com',
+            transportType: 'http',
+          },
+        },
+      ],
     })
   })
 })
