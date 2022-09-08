@@ -9,9 +9,8 @@ import * as base64 from '@ethersproject/base64'
 import { hexlify, hexValue, isBytes } from '@ethersproject/bytes'
 import { Base58 } from '@ethersproject/basex'
 import { toUtf8Bytes } from '@ethersproject/strings'
-import { EthrDidController, interpretIdentifier, REGISTRY } from 'ethr-did-resolver'
+import { EthrDidController, interpretIdentifier, MetaSignature, REGISTRY } from 'ethr-did-resolver'
 import { Resolvable } from 'did-resolver'
-import { address, MetaSignature } from 'ethr-did-resolver/lib/helpers'
 
 export enum DelegateTypes {
   veriKey = 'veriKey',
@@ -129,20 +128,18 @@ export class EthrDID {
     return receipt.transactionHash
   }
 
-  async createChangeOwnerHash(newOwner: address): Promise<string> {
+  async createChangeOwnerHash(newOwner: string): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     return this.controller.createChangeOwnerHash(newOwner)
   }
 
-  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions?: CallOverrides): Promise<string> {
+  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions: CallOverrides): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
-    const receipt = await this.controller.changeOwnerSigned(newOwner, signature, {
-      ...txOptions,
-    })
+    const receipt = await this.controller.changeOwnerSigned(newOwner, signature, txOptions)
     this.owner = newOwner
     return receipt.transactionHash
   }
@@ -165,7 +162,7 @@ export class EthrDID {
     return receipt.transactionHash
   }
 
-  async createAddDelegateHash(delegateType: string, delegateAddress: address, exp: number): Promise<string> {
+  async createAddDelegateHash(delegateType: string, delegateAddress: string, exp: number): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
@@ -181,13 +178,12 @@ export class EthrDID {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
-    const owner = await this.lookupOwner()
     const receipt = await this.controller.addDelegateSigned(
       delegateOptions?.delegateType || DelegateTypes.veriKey,
       delegate,
       delegateOptions?.expiresIn || 86400,
       signature,
-      { ...txOptions, from: owner }
+      txOptions
     )
     return receipt.transactionHash
   }
@@ -205,7 +201,7 @@ export class EthrDID {
     return receipt.transactionHash
   }
 
-  async createRevokeDelegateHash(delegateType: string, delegateAddress: address): Promise<string> {
+  async createRevokeDelegateHash(delegateType: string, delegateAddress: string): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
@@ -221,11 +217,7 @@ export class EthrDID {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
-    const owner = await this.lookupOwner()
-    const receipt = await this.controller.revokeDelegateSigned(delegateType, delegate, signature, {
-      ...txOptions,
-      from: owner,
-    })
+    const receipt = await this.controller.revokeDelegateSigned(delegateType, delegate, signature, txOptions)
     return receipt.transactionHash
   }
 
@@ -261,18 +253,18 @@ export class EthrDID {
     value: string | Uint8Array,
     expiresIn = 86400,
     signature: MetaSignature,
-    gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
-    const owner = await this.lookupOwner()
-    const receipt = await this.controller.setAttributeSigned(key, attributeToHex(key, value), expiresIn, signature, {
-      gasLimit,
-      ...txOptions,
-      from: owner,
-    })
+    const receipt = await this.controller.setAttributeSigned(
+      key,
+      attributeToHex(key, value),
+      expiresIn,
+      signature,
+      txOptions
+    )
     return receipt.transactionHash
   }
 
@@ -306,18 +298,12 @@ export class EthrDID {
     key: string,
     value: string | Uint8Array,
     signature: MetaSignature,
-    gasLimit?: number,
     txOptions: CallOverrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
-    const owner = await this.lookupOwner()
-    const receipt = await this.controller.revokeAttributeSigned(key, attributeToHex(key, value), signature, {
-      gasLimit,
-      ...txOptions,
-      from: owner,
-    })
+    const receipt = await this.controller.revokeAttributeSigned(key, attributeToHex(key, value), signature, txOptions)
     return receipt.transactionHash
   }
 
