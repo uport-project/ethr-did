@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/uport-project/ethr-did/compare/2.2.5...2.3.0) (2022-09-08)
+
+
+### Features
+
+* add support for meta transactions ([#102](https://github.com/uport-project/ethr-did/issues/102)) ([0ee5d98](https://github.com/uport-project/ethr-did/commit/0ee5d989082a9c0d8fec2d0b34e9c47f78a3ac68)), closes [#98](https://github.com/uport-project/ethr-did/issues/98)
+
 ## [2.2.5](https://github.com/uport-project/ethr-did/compare/2.2.4...2.2.5) (2022-09-06)
 
 
