@@ -129,8 +129,8 @@ EthrDid can be configured to control a DID on any ethereum network. To do this, 
 during construction. Example:
 
 ```ts
-console.log( new EthrDID({ identifier: '0xb9c5714089478a327f09197987f16f9e5d936e8a', chainNameOrId: 'rinkeby' }).did )
-// did:ethr:rinkeby:0xB9C5714089478a327F09197987f16f9E5d936E8a
+console.log( new EthrDID({ identifier: '0xb9c5714089478a327f09197987f16f9e5d936e8a', chainNameOrId: 'goerli' }).did )
+// did:ethr:goerli:0xB9C5714089478a327F09197987f16f9E5d936E8a
 ```
 
 If this property is not specified, then the library will attempt to infer it from the `provider` configuration or from
