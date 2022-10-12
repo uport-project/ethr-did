@@ -1,3 +1,10 @@
+## [2.3.1](https://github.com/uport-project/ethr-did/compare/2.3.0...2.3.1) (2022-10-12)
+
+
+### Bug Fixes
+
+* **deps:** bump ethr-did-resolver to 6.2.3 ([c26833a](https://github.com/uport-project/ethr-did/commit/c26833a0d1073b28cb1aefd959ac9bcbf121c56d))
+
 # [2.3.0](https://github.com/uport-project/ethr-did/compare/2.2.5...2.3.0) (2022-09-08)
 
 
