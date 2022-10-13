@@ -27,12 +27,12 @@ a DID document, in which case a transaction will be needed.
 To create a DID that is anchored on a different network, you must specify a `chainNameOrId` property.
 
 ```ts
-let chainNameOrId = 'rinkeby' // you can use the network name for the most popular [test] networks.
-const ethrDidOnRinkeby = new EthrDID({...keypair, chainNameOrId})
-// did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b
+let chainNameOrId = 'goerli' // you can use the network name for the most popular [test] networks.
+const ethrDidOnGoerliNamed = new EthrDID({...keypair, chainNameOrId})
+// did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b
 
 chainNameOrId = 5 // goerli chain ID
-const ethrDidOnGoerli = new EthrDID({...keypair, chainNameOrId})
+const ethrDidOnGoerliChainId = new EthrDID({...keypair, chainNameOrId})
 // did:ethr:0x5:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b
 ```
 
@@ -81,10 +81,10 @@ verifiers to check that the signatures issued by your DID match the keys listed 
 import { Resolver } from 'did-resolver'
 import { getResolver } from 'ethr-did-resolver'
 
-const rpcUrl = "https://rinkeby.infura.io/v3/<get a project ID from infura.io>";
-const didResolver = new Resolver(getResolver({ rpcUrl, name: "rinkeby" }));
+const rpcUrl = "https://goerli.infura.io/v3/<get a project ID from infura.io>";
+const didResolver = new Resolver(getResolver({ rpcUrl, name: "goerli" }));
 
-const didDocument = (await didResolver.resolve(ethrDidOnRinkeby.did)).didDocument
+const didDocument = (await didResolver.resolve(ethrDidOnGoerliNamed.did)).didDocument
 
 /**
  {
@@ -92,28 +92,28 @@ const didDocument = (await didResolver.resolve(ethrDidOnRinkeby.did)).didDocumen
     "https://www.w3.org/ns/did/v1",
     "https://w3id.org/security/suites/secp256k1recovery-2020/v2"
   ],
-  "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
+  "id": "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
   "verificationMethod": [
     {
-      "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
+      "id": "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
       "type": "EcdsaSecp256k1RecoveryMethod2020",
-      "controller": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
-      "blockchainAccountId": "eip155:4:0x80155C25E363Ee9e1BbBCC08cD5Df7CD249A98C4"
+      "controller": "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
+      "blockchainAccountId": "eip155:5:0x80155C25E363Ee9e1BbBCC08cD5Df7CD249A98C4"
     },
     {
-      "id": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey",
+      "id": "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey",
       "type": "EcdsaSecp256k1VerificationKey2019",
-      "controller": "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
+      "controller": "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b",
       "publicKeyHex": "0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b"
     }
   ],
   "authentication": [
-    "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
-    "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey"
+    "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
+    "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey"
   ],
   "assertionMethod": [
-    "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
-    "did:ethr:rinkeby:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey"
+    "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controller",
+    "did:ethr:goerli:0x02ac49094591d32a4e2f93f3368da2d7d827e987ce6cdb3bd3b8a3390fde8fc33b#controllerKey"
   ]
 }
  */
