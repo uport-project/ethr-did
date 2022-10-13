@@ -1,3 +1,10 @@
+## [2.3.2](https://github.com/uport-project/ethr-did/compare/2.3.1...2.3.2) (2022-10-13)
+
+
+### Bug Fixes
+
+* **docs:** remove references to rinkeby ([40e0dde](https://github.com/uport-project/ethr-did/commit/40e0dde34ad4ad5c2dcad47553964b9ba5bcb823))
+
 ## [2.3.1](https://github.com/uport-project/ethr-did/compare/2.3.0...2.3.1) (2022-10-12)
 
 
