@@ -3,21 +3,21 @@
   "version": "2.3.2",
   "description": "Create, manage and use did:ethr identifiers",
   "type": "module",
-  "source": "src/index.ts",
-  "main": "./lib/index.cjs",
-  "module": "./lib/index.module.js",
-  "unpkg": "./lib/index.umd.js",
+  "source": "./src/index.ts",
+  "main": "./lib/index.js",
+  "module": "./esm/index.js",
   "types": "./lib/index.d.ts",
-  "umd:main": "./lib/index.umd.js",
   "files": [
     "lib",
+    "esm",
     "src",
     "LICENSE"
   ],
   "exports": {
     ".": {
-      "require": "./lib/index.cjs",
-      "import": "./lib/index.module.js"
+      "types": "./lib/index.d.ts",
+      "import": "./esm/index.js",
+      "require": "./lib/index.js"
     }
   },
   "repository": {
@@ -32,7 +32,8 @@
   "scripts": {
     "test": "jest",
     "test:ci": "jest --coverage",
-    "build": "microbundle --compress=false",
+    "build": "tsc",
+    "clean": "rm -rf ./lib",
     "format": "prettier --write \"src/**/*.[jt]s\"",
     "lint": "eslint --ignore-pattern \"src/**/*.test.[jt]s\" \"src/**/*.[jt]s\"",
     "prepublishOnly": "yarn test:ci && yarn format && yarn lint",
@@ -85,6 +86,6 @@
     "@ethersproject/wallet": "^5.6.2",
     "did-jwt": "^6.3.0",
     "did-resolver": "^4.0.0",
-    "ethr-did-resolver": "^6.2.3"
+    "ethr-did-resolver": "alpha"
   }
 }
