@@ -85,6 +85,6 @@
     "@ethersproject/wallet": "^5.6.2",
     "did-jwt": "^6.3.0",
     "did-resolver": "^4.0.0",
-    "ethr-did-resolver": "^6.2.3"
+    "ethr-did-resolver": "^7.0.0"
   }
 }
