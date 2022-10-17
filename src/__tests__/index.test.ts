@@ -909,11 +909,15 @@ describe('EthrDID (Meta Transactions)', () => {
     const hash = await ethrDid.createChangeOwnerHash(nextOwner)
     const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
 
-    await walletSigner.changeOwnerSigned(nextOwner, {
-      sigV: signature.v,
-      sigR: signature.r,
-      sigS: signature.s,
-    })
+    await walletSigner.changeOwnerSigned(
+      nextOwner,
+      {
+        sigV: signature.v,
+        sigR: signature.r,
+        sigS: signature.s,
+      },
+      {}
+    )
   })
 
   it('resolves document and verify changes', async () => {

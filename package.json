@@ -2,7 +2,7 @@
   "name": "ethr-did",
   "version": "2.3.2",
   "description": "Create, manage and use did:ethr identifiers",
-  "type": "module",
+  "type": "commonjs",
   "source": "./src/index.ts",
   "main": "./lib/index.js",
   "module": "./esm/index.js",
@@ -86,6 +86,6 @@
     "@ethersproject/wallet": "^5.6.2",
     "did-jwt": "^6.3.0",
     "did-resolver": "^4.0.0",
-    "ethr-did-resolver": "alpha"
+    "ethr-did-resolver": "7.0.0-alpha.3"
   }
 }
