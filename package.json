@@ -1,6 +1,6 @@
 {
   "name": "ethr-did",
-  "version": "2.3.2",
+  "version": "2.3.3",
   "description": "Create, manage and use did:ethr identifiers",
   "type": "commonjs",
   "source": "./src/index.ts",
