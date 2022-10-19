@@ -6,7 +6,7 @@ on:
       - 'master'
 jobs:
   build-test-publish:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v3
         with:
@@ -24,8 +24,8 @@ jobs:
 
       - name: "Setup git coordinates"
         run: |
-          git config user.name uport-automation-bot
-          git config user.email devops@uport.me
+          git config user.name ${{secrets.GH_USER}}
+          git config user.email ${{secrets.GH_EMAIL}}
 
       - name: Run semantic-release
         env:
