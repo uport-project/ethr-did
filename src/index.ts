@@ -135,7 +135,7 @@ export class EthrDID {
     return this.controller.createChangeOwnerHash(newOwner)
   }
 
-  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions: CallOverrides): Promise<string> {
+  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions: CallOverrides = {}): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }

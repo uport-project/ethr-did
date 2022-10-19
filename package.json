@@ -6,9 +6,7 @@
   "source": "src/index.ts",
   "main": "./lib/index.cjs",
   "module": "./lib/index.module.js",
-  "unpkg": "./lib/index.umd.js",
   "types": "./lib/index.d.ts",
-  "umd:main": "./lib/index.umd.js",
   "files": [
     "lib",
     "src",
@@ -16,6 +14,7 @@
   ],
   "exports": {
     ".": {
+      "types": "./lib/index.d.ts",
       "require": "./lib/index.cjs",
       "import": "./lib/index.module.js"
     }
@@ -65,7 +64,6 @@
     "eslint-config-prettier": "8.5.0",
     "eslint-plugin-jest": "26.5.3",
     "eslint-plugin-prettier": "4.2.1",
-    "ethr-did-registry": "0.0.3",
     "ganache": "7.3.2",
     "jest": "28.1.2",
     "microbundle": "0.15.0",

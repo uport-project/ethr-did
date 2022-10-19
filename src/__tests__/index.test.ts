@@ -1,10 +1,9 @@
 import { Resolvable, Resolver } from 'did-resolver'
 import { Contract, ContractFactory } from '@ethersproject/contracts'
 import { JsonRpcProvider } from '@ethersproject/providers'
-import { getResolver } from 'ethr-did-resolver'
+import { getResolver, EthereumDIDRegistry } from 'ethr-did-resolver'
 import { DelegateTypes, EthrDID, KeyPair } from '../index'
 import { createProvider, sleep } from './testUtils'
-import DidRegistryContract from 'ethr-did-registry'
 import { verifyJWT } from 'did-jwt'
 import { arrayify } from '@ethersproject/bytes'
 import { SigningKey } from '@ethersproject/signing-key'
@@ -26,7 +25,7 @@ describe('EthrDID', () => {
   const provider: JsonRpcProvider = createProvider()
 
   beforeAll(async () => {
-    const factory = ContractFactory.fromSolidity(DidRegistryContract).connect(provider.getSigner(0))
+    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(provider.getSigner(0))
 
     let registryContract: Contract
     registryContract = await factory.deploy()
@@ -783,7 +782,7 @@ describe('EthrDID (Meta Transactions)', () => {
   const provider: JsonRpcProvider = createProvider()
 
   beforeAll(async () => {
-    const factory = ContractFactory.fromSolidity(DidRegistryContract).connect(provider.getSigner(0))
+    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(provider.getSigner(0))
 
     registryContract = await factory.deploy()
     registryContract = await registryContract.deployed()
