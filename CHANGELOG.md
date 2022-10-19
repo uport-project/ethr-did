@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/uport-project/ethr-did/compare/2.3.3...2.3.4) (2022-10-19)
+
+
+### Bug Fixes
+
+* **build:** export types for esm ([#106](https://github.com/uport-project/ethr-did/issues/106)) ([3b146f7](https://github.com/uport-project/ethr-did/commit/3b146f7cc62b7719eaa617e1ab4e5fbf1e3894d1))
+
 ## [2.3.3](https://github.com/uport-project/ethr-did/compare/2.3.2...2.3.3) (2022-10-17)
 
 
