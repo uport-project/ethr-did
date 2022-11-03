@@ -40,7 +40,8 @@ aggregate to form a DID's DID document using
 the [Ethr-Did-Resolver](https://github.com/decentralized-identity/ethr-did-resolver)
 .
 
-An example of a DID document resolved using the [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver):
+An example of a DID document resolved using
+the [ethr-did-resolver](https://github.com/decentralized-identity/ethr-did-resolver):
 
 ```json5
 {
@@ -57,8 +58,12 @@ An example of a DID document resolved using the [ethr-did-resolver](https://gith
       blockchainAccountId: 'eip155:1:0xb9c5714089478a327f09197987f16f9e5d936e8a'
     }
   ],
-  assertionMethod: ['did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller'],
-  authentication: ['did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller']
+  assertionMethod: [
+    'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller'
+  ],
+  authentication: [
+    'did:ethr:0xb9c5714089478a327f09197987f16f9e5d936e8a#controller'
+  ]
 }
 ```
 
@@ -87,7 +92,7 @@ import { EthrDID } from 'ethr-did'
 
 const chainNameOrId = 1 // mainnet
 const provider = InfuraProvider("<infura project ID>", chainNameOrId)
-const ethrDid = new EthrDID({identifier: '0x...', privateKey: '...', provider, chainNameOrId})
+const ethrDid = new EthrDID({ identifier: '0x...', privateKey: '...', provider, chainNameOrId })
 ```
 
 | key | description| required |
@@ -129,7 +134,7 @@ EthrDid can be configured to control a DID on any ethereum network. To do this, 
 during construction. Example:
 
 ```ts
-console.log( new EthrDID({ identifier: '0xb9c5714089478a327f09197987f16f9e5d936e8a', chainNameOrId: 'goerli' }).did )
+console.log(new EthrDID({ identifier: '0xb9c5714089478a327f09197987f16f9e5d936e8a', chainNameOrId: 'goerli' }).did)
 // did:ethr:goerli:0xB9C5714089478a327F09197987f16f9E5d936E8a
 ```
 
