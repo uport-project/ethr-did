@@ -1,3 +1,10 @@
+## [2.3.6](https://github.com/uport-project/ethr-did/compare/2.3.5...2.3.6) (2022-11-03)
+
+
+### Bug Fixes
+
+* bump release ([cc5109e](https://github.com/uport-project/ethr-did/commit/cc5109e9d0a855ba777c2e2e2b987d3b74f65a34))
+
 ## [2.3.5](https://github.com/uport-project/ethr-did/compare/2.3.4...2.3.5) (2022-11-03)
 
 
