@@ -1,3 +1,10 @@
+## [2.3.7](https://github.com/uport-project/ethr-did/compare/2.3.6...2.3.7) (2022-11-07)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v8 ([e0805e8](https://github.com/uport-project/ethr-did/commit/e0805e8c7f3b498d9599300bd30d1e82be5627f9))
+
 ## [2.3.6](https://github.com/uport-project/ethr-did/compare/2.3.5...2.3.6) (2022-11-03)
 
 
