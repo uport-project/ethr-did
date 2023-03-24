@@ -1,3 +1,10 @@
+## [2.3.8](https://github.com/uport-project/ethr-did/compare/2.3.7...2.3.8) (2023-03-24)
+
+
+### Bug Fixes
+
+* **deps:** Update did-dependencies ([5976e17](https://github.com/uport-project/ethr-did/commit/5976e1718a428e8c3aa1c0e3e7a61e758dd4666a))
+
 ## [2.3.7](https://github.com/uport-project/ethr-did/compare/2.3.6...2.3.7) (2022-11-07)
 
 
