@@ -1,3 +1,10 @@
+## [2.3.9](https://github.com/uport-project/ethr-did/compare/2.3.8...2.3.9) (2023-03-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @ethersproject/providers to v5.7.2 ([2ddb987](https://github.com/uport-project/ethr-did/commit/2ddb9873303d6db0cad007fd912776aa26395fd2))
+
 ## [2.3.8](https://github.com/uport-project/ethr-did/compare/2.3.7...2.3.8) (2023-03-24)
 
 
