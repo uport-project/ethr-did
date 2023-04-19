@@ -81,7 +81,7 @@
     "@ethersproject/strings": "^5.7.0",
     "@ethersproject/transactions": "^5.7.0",
     "@ethersproject/wallet": "^5.7.0",
-    "did-jwt": "^6.9.0",
+    "did-jwt": "^7.0.0",
     "did-resolver": "^4.0.1",
     "ethr-did-resolver": "^8.0.0"
   }
