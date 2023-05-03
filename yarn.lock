@@ -4034,9 +4034,9 @@ dezalgo@^1.0.0:
     wrappy "1"
 
 did-jwt@^7.0.0:
-  version "7.0.0"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.0.0.tgz#3e8d89c180513efa15d87434cf87ce23a2603a5d"
-  integrity sha512-iRA2cUfhL93gtDosez8qCRaa1Zd/8rTiutS3TdlAxSGMN6vGXP7kO6FPXvzM+rapfKBUQCAg1tOHTb70fr7gEQ==
+  version "7.1.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.1.0.tgz#f33b3bcba0eea1ac676472a0456a35d4ab225c79"
+  integrity sha512-Mqg5sTBn37BtG2RW0mFMZbux8/4Z282u+Tbh2waETUm0uq/GiN59vmBm6l7HxoILRgf0cEFBHxvd1inTRJ/6pA==
   dependencies:
     "@noble/curves" "^1.0.0"
     "@noble/hashes" "^1.3.0"
