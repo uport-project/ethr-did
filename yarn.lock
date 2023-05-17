@@ -4281,20 +4281,20 @@ dezalgo@^1.0.0:
     wrappy "1"
 
 did-jwt@^7.0.0:
-  version "7.1.0"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.1.0.tgz#f33b3bcba0eea1ac676472a0456a35d4ab225c79"
-  integrity sha512-Mqg5sTBn37BtG2RW0mFMZbux8/4Z282u+Tbh2waETUm0uq/GiN59vmBm6l7HxoILRgf0cEFBHxvd1inTRJ/6pA==
+  version "7.2.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.2.0.tgz#a97d63139018bebbb7300dcbfa981f195ac4f1c4"
+  integrity sha512-VLtK4eJKm7eRB4SmQrGJwhqlmxKGqGfoNjc711Guiw6aVIryziYzBj01bDHw1rJO9bJQ53Q0CWlXAVpgmOa7KQ==
   dependencies:
     "@noble/curves" "^1.0.0"
     "@noble/hashes" "^1.3.0"
     "@stablelib/xchacha20poly1305" "^1.0.1"
     bech32 "^2.0.0"
     canonicalize "^2.0.0"
-    did-resolver "^4.0.0"
-    multiformats "^9.6.5"
-    uint8arrays "^3.0.0"
+    did-resolver "^4.1.0"
+    multiformats "^11.0.2"
+    uint8arrays "^4.0.3"
 
-did-resolver@^4.0.0, did-resolver@^4.0.1:
+did-resolver@^4.0.1, did-resolver@^4.1.0:
   version "4.1.0"
   resolved "https://registry.yarnpkg.com/did-resolver/-/did-resolver-4.1.0.tgz#740852083c4fd5bf9729d528eca5d105aff45eb6"
   integrity sha512-S6fWHvCXkZg2IhS4RcVHxwuyVejPR7c+a4Go0xbQ9ps5kILa8viiYQgrM4gfTyeTjJ0ekgJH9gk/BawTpmkbZA==
@@ -6879,10 +6879,10 @@ ms@^2.0.0, ms@^2.1.2:
   resolved "https://registry.yarnpkg.com/ms/-/ms-2.1.3.tgz#574c8138ce1d2b5861f0b44579dbadd60c6615b2"
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
-multiformats@^9.4.2, multiformats@^9.6.5:
-  version "9.9.0"
-  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-9.9.0.tgz#c68354e7d21037a8f1f8833c8ccd68618e8f1d37"
-  integrity sha512-HoMUjhH9T8DDBNT+6xzkrd9ga/XiBI4xLr58LJACwK6G3HTOPeMz4nB4KJs33L2BelrIJa7P0VuNaVF3hMYfjg==
+multiformats@^11.0.0, multiformats@^11.0.2:
+  version "11.0.2"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-11.0.2.tgz#b14735efc42cd8581e73895e66bebb9752151b60"
+  integrity sha512-b5mYMkOkARIuVZCpvijFj9a6m5wMVLC7cf/jIPd5D/ARDOfLC5+IFkbgDXQgcU2goIsTD/O9NY4DI/Mt4OGvlg==
 
 mute-stream@~0.0.4:
   version "0.0.8"
@@ -8974,12 +8974,12 @@ uglify-js@^3.1.4:
   resolved "https://registry.yarnpkg.com/uglify-js/-/uglify-js-3.17.3.tgz#f0feedf019c4510f164099e8d7e72ff2d7304377"
   integrity sha512-JmMFDME3iufZnBpyKL+uS78LRiC+mK55zWfM5f/pWBJfpOttXAqYfdDGRukYhJuyRinvPVAtUhvy7rlDybNtFg==
 
-uint8arrays@^3.0.0:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-3.1.1.tgz#2d8762acce159ccd9936057572dade9459f65ae0"
-  integrity sha512-+QJa8QRnbdXVpHYjLoTpJIdCTiw9Ir62nocClWuXIq2JIh4Uta0cQsTSpFL678p2CN8B+XSApwcU+pQEqVpKWg==
+uint8arrays@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-4.0.3.tgz#43109c03c4c10d312e7f2e9f4d53e5cd2398c7fd"
+  integrity sha512-b+aKlI2oTnxnfeSQWV1sMacqSNxqhtXySaH6bflvONGxF8V/fT3ZlYH7z2qgGfydsvpVo4JUgM/Ylyfl2YouCg==
   dependencies:
-    multiformats "^9.4.2"
+    multiformats "^11.0.0"
 
 unbox-primitive@^1.0.2:
   version "1.0.2"
