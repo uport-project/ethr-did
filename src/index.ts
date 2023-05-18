@@ -1,4 +1,4 @@
-import { createJWT, ES256KSigner, hexToBytes, JWTVerified, Signer as JWTSigner, verifyJWT } from 'did-jwt'
+import { createJWT, ES256KSigner, hexToBytes, type JWTVerified, type Signer as JWTSigner, verifyJWT } from 'did-jwt'
 import { Signer as TxSigner } from '@ethersproject/abstract-signer'
 import { CallOverrides } from '@ethersproject/contracts'
 import { computeAddress } from '@ethersproject/transactions'
@@ -9,8 +9,8 @@ import * as base64 from '@ethersproject/base64'
 import { hexlify, hexValue, isBytes } from '@ethersproject/bytes'
 import { Base58 } from '@ethersproject/basex'
 import { toUtf8Bytes } from '@ethersproject/strings'
-import { EthrDidController, interpretIdentifier, MetaSignature, REGISTRY } from 'ethr-did-resolver'
-import { Resolvable } from 'did-resolver'
+import { EthrDidController, interpretIdentifier, type MetaSignature, REGISTRY } from 'ethr-did-resolver'
+import type { Resolvable } from 'did-resolver'
 
 export enum DelegateTypes {
   veriKey = 'veriKey',
@@ -53,7 +53,7 @@ export class EthrDID {
   public signer?: JWTSigner
   public alg?: 'ES256K' | 'ES256K-R'
   private owner?: string
-  private controller?: EthrDidController
+  private readonly controller?: EthrDidController
 
   constructor(conf: IConfig) {
     const { address, publicKey, network } = interpretIdentifier(conf.identifier)

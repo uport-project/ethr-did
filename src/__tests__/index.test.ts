@@ -8,6 +8,8 @@ import { verifyJWT } from 'did-jwt'
 import { arrayify } from '@ethersproject/bytes'
 import { SigningKey } from '@ethersproject/signing-key'
 
+import { jest } from '@jest/globals'
+
 jest.setTimeout(30000)
 
 describe('EthrDID', () => {
@@ -835,6 +837,24 @@ describe('EthrDID (Meta Transactions)', () => {
       { delegateType: DelegateTypes.sigAuth, expiresIn: exp }
     )
 
+    let resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-1`,
+          blockchainAccountId: `eip155:1337:${delegate1}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-1`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-1`],
+    })
+
     // Add second delegate
     const hash2 = await ethrDid.createAddDelegateHash(delegateType, delegate2, exp)
     const signature2 = new SigningKey(currentOwnerPrivateKey).signDigest(hash2)
@@ -848,6 +868,28 @@ describe('EthrDID (Meta Transactions)', () => {
       },
       { delegateType: DelegateTypes.sigAuth, expiresIn: exp }
     )
+
+    resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-1`,
+          blockchainAccountId: `eip155:1337:${delegate1}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-2`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-1`, `${did}#delegate-2`],
+    })
   })
 
   it('remove delegate1 via meta transaction', async () => {
@@ -859,6 +901,28 @@ describe('EthrDID (Meta Transactions)', () => {
       sigV: signature.v,
       sigR: signature.r,
       sigS: signature.s,
+    })
+
+    // revoking a delegate sets their validity to the block timestamp instead of 0, so we need to wait at least a
+    // second for the resolver to see a difference in the document
+    await sleep(1)
+
+    const resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-2`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
     })
   })
 
@@ -877,6 +941,34 @@ describe('EthrDID (Meta Transactions)', () => {
       sigS: signature1.s,
     })
 
+    let resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-2`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
+      service: [
+        {
+          id: `${did}#service-1`,
+          serviceEndpoint: {
+            transportType: 'http',
+            uri: 'https://didcomm.example.com',
+          },
+          type: 'testService',
+        },
+      ],
+    })
+
     // Add second attribute
     const attributeName2 = 'did/svc/test2Service'
     const hash2 = await ethrDid.createSetAttributeHash(attributeName2, attributeValue, attributeExpiration)
@@ -886,6 +978,42 @@ describe('EthrDID (Meta Transactions)', () => {
       sigV: signature2.v,
       sigR: signature2.r,
       sigS: signature2.s,
+    })
+
+    resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-2`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
+      service: [
+        {
+          id: `${did}#service-1`,
+          serviceEndpoint: {
+            transportType: 'http',
+            uri: 'https://didcomm.example.com',
+          },
+          type: 'testService',
+        },
+        {
+          id: `${did}#service-2`,
+          serviceEndpoint: {
+            transportType: 'http',
+            uri: 'https://didcomm.example.com',
+          },
+          type: 'test2Service',
+        },
+      ],
     })
   })
 
@@ -901,6 +1029,34 @@ describe('EthrDID (Meta Transactions)', () => {
       sigR: signature.r,
       sigS: signature.s,
     })
+
+    const resolved = await resolver.resolve(did)
+    expect(resolved.didDocument).toEqual({
+      '@context': expect.anything(),
+      id: did,
+      verificationMethod: [
+        expect.objectContaining({
+          id: `${did}#controller`,
+          blockchainAccountId: `eip155:1337:${identity}`,
+        }),
+        expect.objectContaining({
+          id: `${did}#delegate-2`,
+          blockchainAccountId: `eip155:1337:${delegate2}`,
+        }),
+      ],
+      authentication: [`${did}#controller`, `${did}#delegate-2`],
+      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
+      service: [
+        {
+          id: `${did}#service-2`,
+          serviceEndpoint: {
+            transportType: 'http',
+            uri: 'https://didcomm.example.com',
+          },
+          type: 'test2Service',
+        },
+      ],
+    })
   })
 
   it('change owner via meta transaction', async () => {
@@ -913,42 +1069,30 @@ describe('EthrDID (Meta Transactions)', () => {
       sigR: signature.r,
       sigS: signature.s,
     })
-  })
-
-  it('resolves document and verify changes', async () => {
-    const nextOwner = accounts[2]
     const resolved = await resolver.resolve(did)
-    expect(resolved.didDocumentMetadata).toEqual({
-      versionId: '8',
-      updated: expect.anything(),
-    })
     expect(resolved.didDocument).toEqual({
-      '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
+      '@context': expect.anything(),
       id: did,
       verificationMethod: [
-        {
+        expect.objectContaining({
           id: `${did}#controller`,
-          type: 'EcdsaSecp256k1RecoveryMethod2020',
-          controller: did,
           blockchainAccountId: `eip155:1337:${nextOwner}`,
-        },
-        {
+        }),
+        expect.objectContaining({
           id: `${did}#delegate-2`,
-          type: 'EcdsaSecp256k1RecoveryMethod2020',
-          controller: did,
           blockchainAccountId: `eip155:1337:${delegate2}`,
-        },
+        }),
       ],
       authentication: [`${did}#controller`, `${did}#delegate-2`],
       assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
       service: [
         {
           id: `${did}#service-2`,
-          type: 'test2Service',
           serviceEndpoint: {
-            uri: 'https://didcomm.example.com',
             transportType: 'http',
+            uri: 'https://didcomm.example.com',
           },
+          type: 'test2Service',
         },
       ],
     })
