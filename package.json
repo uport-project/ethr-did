@@ -38,17 +38,17 @@
     "release": "semantic-release --debug"
   },
   "devDependencies": {
-    "@babel/core": "7.22.1",
-    "@babel/preset-env": "7.22.2",
-    "@babel/preset-typescript": "7.21.5",
+    "@babel/core": "7.22.5",
+    "@babel/preset-env": "7.22.5",
+    "@babel/preset-typescript": "7.22.5",
     "@ethersproject/contracts": "5.7.0",
     "@semantic-release/changelog": "6.0.3",
     "@semantic-release/git": "10.0.1",
-    "@types/jest": "29.5.1",
-    "@typescript-eslint/eslint-plugin": "5.59.7",
-    "@typescript-eslint/parser": "5.59.7",
+    "@types/jest": "29.5.2",
+    "@typescript-eslint/eslint-plugin": "5.59.11",
+    "@typescript-eslint/parser": "5.59.11",
     "cross-env": "7.0.3",
-    "eslint": "8.41.0",
+    "eslint": "8.43.0",
     "eslint-config-prettier": "8.8.0",
     "eslint-plugin-jest": "27.2.1",
     "eslint-plugin-prettier": "4.2.1",
@@ -57,9 +57,9 @@
     "jest-config": "29.5.0",
     "microbundle": "0.15.1",
     "prettier": "2.8.8",
-    "semantic-release": "21.0.2",
+    "semantic-release": "21.0.5",
     "ts-jest": "29.1.0",
-    "typescript": "5.0.4"
+    "typescript": "5.1.3"
   },
   "dependencies": {
     "@ethersproject/abstract-signer": "^5.7.0",
