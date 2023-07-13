@@ -5151,9 +5151,9 @@ esutils@^2.0.2:
   integrity sha512-kVscqXk4OCp68SZ0dkgEKVi6/8ij300KBWTJq32P/dYeWTSwK41WyTxalN1eRmA5Z9UU/LX9D7FWSmV9SAYx6g==
 
 ethr-did-resolver@^8.0.0:
-  version "8.1.1"
-  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-8.1.1.tgz#8e01b4aa3bf39187216ad8f35464d77d229fd799"
-  integrity sha512-2Ot3Gpfc3NW9s7NhPgAK7wB0z6q+TbbsFX5FeGFfeN+cLjHuP7ICSD2oy+6DwfGdvZlhONoTZNOpL7ZY2DI4yw==
+  version "8.1.2"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-8.1.2.tgz#cfee33a8b8a70f762da3eba50db99d8a80786b37"
+  integrity sha512-dnbE3GItE1YHp/eavR11KbGDi8Il01H9GeH+wKgoSgE95pKBZufHyHYce/EK2k8VOmj6MJf8u/TIpPvxjCbK+A==
   dependencies:
     "@ethersproject/abi" "^5.6.3"
     "@ethersproject/abstract-signer" "^5.6.2"
