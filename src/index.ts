@@ -1,16 +1,20 @@
 import { createJWT, ES256KSigner, hexToBytes, JWTVerified, Signer as JWTSigner, verifyJWT } from 'did-jwt'
-import { Signer as TxSigner } from '@ethersproject/abstract-signer'
-import { CallOverrides } from '@ethersproject/contracts'
-import { computeAddress } from '@ethersproject/transactions'
-import { computePublicKey } from '@ethersproject/signing-key'
-import { Provider } from '@ethersproject/providers'
-import { Wallet } from '@ethersproject/wallet'
-import * as base64 from '@ethersproject/base64'
-import { hexlify, hexValue, isBytes } from '@ethersproject/bytes'
-import { Base58 } from '@ethersproject/basex'
-import { toUtf8Bytes } from '@ethersproject/strings'
 import { EthrDidController, interpretIdentifier, MetaSignature, REGISTRY } from 'ethr-did-resolver'
 import { Resolvable } from 'did-resolver'
+import {
+  toBeHex,
+  toQuantity,
+  Wallet,
+  computeAddress,
+  Signer,
+  decodeBase58,
+  Provider,
+  toUtf8Bytes,
+  isBytesLike,
+  hexlify,
+  Overrides,
+  decodeBase64,
+} from 'ethers'
 
 export enum DelegateTypes {
   veriKey = 'veriKey',
@@ -26,7 +30,7 @@ interface IConfig {
 
   signer?: JWTSigner
   alg?: 'ES256K' | 'ES256K-R'
-  txSigner?: TxSigner
+  txSigner?: Signer
   privateKey?: string
 
   rpcUrl?: string
@@ -57,7 +61,7 @@ export class EthrDID {
 
   constructor(conf: IConfig) {
     const { address, publicKey, network } = interpretIdentifier(conf.identifier)
-    const chainNameOrId = typeof conf.chainNameOrId === 'number' ? hexValue(conf.chainNameOrId) : conf.chainNameOrId
+    const chainNameOrId = typeof conf.chainNameOrId === 'number' ? toQuantity(conf.chainNameOrId) : conf.chainNameOrId
     if (conf.provider || conf.rpcUrl || conf.web3) {
       let txSigner = conf.txSigner
       if (conf.privateKey && typeof txSigner === 'undefined') {
@@ -101,8 +105,8 @@ export class EthrDID {
     const wallet = Wallet.createRandom()
     const privateKey = wallet.privateKey
     const address = computeAddress(privateKey)
-    const publicKey = computePublicKey(privateKey, true)
-    const net = typeof chainNameOrId === 'number' ? hexValue(chainNameOrId) : chainNameOrId
+    const publicKey = wallet.publicKey
+    const net = typeof chainNameOrId === 'number' ? toQuantity(chainNameOrId) : chainNameOrId
     const identifier = net ? `did:ethr:${net}:${publicKey}` : publicKey
     return { address, privateKey, publicKey, identifier }
   }
@@ -115,7 +119,7 @@ export class EthrDID {
     return this.controller?.getOwner(this.address)
   }
 
-  async changeOwner(newOwner: string, txOptions?: CallOverrides): Promise<string> {
+  async changeOwner(newOwner: string, txOptions?: Overrides): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
@@ -125,7 +129,7 @@ export class EthrDID {
       from: owner,
     })
     this.owner = newOwner
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async createChangeOwnerHash(newOwner: string): Promise<string> {
@@ -135,20 +139,16 @@ export class EthrDID {
     return this.controller.createChangeOwnerHash(newOwner)
   }
 
-  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions: CallOverrides): Promise<string> {
+  async changeOwnerSigned(newOwner: string, signature: MetaSignature, txOptions: Overrides): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     const receipt = await this.controller.changeOwnerSigned(newOwner, signature, txOptions)
     this.owner = newOwner
-    return receipt.transactionHash
+    return receipt.hash
   }
 
-  async addDelegate(
-    delegate: string,
-    delegateOptions?: DelegateOptions,
-    txOptions: CallOverrides = {}
-  ): Promise<string> {
+  async addDelegate(delegate: string, delegateOptions?: DelegateOptions, txOptions = {}): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
@@ -159,7 +159,7 @@ export class EthrDID {
       delegateOptions?.expiresIn || 86400,
       { ...txOptions, from: owner }
     )
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async createAddDelegateHash(delegateType: string, delegateAddress: string, exp: number): Promise<string> {
@@ -173,7 +173,7 @@ export class EthrDID {
     delegate: string,
     signature: MetaSignature,
     delegateOptions?: DelegateOptions,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
@@ -185,20 +185,20 @@ export class EthrDID {
       signature,
       txOptions
     )
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async revokeDelegate(
     delegate: string,
     delegateType = DelegateTypes.veriKey,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     const owner = await this.lookupOwner()
     const receipt = await this.controller.revokeDelegate(delegateType, delegate, { ...txOptions, from: owner })
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async createRevokeDelegateHash(delegateType: string, delegateAddress: string): Promise<string> {
@@ -212,13 +212,13 @@ export class EthrDID {
     delegate: string,
     delegateType = DelegateTypes.veriKey,
     signature: MetaSignature,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     const receipt = await this.controller.revokeDelegateSigned(delegateType, delegate, signature, txOptions)
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async setAttribute(
@@ -227,7 +227,7 @@ export class EthrDID {
     expiresIn = 86400,
     /** @deprecated please use `txOptions.gasLimit` */
     gasLimit?: number,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
@@ -238,7 +238,7 @@ export class EthrDID {
       ...txOptions,
       from: owner,
     })
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async createSetAttributeHash(attrName: string, attrValue: string, exp: number) {
@@ -253,7 +253,7 @@ export class EthrDID {
     value: string | Uint8Array,
     expiresIn = 86400,
     signature: MetaSignature,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
@@ -265,7 +265,7 @@ export class EthrDID {
       signature,
       txOptions
     )
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async revokeAttribute(
@@ -273,7 +273,7 @@ export class EthrDID {
     value: string | Uint8Array,
     /** @deprecated please use `txOptions.gasLimit` */
     gasLimit?: number,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
@@ -284,7 +284,7 @@ export class EthrDID {
       ...txOptions,
       from: owner,
     })
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   async createRevokeAttributeHash(attrName: string, attrValue: string) {
@@ -298,13 +298,13 @@ export class EthrDID {
     key: string,
     value: string | Uint8Array,
     signature: MetaSignature,
-    txOptions: CallOverrides = {}
+    txOptions: Overrides = {}
   ): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
     const receipt = await this.controller.revokeAttributeSigned(key, attributeToHex(key, value), signature, txOptions)
-    return receipt.transactionHash
+    return receipt.hash
   }
 
   // Create a temporary signing delegate able to sign JWT on behalf of identity
@@ -342,7 +342,7 @@ export class EthrDID {
 }
 
 function attributeToHex(key: string, value: string | Uint8Array): string {
-  if (value instanceof Uint8Array || isBytes(value)) {
+  if (value instanceof Uint8Array || isBytesLike(value)) {
     return hexlify(value)
   }
   const matchKeyWithEncoding = key.match(/^did\/(pub|auth|svc)\/(\w+)(\/(\w+))?(\/(\w+))?$/)
@@ -350,10 +350,10 @@ function attributeToHex(key: string, value: string | Uint8Array): string {
   const matchHexString = (<string>value).match(/^0x[0-9a-fA-F]*$/)
   if (encoding && !matchHexString) {
     if (encoding === 'base64') {
-      return hexlify(base64.decode(value))
+      return hexlify(decodeBase64(value))
     }
     if (encoding === 'base58') {
-      return hexlify(Base58.decode(value))
+      return hexlify(toBeHex(decodeBase58(value)))
     }
   } else if (matchHexString) {
     return <string>value

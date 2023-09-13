@@ -1,12 +1,10 @@
-import { JsonRpcProvider, Web3Provider } from '@ethersproject/providers'
 import ganache from 'ganache'
+import { BrowserProvider, JsonRpcProvider } from 'ethers'
 
-export function createProvider(): JsonRpcProvider {
-  return new Web3Provider(
+export function createProvider(): BrowserProvider {
+  return new BrowserProvider(
     ganache.provider({
-      logging: {
-        quiet: true,
-      },
+      logging: { quiet: true },
       accounts: [
         {
           secretKey: '0x278a5de700e29faae8e40e366ec5012b5ec63d36ec77e8a2417154cc1d25383f',
