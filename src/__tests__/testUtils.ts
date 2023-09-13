@@ -1,3 +1,4 @@
+import { ExternalProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers'
 import ganache from 'ganache'
 import { BrowserProvider, JsonRpcProvider } from 'ethers'
 
@@ -54,9 +55,11 @@ export function createProvider(): BrowserProvider {
 export async function sleep(seconds: number): Promise<void> {
   return new Promise((resolve) => setTimeout(resolve, seconds * 1000))
 }
+
 export async function stopMining(provider: JsonRpcProvider): Promise<unknown> {
   return provider.send('miner_stop', [])
 }
+
 export async function startMining(provider: JsonRpcProvider): Promise<unknown> {
   return provider.send('miner_start', [1])
 }

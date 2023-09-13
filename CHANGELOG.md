@@ -1,3 +1,151 @@
+## [2.3.20](https://github.com/uport-project/ethr-did/compare/2.3.19...2.3.20) (2023-09-04)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.7 ([80feeb5](https://github.com/uport-project/ethr-did/commit/80feeb50b585e56e4a8525286df4c3fcc8fa1404))
+
+## [2.3.19](https://github.com/uport-project/ethr-did/compare/2.3.18...2.3.19) (2023-08-24)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.6 ([057a455](https://github.com/uport-project/ethr-did/commit/057a45522ecf2bb063998cca67bcdcc8ce7e3f2b))
+
+## [2.3.18](https://github.com/uport-project/ethr-did/compare/2.3.17...2.3.18) (2023-08-04)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.5 ([daba9ff](https://github.com/uport-project/ethr-did/commit/daba9ffd1525d7b8a2734e23f0eab169f104b3b0))
+
+## [2.3.17](https://github.com/uport-project/ethr-did/compare/2.3.16...2.3.17) (2023-07-13)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v8.1.2 ([b3e61dc](https://github.com/uport-project/ethr-did/commit/b3e61dc2ad2209fb258b79bc012b1c3cb09d4b2d))
+
+## [2.3.16](https://github.com/uport-project/ethr-did/compare/2.3.15...2.3.16) (2023-07-12)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v8.1.1 ([fa369cd](https://github.com/uport-project/ethr-did/commit/fa369cdc402ebdc05ccc749711f995ed6b9838de))
+
+## [2.3.15](https://github.com/uport-project/ethr-did/compare/2.3.14...2.3.15) (2023-06-27)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.4 ([7c8caf1](https://github.com/uport-project/ethr-did/commit/7c8caf1d6b23ce3ed194f2e011069109c828dde3))
+
+## [2.3.14](https://github.com/uport-project/ethr-did/compare/2.3.13...2.3.14) (2023-06-08)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.2 ([2d33145](https://github.com/uport-project/ethr-did/commit/2d331455d87759bc0a4722168ec3726c21a06360))
+
+## [2.3.13](https://github.com/uport-project/ethr-did/compare/2.3.12...2.3.13) (2023-06-04)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.1 ([402b454](https://github.com/uport-project/ethr-did/commit/402b4549b0fe6f4a7db1176977e2c86b8bf95dbd))
+
+## [2.3.12](https://github.com/uport-project/ethr-did/compare/2.3.11...2.3.12) (2023-05-18)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.2.0 ([726adc9](https://github.com/uport-project/ethr-did/commit/726adc98e9464e0e271d86b90a9243deee682277))
+* stricter types, better tests ([69aee19](https://github.com/uport-project/ethr-did/commit/69aee19d1b2e62739e80755db5db7544c39200fa))
+
+## [2.3.11](https://github.com/uport-project/ethr-did/compare/2.3.10...2.3.11) (2023-05-04)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.1.0 ([3860076](https://github.com/uport-project/ethr-did/commit/3860076574552d9f2ef79c31700b14e761f03591))
+
+## [2.3.10](https://github.com/uport-project/ethr-did/compare/2.3.9...2.3.10) (2023-04-20)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7 ([4b65fce](https://github.com/uport-project/ethr-did/commit/4b65fcea0ba8ef4872dcf314f9c2a847cbaf6519))
+
+## [2.3.9](https://github.com/uport-project/ethr-did/compare/2.3.8...2.3.9) (2023-03-29)
+
+
+### Bug Fixes
+
+* **deps:** update dependency @ethersproject/providers to v5.7.2 ([2ddb987](https://github.com/uport-project/ethr-did/commit/2ddb9873303d6db0cad007fd912776aa26395fd2))
+
+## [2.3.8](https://github.com/uport-project/ethr-did/compare/2.3.7...2.3.8) (2023-03-24)
+
+
+### Bug Fixes
+
+* **deps:** Update did-dependencies ([5976e17](https://github.com/uport-project/ethr-did/commit/5976e1718a428e8c3aa1c0e3e7a61e758dd4666a))
+
+## [2.3.7](https://github.com/uport-project/ethr-did/compare/2.3.6...2.3.7) (2022-11-07)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v8 ([e0805e8](https://github.com/uport-project/ethr-did/commit/e0805e8c7f3b498d9599300bd30d1e82be5627f9))
+
+## [2.3.6](https://github.com/uport-project/ethr-did/compare/2.3.5...2.3.6) (2022-11-03)
+
+
+### Bug Fixes
+
+* bump release ([cc5109e](https://github.com/uport-project/ethr-did/commit/cc5109e9d0a855ba777c2e2e2b987d3b74f65a34))
+
+## [2.3.5](https://github.com/uport-project/ethr-did/compare/2.3.4...2.3.5) (2022-11-03)
+
+
+### Bug Fixes
+
+* **deps:** bump ethr-did-resolver to 7.0.2 ([48c0e43](https://github.com/uport-project/ethr-did/commit/48c0e430967848940c9c272b21442a4d23bd29f4))
+
+## [2.3.4](https://github.com/uport-project/ethr-did/compare/2.3.3...2.3.4) (2022-10-19)
+
+
+### Bug Fixes
+
+* **build:** export types for esm ([#106](https://github.com/uport-project/ethr-did/issues/106)) ([3b146f7](https://github.com/uport-project/ethr-did/commit/3b146f7cc62b7719eaa617e1ab4e5fbf1e3894d1))
+
+## [2.3.3](https://github.com/uport-project/ethr-did/compare/2.3.2...2.3.3) (2022-10-17)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v7 ([24b23ac](https://github.com/uport-project/ethr-did/commit/24b23ac32a691dbcbf1c4a306ced0bb465792e40))
+
+## [2.3.2](https://github.com/uport-project/ethr-did/compare/2.3.1...2.3.2) (2022-10-13)
+
+
+### Bug Fixes
+
+* **docs:** remove references to rinkeby ([40e0dde](https://github.com/uport-project/ethr-did/commit/40e0dde34ad4ad5c2dcad47553964b9ba5bcb823))
+
+## [2.3.1](https://github.com/uport-project/ethr-did/compare/2.3.0...2.3.1) (2022-10-12)
+
+
+### Bug Fixes
+
+* **deps:** bump ethr-did-resolver to 6.2.3 ([c26833a](https://github.com/uport-project/ethr-did/commit/c26833a0d1073b28cb1aefd959ac9bcbf121c56d))
+
+# [2.3.0](https://github.com/uport-project/ethr-did/compare/2.2.5...2.3.0) (2022-09-08)
+
+
+### Features
+
+* add support for meta transactions ([#102](https://github.com/uport-project/ethr-did/issues/102)) ([0ee5d98](https://github.com/uport-project/ethr-did/commit/0ee5d989082a9c0d8fec2d0b34e9c47f78a3ac68)), closes [#98](https://github.com/uport-project/ethr-did/issues/98)
+
 ## [2.2.5](https://github.com/uport-project/ethr-did/compare/2.2.4...2.2.5) (2022-09-06)
 
 

@@ -1,4 +1,4 @@
-import { EthrDID } from '..'
+import { EthrDID } from '../index'
 
 describe('configuration', () => {
   it('can use rpcUrl - github #64', () => {

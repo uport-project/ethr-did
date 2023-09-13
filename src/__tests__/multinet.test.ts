@@ -1,4 +1,4 @@
-import { EthrDID } from '..'
+import { EthrDID } from '../index'
 
 describe('other networks', () => {
   it('supports rsk - github #50', () => {
