@@ -7,7 +7,6 @@
   "main": "./lib/index.cjs",
   "module": "./lib/index.module.js",
   "types": "./lib/index.d.ts",
-  "umd:main": "./lib/index.umd.js",
   "files": [
     "lib",
     "src",
