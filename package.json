@@ -65,6 +65,6 @@
     "did-jwt": "^7.2.0",
     "did-resolver": "^4.1.0",
     "ethr-did-resolver": "^8.0.0",
-    "ethers": "^6.7.1",
+    "ethers": "^6.7.1"
   }
 }

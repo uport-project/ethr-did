@@ -1,9 +1,8 @@
 import { Resolvable, Resolver } from 'did-resolver'
 import { Contract, ContractFactory, getBytes, SigningKey } from 'ethers'
-import { getResolver } from 'ethr-did-resolver'
+import { EthereumDIDRegistry, getResolver } from 'ethr-did-resolver'
 import { DelegateTypes, EthrDID, KeyPair } from '../index'
 import { createProvider, sleep } from './testUtils'
-import DidRegistryContract from 'ethr-did-registry'
 import { verifyJWT } from 'did-jwt'
 
 import { jest } from '@jest/globals'
@@ -772,7 +771,6 @@ describe('EthrDID (Meta Transactions)', () => {
     accounts: string[],
     did: string,
     identity: string,
-    owner: string,
     delegate1: string,
     delegate2: string,
     walletIdentity: string,
@@ -781,7 +779,7 @@ describe('EthrDID (Meta Transactions)', () => {
   const provider = createProvider()
 
   beforeAll(async () => {
-    const factory = ContractFactory.fromSolidity(DidRegistryContract).connect(await provider.getSigner(0))
+    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(await provider.getSigner(0))
 
     registryContract = await factory.deploy()
     registryContract = await registryContract.waitForDeployment()
@@ -792,7 +790,6 @@ describe('EthrDID (Meta Transactions)', () => {
     accounts = accountSigners.map((signer) => signer.address)
 
     identity = accounts[1]
-    owner = accounts[2]
     delegate1 = accounts[3]
     delegate2 = accounts[4]
     walletIdentity = accounts[5]
@@ -1060,14 +1057,11 @@ describe('EthrDID (Meta Transactions)', () => {
     const hash = await ethrDid.createChangeOwnerHash(nextOwner)
     const signature = new SigningKey(currentOwnerPrivateKey).sign(hash)
 
-    await walletSigner.changeOwnerSigned(
-      nextOwner,
-      {
-        sigV: signature.v,
-        sigR: signature.r,
-        sigS: signature.s,
-      }
-    )
+    await walletSigner.changeOwnerSigned(nextOwner, {
+      sigV: signature.v,
+      sigR: signature.r,
+      sigS: signature.s,
+    })
 
     const resolved = await resolver.resolve(did)
     expect(resolved.didDocument).toEqual({

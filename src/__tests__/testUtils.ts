@@ -1,4 +1,3 @@
-import { ExternalProvider, JsonRpcProvider, Web3Provider } from '@ethersproject/providers'
 import ganache from 'ganache'
 import { BrowserProvider, JsonRpcProvider } from 'ethers'
 
