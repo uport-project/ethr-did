@@ -4977,9 +4977,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^7.2.0:
-  version "7.2.7"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.2.7.tgz#8ed041bcc70287229a96004d1d2c1210da342633"
-  integrity sha512-8hCEG13b3YV7Gw+euv4hSFKTk83tAeItP8d/dfz81KL1XfRahsvdbepZS1ckPsS1tLzQadQ+pxscvhkddfuQDA==
+  version "7.2.8"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.2.8.tgz#2d1cba5cb108aff19d0aa8783e78cdbd65b242db"
+  integrity sha512-hT+F7F7crtu9UsDoopGv9tJL/yrLb26IU92FjL2VHrQ8buei1WUCZRJHan2yQSRKtc9Vao0iCxq59bAmYMWnXA==
   dependencies:
     "@noble/curves" "^1.0.0"
     "@noble/hashes" "^1.3.0"
@@ -7887,9 +7887,9 @@ ms@^2.0.0, ms@^2.1.2:
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 multiformats@^12.0.0, multiformats@^12.0.1:
-  version "12.1.0"
-  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-12.1.0.tgz#0c344239c7d8dc60c8079935b1dbb12e39d22214"
-  integrity sha512-/qTOKKnU8nwcVURjRcS+UN0QYgdS5BPZzY10Aiciu2SqncyCVMGV8KtD83EBFmsuJDsSEmT4sGvzcTkCoMw0sQ==
+  version "12.1.1"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-12.1.1.tgz#bebd4e121ccdb7e9b2f2db407f839fc9e963a3b7"
+  integrity sha512-GBSToTmri2vJYs8wqcZQ8kB21dCaeTOzHTIAlr8J06C1eL6UbzqURXFZ5Fl0EYm9GAFz1IlYY8SxGOs9G9NJRg==
 
 mute-stream@~1.0.0:
   version "1.0.0"
