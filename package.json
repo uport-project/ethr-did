@@ -1,6 +1,6 @@
 {
   "name": "ethr-did",
-  "version": "2.3.20",
+  "version": "2.3.22",
   "description": "Create, manage and use did:ethr identifiers",
   "type": "module",
   "source": "src/index.ts",
@@ -56,7 +56,7 @@
     "jest-config": "29.6.2",
     "microbundle": "0.15.1",
     "prettier": "3.0.2",
-    "semantic-release": "21.0.9",
+    "semantic-release": "22.0.0",
     "ts-jest": "29.1.1",
     "typescript": "5.1.6"
   },
