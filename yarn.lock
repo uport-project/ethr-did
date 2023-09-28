@@ -3569,9 +3569,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^7.2.0:
-  version "7.3.0"
-  resolved "https://registry.npmjs.org/did-jwt/-/did-jwt-7.3.0.tgz"
-  integrity sha512-5uZieA76TsrmWRE67qh1JyaRW6GopZxVTlKNy+rBROH7ca214VkLnFfgoxc9sguZkONvDTbUPfiP1xF0+Lckbw==
+  version "7.4.1"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.1.tgz#7c5c26b8832c3a2919ae4296ea6983109f5592b4"
+  integrity sha512-gYDbY6KKuKxmcmJvI1u4zS7QDQGz4B4Ak/T/biMMOHNYZZDGDMKXdZYhiCsphqrBvd7j0OZTFK7iAvMgSpB2aw==
   dependencies:
     "@noble/ciphers" "^0.3.0"
     "@noble/curves" "^1.0.0"
