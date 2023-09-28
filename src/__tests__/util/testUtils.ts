@@ -1,4 +1,3 @@
-/* istanbul ignore file */
 import ganache from 'ganache'
 import { BrowserProvider, JsonRpcProvider } from 'ethers'
 

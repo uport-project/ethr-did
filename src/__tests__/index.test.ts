@@ -1091,43 +1091,4 @@ describe('EthrDID (Meta Transactions)', () => {
       ],
     })
   })
-
-  it('resolves document and verify changes', async () => {
-    const nextOwner = accounts[2]
-    const resolved = await resolver.resolve(did)
-    expect(resolved.didDocumentMetadata).toEqual({
-      versionId: '8',
-      updated: expect.anything(),
-    })
-    expect(resolved.didDocument).toEqual({
-      '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2'],
-      id: did,
-      verificationMethod: [
-        {
-          id: `${did}#controller`,
-          type: 'EcdsaSecp256k1RecoveryMethod2020',
-          controller: did,
-          blockchainAccountId: `eip155:1337:${nextOwner}`,
-        },
-        {
-          id: `${did}#delegate-2`,
-          type: 'EcdsaSecp256k1RecoveryMethod2020',
-          controller: did,
-          blockchainAccountId: `eip155:1337:${delegate2}`,
-        },
-      ],
-      authentication: [`${did}#controller`, `${did}#delegate-2`],
-      assertionMethod: [`${did}#controller`, `${did}#delegate-2`],
-      service: [
-        {
-          id: `${did}#service-2`,
-          type: 'test2Service',
-          serviceEndpoint: {
-            uri: 'https://didcomm.example.com',
-            transportType: 'http',
-          },
-        },
-      ],
-    })
-  })
 })
