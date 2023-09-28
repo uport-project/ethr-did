@@ -2,7 +2,7 @@ import { Resolvable, Resolver } from 'did-resolver'
 import { Contract, ContractFactory, getBytes, SigningKey } from 'ethers'
 import { EthereumDIDRegistry, getResolver } from 'ethr-did-resolver'
 import { DelegateTypes, EthrDID, KeyPair } from '../index'
-import { createProvider, sleep } from './testUtils'
+import { createProvider, sleep } from './util/testUtils'
 import { verifyJWT } from 'did-jwt'
 
 import { jest } from '@jest/globals'
