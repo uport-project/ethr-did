@@ -61,8 +61,7 @@ export class EthrDID {
 
   constructor(conf: IConfig) {
     const { address, publicKey, network } = interpretIdentifier(conf.identifier)
-    const chainNameOrId =
-      typeof conf.chainNameOrId === 'bigint' ? toQuantity(conf.chainNameOrId) : conf.chainNameOrId
+    const chainNameOrId = typeof conf.chainNameOrId === 'bigint' || typeof conf.chainNameOrId === 'number' ? toQuantity(conf.chainNameOrId) : conf.chainNameOrId
     if (conf.provider || conf.rpcUrl || conf.web3) {
       let txSigner = conf.txSigner
       if (conf.privateKey && typeof txSigner === 'undefined') {
