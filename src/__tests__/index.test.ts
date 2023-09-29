@@ -41,7 +41,7 @@ describe('EthrDID', () => {
     delegate2 = accounts[4]
     did = `did:ethr:dev:${identity}`
 
-    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: BigInt(1337) }))
+    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: 1337 }))
     ethrDid = new EthrDID({
       provider,
       registry,
@@ -795,7 +795,7 @@ describe('EthrDID (Meta Transactions)', () => {
     walletIdentity = accounts[5]
     did = `did:ethr:dev:${identity}`
 
-    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: BigInt(1337) }))
+    resolver = new Resolver(getResolver({ name: 'dev', provider, registry, chainId: 1337 }))
     ethrDid = new EthrDID({
       provider,
       registry,
