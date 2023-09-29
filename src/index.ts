@@ -6,7 +6,7 @@ import {
   toQuantity,
   Wallet,
   computeAddress,
-  Signer,
+  Signer as TxSigner,
   decodeBase58,
   Provider,
   toUtf8Bytes,
@@ -30,7 +30,7 @@ interface IConfig {
 
   signer?: JWTSigner
   alg?: 'ES256K' | 'ES256K-R'
-  txSigner?: Signer
+  txSigner?: TxSigner
   privateKey?: string
 
   rpcUrl?: string
