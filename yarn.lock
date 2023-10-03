@@ -1498,12 +1498,12 @@
 
 "@noble/ciphers@^0.3.0":
   version "0.3.0"
-  resolved "https://registry.npmjs.org/@noble/ciphers/-/ciphers-0.3.0.tgz"
+  resolved "https://registry.yarnpkg.com/@noble/ciphers/-/ciphers-0.3.0.tgz#6ba3090afdc7a7051393486f6af210e62e0f04ec"
   integrity sha512-ldbrnOjmNRwFdXcTM6uXDcxpMIFrbzAWNnpBPp4oTJTFF0XByGD6vf45WrehZGXRQTRVV+Zm8YP+EgEf+e4cWA==
 
 "@noble/curves@^1.0.0":
   version "1.2.0"
-  resolved "https://registry.npmjs.org/@noble/curves/-/curves-1.2.0.tgz"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.2.0.tgz#92d7e12e4e49b23105a2555c6984d41733d65c35"
   integrity sha512-oYclrNgRaM9SsBUBVbb8M6DTV7ZHRTKugureoYEncY5c65HOmRzvSiTE3y5CYaPYJA/GVkrhXEoF0M3Ya9PMnw==
   dependencies:
     "@noble/hashes" "1.3.2"
@@ -1515,7 +1515,7 @@
 
 "@noble/hashes@1.3.2", "@noble/hashes@^1.3.0":
   version "1.3.2"
-  resolved "https://registry.npmjs.org/@noble/hashes/-/hashes-1.3.2.tgz"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
   integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
 
 "@noble/secp256k1@1.7.1":
@@ -1907,7 +1907,7 @@
 
 "@scure/base@^1.1.3":
   version "1.1.3"
-  resolved "https://registry.npmjs.org/@scure/base/-/base-1.1.3.tgz"
+  resolved "https://registry.yarnpkg.com/@scure/base/-/base-1.1.3.tgz#8584115565228290a6c6c4961973e0903bb3df2f"
   integrity sha512-/+SgoRjLq7Xlf0CWuLHq2LUZeL/w65kfzAPG5NH9pcmBhs+nunQTn4gvdwgMTIXnt9b2C/1SeL2XiysZEyIC9Q==
 
 "@semantic-release/changelog@6.0.3":
@@ -3034,7 +3034,7 @@ caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001538:
 
 canonicalize@^2.0.0:
   version "2.0.0"
-  resolved "https://registry.npmjs.org/canonicalize/-/canonicalize-2.0.0.tgz"
+  resolved "https://registry.yarnpkg.com/canonicalize/-/canonicalize-2.0.0.tgz#32be2cef4446d67fd5348027a384cae28f17226a"
   integrity sha512-ulDEYPv7asdKvqahuAY35c1selLdzDwHqugK92hfkzvlDCwXRRelDkR+Er33md/PtnpqHemgkuDPanZ4fiYZ8w==
 
 cardinal@^2.1.1:
@@ -3569,9 +3569,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^7.2.0:
-  version "7.4.1"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.1.tgz#7c5c26b8832c3a2919ae4296ea6983109f5592b4"
-  integrity sha512-gYDbY6KKuKxmcmJvI1u4zS7QDQGz4B4Ak/T/biMMOHNYZZDGDMKXdZYhiCsphqrBvd7j0OZTFK7iAvMgSpB2aw==
+  version "7.4.2"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.2.tgz#9610d16ef5c2883ba2ebc4d98f972b586524419b"
+  integrity sha512-bdMVrUKD8wBiYihrxm5Bso33vYuw5DHxxN6y+IFSpHQpYQF16nuW6T8+FCrVkS5gDYE6jFZmnkqjJwycT4K7AA==
   dependencies:
     "@noble/ciphers" "^0.3.0"
     "@noble/curves" "^1.0.0"
@@ -6360,9 +6360,9 @@ ms@^2.0.0, ms@^2.1.2:
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 multiformats@^12.0.0, multiformats@^12.0.1:
-  version "12.1.1"
-  resolved "https://registry.npmjs.org/multiformats/-/multiformats-12.1.1.tgz"
-  integrity sha512-GBSToTmri2vJYs8wqcZQ8kB21dCaeTOzHTIAlr8J06C1eL6UbzqURXFZ5Fl0EYm9GAFz1IlYY8SxGOs9G9NJRg==
+  version "12.1.2"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-12.1.2.tgz#eef67872da3f34b9a4a7ca7dd1ffdf3074f5c517"
+  integrity sha512-6mRIsrZXyw5xNPO31IGBMmxgDXBSgCGDsBAtazkZ02ip4hMwZNrQvfxXZtytRoBSWuzSq5f9VmMnXj76fIz5FQ==
 
 mute-stream@~1.0.0:
   version "1.0.0"
@@ -8568,7 +8568,7 @@ uglify-js@^3.1.4:
 
 uint8arrays@^4.0.3:
   version "4.0.6"
-  resolved "https://registry.npmjs.org/uint8arrays/-/uint8arrays-4.0.6.tgz"
+  resolved "https://registry.yarnpkg.com/uint8arrays/-/uint8arrays-4.0.6.tgz#bae68b536c2e87147045b95d73d29e503e45ecab"
   integrity sha512-4ZesjQhqOU2Ip6GPReIwN60wRxIupavL8T0Iy36BBHr2qyMrNxsPJvr7vpS4eFt8F8kSguWUPad6ZM9izs/vyw==
   dependencies:
     multiformats "^12.0.1"
