@@ -148,7 +148,7 @@ export class EthrDID {
     return receipt.hash
   }
 
-  async addDelegate(delegate: string, delegateOptions?: DelegateOptions, txOptions = {}): Promise<string> {
+  async addDelegate(delegate: string, delegateOptions?: DelegateOptions, txOptions: Overrides = {}): Promise<string> {
     if (typeof this.controller === 'undefined') {
       throw new Error('a web3 provider configuration is needed for network operations')
     }
