@@ -1,12 +1,9 @@
 import { Resolvable, Resolver } from 'did-resolver'
-import { Contract, ContractFactory } from '@ethersproject/contracts'
-import { JsonRpcProvider } from '@ethersproject/providers'
-import { getResolver, EthereumDIDRegistry } from 'ethr-did-resolver'
+import { Contract, ContractFactory, getBytes, SigningKey } from 'ethers'
+import { EthereumDIDRegistry, getResolver } from 'ethr-did-resolver'
 import { DelegateTypes, EthrDID, KeyPair } from '../index'
-import { createProvider, sleep } from './testUtils'
+import { createProvider, sleep } from './util/testUtils'
 import { verifyJWT } from 'did-jwt'
-import { arrayify } from '@ethersproject/bytes'
-import { SigningKey } from '@ethersproject/signing-key'
 
 import { jest } from '@jest/globals'
 
@@ -24,20 +21,19 @@ describe('EthrDID', () => {
     delegate2: string,
     resolver: Resolvable
 
-  const provider: JsonRpcProvider = createProvider()
+  const provider = createProvider()
 
   beforeAll(async () => {
-    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(provider.getSigner(0))
+    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(await provider.getSigner(0))
 
     let registryContract: Contract
     registryContract = await factory.deploy()
-    registryContract = await registryContract.deployed()
+    registryContract = await registryContract.waitForDeployment()
 
-    await registryContract.deployTransaction.wait()
+    registry = await registryContract.getAddress()
 
-    registry = registryContract.address
-
-    accounts = await provider.listAccounts()
+    const accountSigners = await provider.listAccounts()
+    accounts = accountSigners.map((signer) => signer.address)
 
     identity = accounts[1]
     owner = accounts[2]
@@ -134,7 +130,7 @@ describe('EthrDID', () => {
         beforeAll(async () => {
           const txHash = await ethrDid.addDelegate(delegate2, {
             delegateType: DelegateTypes.sigAuth,
-            expiresIn: 2,
+            expiresIn: 5,
           })
           await provider.waitForTransaction(txHash)
         })
@@ -775,28 +771,25 @@ describe('EthrDID (Meta Transactions)', () => {
     accounts: string[],
     did: string,
     identity: string,
-    owner: string,
     delegate1: string,
     delegate2: string,
     walletIdentity: string,
     resolver: Resolvable
 
-  const provider: JsonRpcProvider = createProvider()
+  const provider = createProvider()
 
   beforeAll(async () => {
-    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(provider.getSigner(0))
+    const factory = ContractFactory.fromSolidity(EthereumDIDRegistry).connect(await provider.getSigner(0))
 
     registryContract = await factory.deploy()
-    registryContract = await registryContract.deployed()
+    registryContract = await registryContract.waitForDeployment()
 
-    await registryContract.deployTransaction.wait()
+    registry = await registryContract.getAddress()
 
-    registry = registryContract.address
-
-    accounts = await provider.listAccounts()
+    const accountSigners = await provider.listAccounts()
+    accounts = accountSigners.map((signer) => signer.address)
 
     identity = accounts[1]
-    owner = accounts[2]
     delegate1 = accounts[3]
     delegate2 = accounts[4]
     walletIdentity = accounts[5]
@@ -813,19 +806,19 @@ describe('EthrDID (Meta Transactions)', () => {
       provider,
       registry,
       identifier: identity,
-      txSigner: provider.getSigner(walletIdentity),
+      txSigner: await provider.getSigner(walletIdentity),
       chainNameOrId: 'dev',
     })
   })
 
-  const currentOwnerPrivateKey = arrayify('0x0000000000000000000000000000000000000000000000000000000000000001')
+  const currentOwnerPrivateKey = getBytes('0x0000000000000000000000000000000000000000000000000000000000000001')
 
   it('add delegates via meta transaction', async () => {
     // Add first delegate
     const delegateType = DelegateTypes.sigAuth
     const exp = 86400
     const hash1 = await ethrDid.createAddDelegateHash(delegateType, delegate1, exp)
-    const signature1 = new SigningKey(currentOwnerPrivateKey).signDigest(hash1)
+    const signature1 = new SigningKey(currentOwnerPrivateKey).sign(hash1)
 
     await walletSigner.addDelegateSigned(
       delegate1,
@@ -857,7 +850,7 @@ describe('EthrDID (Meta Transactions)', () => {
 
     // Add second delegate
     const hash2 = await ethrDid.createAddDelegateHash(delegateType, delegate2, exp)
-    const signature2 = new SigningKey(currentOwnerPrivateKey).signDigest(hash2)
+    const signature2 = new SigningKey(currentOwnerPrivateKey).sign(hash2)
 
     await walletSigner.addDelegateSigned(
       delegate2,
@@ -895,7 +888,7 @@ describe('EthrDID (Meta Transactions)', () => {
   it('remove delegate1 via meta transaction', async () => {
     const delegateType = DelegateTypes.sigAuth
     const hash = await ethrDid.createRevokeDelegateHash(delegateType, delegate1)
-    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+    const signature = new SigningKey(currentOwnerPrivateKey).sign(hash)
 
     await walletSigner.revokeDelegateSigned(delegate1, DelegateTypes.sigAuth, {
       sigV: signature.v,
@@ -933,7 +926,7 @@ describe('EthrDID (Meta Transactions)', () => {
     const attributeValue = JSON.stringify(serviceEndpointParams)
     const attributeExpiration = 86400
     const hash1 = await ethrDid.createSetAttributeHash(attributeName, attributeValue, attributeExpiration)
-    const signature1 = new SigningKey(currentOwnerPrivateKey).signDigest(hash1)
+    const signature1 = new SigningKey(currentOwnerPrivateKey).sign(hash1)
 
     await walletSigner.setAttributeSigned(attributeName, attributeValue, attributeExpiration, {
       sigV: signature1.v,
@@ -972,7 +965,7 @@ describe('EthrDID (Meta Transactions)', () => {
     // Add second attribute
     const attributeName2 = 'did/svc/test2Service'
     const hash2 = await ethrDid.createSetAttributeHash(attributeName2, attributeValue, attributeExpiration)
-    const signature2 = new SigningKey(currentOwnerPrivateKey).signDigest(hash2)
+    const signature2 = new SigningKey(currentOwnerPrivateKey).sign(hash2)
 
     await walletSigner.setAttributeSigned(attributeName2, attributeValue, attributeExpiration, {
       sigV: signature2.v,
@@ -1022,7 +1015,7 @@ describe('EthrDID (Meta Transactions)', () => {
     const serviceEndpointParams = { uri: 'https://didcomm.example.com', transportType: 'http' }
     const attributeValue = JSON.stringify(serviceEndpointParams)
     const hash = await ethrDid.createRevokeAttributeHash(attributeName, attributeValue)
-    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+    const signature = new SigningKey(currentOwnerPrivateKey).sign(hash)
 
     await walletSigner.revokeAttributeSigned(attributeName, attributeValue, {
       sigV: signature.v,
@@ -1062,13 +1055,14 @@ describe('EthrDID (Meta Transactions)', () => {
   it('change owner via meta transaction', async () => {
     const nextOwner = accounts[2]
     const hash = await ethrDid.createChangeOwnerHash(nextOwner)
-    const signature = new SigningKey(currentOwnerPrivateKey).signDigest(hash)
+    const signature = new SigningKey(currentOwnerPrivateKey).sign(hash)
 
     await walletSigner.changeOwnerSigned(nextOwner, {
       sigV: signature.v,
       sigR: signature.r,
       sigS: signature.s,
     })
+
     const resolved = await resolver.resolve(did)
     expect(resolved.didDocument).toEqual({
       '@context': expect.anything(),

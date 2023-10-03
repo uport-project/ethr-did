@@ -1,4 +1,4 @@
-import {defaults} from 'jest-config'
+import { defaults } from 'jest-config'
 
 const config = {
   moduleFileExtensions: [...defaults.moduleFileExtensions, 'mts'],
@@ -19,7 +19,11 @@ const config = {
   extensionsToTreatAsEsm: ['.ts'],
   testMatch: ['**/__tests__/**/*.test.ts'],
   testEnvironment: 'node',
-  coverageProvider: 'v8'
+  coverageProvider: 'v8',
+  coveragePathIgnorePatterns: [
+    '<rootDir>/node_modules/',
+    '<rootDir>/src/__tests__/util'
+  ],
 }
 
 export default config

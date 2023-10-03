@@ -13,9 +13,6 @@
     "outDir": "lib",
     "strict": true,
     "moduleResolution": "node",
-    "types": [
-      "jest"
-    ],
     "allowSyntheticDefaultImports": true,
     "resolveJsonModule": true,
     "esModuleInterop": true
