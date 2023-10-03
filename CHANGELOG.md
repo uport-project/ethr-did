@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/uport-project/ethr-did/compare/2.3.23...3.0.0) (2023-10-03)
+
+
+### chorr
+
+* **deps:** update ethers ([#117](https://github.com/uport-project/ethr-did/issues/117)) ([74031f6](https://github.com/uport-project/ethr-did/commit/74031f6fc874255085e5c8a00a95297889f4104c))
+
+
+### BREAKING CHANGES
+
+* **deps:** now using ethers v6 which may cause dependency conflicts when upgrading
+
 ## [2.3.23](https://github.com/uport-project/ethr-did/compare/2.3.22...2.3.23) (2023-09-27)
 
 
