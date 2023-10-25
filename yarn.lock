@@ -3569,9 +3569,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^7.2.0:
-  version "7.4.3"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.3.tgz#770d2a944ba549346ba762f4de136e1f8b7e780c"
-  integrity sha512-fm89zeD7XreXvyD7W8h/+RHT541M9pPt5uqANBDpznhdOazdxSY6AMnCRLLeWBPaUqRtdYgP7nCvU/lB4oWnwg==
+  version "7.4.4"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.4.tgz#0d925bd453c5b18001ba247890b173778120c74c"
+  integrity sha512-OW9CwDvHx0E2qjrRfy8wm5sJekXxJqGrAZXgdfhYpHEHX31Kn7Cz9gShrpGlIqYFsEsEAsA5xhFIidKAawyNCg==
   dependencies:
     "@noble/ciphers" "^0.4.0"
     "@noble/curves" "^1.0.0"
@@ -6360,9 +6360,9 @@ ms@^2.0.0, ms@^2.1.2:
   integrity sha512-6FlzubTLZG3J2a/NVCAleEhjzq5oxgHyaCU9yYXvcLsvoVaHJq/s5xXI6/XXP6tz7R9xAOtHnSO/tXtF3WRTlA==
 
 multiformats@^12.0.0, multiformats@^12.0.1:
-  version "12.1.2"
-  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-12.1.2.tgz#eef67872da3f34b9a4a7ca7dd1ffdf3074f5c517"
-  integrity sha512-6mRIsrZXyw5xNPO31IGBMmxgDXBSgCGDsBAtazkZ02ip4hMwZNrQvfxXZtytRoBSWuzSq5f9VmMnXj76fIz5FQ==
+  version "12.1.3"
+  resolved "https://registry.yarnpkg.com/multiformats/-/multiformats-12.1.3.tgz#cbf7a9861e11e74f8228b21376088cb43ba8754e"
+  integrity sha512-eajQ/ZH7qXZQR2AgtfpmSMizQzmyYVmCql7pdhldPuYQi4atACekbJaQplk6dWyIi10jCaFnd6pqvcEFXjbaJw==
 
 mute-stream@~1.0.0:
   version "1.0.0"
