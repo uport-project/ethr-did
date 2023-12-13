@@ -1,3 +1,10 @@
+## [3.0.5](https://github.com/uport-project/ethr-did/compare/3.0.4...3.0.5) (2023-12-13)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency did-jwt to v7.4.6 ([37e96bc](https://github.com/uport-project/ethr-did/commit/37e96bc4e9d02e1b092d38508ec76274d19a8327))
+
 ## [3.0.4](https://github.com/uport-project/ethr-did/compare/3.0.3...3.0.4) (2023-11-01)
 
 
