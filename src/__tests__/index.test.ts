@@ -76,7 +76,11 @@ describe('EthrDID', () => {
 
       it('resolves document', async () => {
         return expect((await resolver.resolve(did)).didDocument).toEqual({
-          '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+          '@context': [
+            'https://www.w3.org/ns/did/v1',
+            'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+            'https://w3id.org/security/v3-unstable',
+          ],
           id: did,
           verificationMethod: [
             {
@@ -104,7 +108,11 @@ describe('EthrDID', () => {
         it('resolves document', async () => {
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+              'https://w3id.org/security/v3-unstable',
+            ],
             id: did,
             verificationMethod: [
               {
@@ -137,7 +145,11 @@ describe('EthrDID', () => {
 
         it('resolves document', async () => {
           return expect((await resolver.resolve(did)).didDocument).toEqual({
-            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+              'https://w3id.org/security/v3-unstable',
+            ],
             id: did,
             verificationMethod: [
               {
@@ -173,7 +185,11 @@ describe('EthrDID', () => {
         it('resolves document', async () => {
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+              'https://w3id.org/security/v3-unstable',
+            ],
             id: did,
             verificationMethod: [
               {
@@ -205,7 +221,11 @@ describe('EthrDID', () => {
 
         it('resolves document', async () => {
           return expect((await resolver.resolve(did)).didDocument).toEqual({
-            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+              'https://w3id.org/security/v3-unstable',
+            ],
             id: did,
             verificationMethod: [
               {
@@ -241,7 +261,11 @@ describe('EthrDID', () => {
 
           const resolution = await resolver.resolve(did)
           return expect(resolution.didDocument).toEqual({
-            '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+            '@context': [
+              'https://www.w3.org/ns/did/v1',
+              'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+              'https://w3id.org/security/v3-unstable',
+            ],
             id: did,
             verificationMethod: [
               {
@@ -281,7 +305,7 @@ describe('EthrDID', () => {
               '@context': [
                 'https://www.w3.org/ns/did/v1',
                 'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
-                'https://w3id.org/security/v3-unstable'
+                'https://w3id.org/security/v3-unstable',
               ],
               id: did,
               verificationMethod: [
@@ -325,7 +349,7 @@ describe('EthrDID', () => {
               '@context': [
                 'https://www.w3.org/ns/did/v1',
                 'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
-                'https://w3id.org/security/v3-unstable'
+                'https://w3id.org/security/v3-unstable',
               ],
               id: did,
               verificationMethod: [
@@ -375,7 +399,7 @@ describe('EthrDID', () => {
               '@context': [
                 'https://www.w3.org/ns/did/v1',
                 'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
-                'https://w3id.org/security/v3-unstable'
+                'https://w3id.org/security/v3-unstable',
               ],
               id: did,
               verificationMethod: [
@@ -434,7 +458,7 @@ describe('EthrDID', () => {
               '@context': [
                 'https://www.w3.org/ns/did/v1',
                 'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
-                'https://w3id.org/security/v3-unstable'
+                'https://w3id.org/security/v3-unstable',
               ],
               id: did,
               verificationMethod: [
@@ -498,7 +522,7 @@ describe('EthrDID', () => {
               '@context': [
                 'https://www.w3.org/ns/did/v1',
                 'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
-                'https://w3id.org/security/v3-unstable'
+                'https://w3id.org/security/v3-unstable',
               ],
               id: did,
               verificationMethod: [
@@ -563,7 +587,11 @@ describe('EthrDID', () => {
 
       it('resolves document', async () => {
         return expect((await resolver.resolve(did)).didDocument).toEqual({
-          '@context': ['https://www.w3.org/ns/did/v1', 'https://w3id.org/security/suites/secp256k1recovery-2020/v2', "https://w3id.org/security/v3-unstable"],
+          '@context': [
+            'https://www.w3.org/ns/did/v1',
+            'https://w3id.org/security/suites/secp256k1recovery-2020/v2',
+            'https://w3id.org/security/v3-unstable',
+          ],
           id: did,
           verificationMethod: [
             {
