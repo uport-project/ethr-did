@@ -1,3 +1,10 @@
+## [3.0.9](https://github.com/uport-project/ethr-did/compare/3.0.8...3.0.9) (2024-01-03)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ethers to v6.9.2 ([dc360ab](https://github.com/uport-project/ethr-did/commit/dc360ab78f8bc61c04e904035927eddcdf0036f7))
+
 ## [3.0.8](https://github.com/uport-project/ethr-did/compare/3.0.7...3.0.8) (2023-12-20)
 
 
