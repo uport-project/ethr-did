@@ -3575,10 +3575,10 @@ detect-newline@^3.0.0:
   resolved "https://registry.npmjs.org/detect-newline/-/detect-newline-3.1.0.tgz"
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
-did-jwt@^7.2.0:
-  version "7.4.7"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-7.4.7.tgz#44105fb0a0cdfd78c087de52087422075c674700"
-  integrity sha512-Apz7nIfIHSKWIMaEP5L/K8xkwByvjezjTG0xiqwKdnNj1x8M0+Yasury5Dm/KPltxi2PlGfRPf3IejRKZrT8mQ==
+did-jwt@^8.0.0:
+  version "8.0.0"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.0.tgz#9a1fdb81368cbf3a34985bc73dc1b21ac6b0e74c"
+  integrity sha512-lJSVC9Ckxl+U+jDPbdATDtXV7CwE0XGT0Js6KNfjRlaj0LTXvDF90IAyayFwLUzO6punA/q3ZHVfTZaYDhHrLw==
   dependencies:
     "@noble/ciphers" "^0.4.0"
     "@noble/curves" "^1.0.0"
