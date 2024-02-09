@@ -1,3 +1,10 @@
+## [3.0.15](https://github.com/uport-project/ethr-did/compare/3.0.14...3.0.15) (2024-02-09)
+
+
+### Bug Fixes
+
+* **deps:** Update dependency ethr-did-resolver to v10.1.4 ([bbe5a16](https://github.com/uport-project/ethr-did/commit/bbe5a1685c3cdbb621871016308540431c60f436))
+
 ## [3.0.14](https://github.com/uport-project/ethr-did/compare/3.0.13...3.0.14) (2024-02-09)
 
 
