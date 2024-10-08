@@ -25,7 +25,7 @@
   },
   "author": "Pelle Braendgaard",
   "contributors": [
-    "Mircea Nistor <mircea.nistor@mesh.xyz>"
+    "Mircea Nistor"
   ],
   "license": "Apache-2.0",
   "scripts": {
@@ -65,5 +65,6 @@
     "did-resolver": "^4.1.0",
     "ethers": "^6.8.1",
     "ethr-did-resolver": "11.0.1"
-  }
+  },
+  "packageManager": "yarn@1.22.22"
 }
