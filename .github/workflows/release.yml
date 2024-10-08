@@ -19,12 +19,12 @@ jobs:
       - name: "Setup node with cache"
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: 'yarn'
 
       - run: yarn install --frozen-lockfile
-      - run: yarn run format
       - run: yarn run build
+      - run: yarn run format
 
       - name: "Setup git coordinates"
         run: |

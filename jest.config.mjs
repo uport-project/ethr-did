@@ -20,10 +20,7 @@ const config = {
   testMatch: ['**/__tests__/**/*.test.ts'],
   testEnvironment: 'node',
   coverageProvider: 'v8',
-  coveragePathIgnorePatterns: [
-    '<rootDir>/node_modules/',
-    '<rootDir>/src/__tests__/util'
-  ],
+  coveragePathIgnorePatterns: ['<rootDir>/node_modules/', '<rootDir>/src/__tests__/util'],
 }
 
 export default config
