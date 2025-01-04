@@ -68,7 +68,7 @@ export class EthrDID {
     if (conf.provider || conf.rpcUrl || conf.web3) {
       let txSigner = conf.txSigner
       if (conf.privateKey && typeof txSigner === 'undefined') {
-        txSigner = new Wallet(conf.privateKey)
+        txSigner = new Wallet(conf.privateKey, conf.provider || conf.web3?.currentProvider)
       }
       this.controller = new EthrDidController(
         conf.identifier,
