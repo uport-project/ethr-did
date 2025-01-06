@@ -4003,10 +4003,10 @@ ethers@^6.8.1:
     tslib "2.4.0"
     ws "8.5.0"
 
-ethr-did-resolver@10.1.5:
-  version "10.1.5"
-  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-10.1.5.tgz#8127f9039a05c776413175c8acd33b14d88d5ec9"
-  integrity sha512-wVCKhF6qQo2IewH9ui4lRBixbvT/A6szZFQoJkfvjP6EU/3MSb4KOP5QNpM37zmFU/rQGjHNt7bF13fNcmZ6wQ==
+ethr-did-resolver@11.0.3:
+  version "11.0.3"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-11.0.3.tgz#ed68195752f3a37ff821fdd7191fe972e92cb1eb"
+  integrity sha512-lQ1T/SZfgR6Kp05/GSIXnMELxQ5H6M6OCTH4wBTVSAgHzbJiDNVIYWzg/c+NniIM88B0ViAi4CaiCHaiUlvPQg==
   dependencies:
     did-resolver "^4.1.0"
     ethers "^6.8.1"
