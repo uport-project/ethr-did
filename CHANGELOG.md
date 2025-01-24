@@ -1,3 +1,10 @@
+## [3.0.23](https://github.com/uport-project/ethr-did/compare/3.0.22...3.0.23) (2025-01-24)
+
+
+### Bug Fixes
+
+* missing provider error in ethrDid.setAttribute ([#135](https://github.com/uport-project/ethr-did/issues/135)) ([a83bfcf](https://github.com/uport-project/ethr-did/commit/a83bfcf347bb6a358e2653e03a5dd6f34ca3ba39)), closes [#81](https://github.com/uport-project/ethr-did/issues/81)
+
 ## [3.0.22](https://github.com/uport-project/ethr-did/compare/3.0.21...3.0.22) (2025-01-24)
 
 
