@@ -11,7 +11,7 @@ jobs:
   build-test-publish:
     runs-on: ubuntu-22.04
     steps:
-      - uses: actions/checkout@b4ffde65f46336ab88eb53be808477a3936bae11 # v4
+      - uses: actions/checkout@v4
         with:
           fetch-depth: 0
           token: ${{ secrets.GH_TOKEN }}
@@ -19,12 +19,12 @@ jobs:
       - name: "Setup node with cache"
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
           cache: 'yarn'
 
       - run: yarn install --frozen-lockfile
-      - run: yarn run format
       - run: yarn run build
+      - run: yarn run format
 
       - name: "Setup git coordinates"
         run: |
