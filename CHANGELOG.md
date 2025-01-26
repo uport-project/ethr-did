@@ -1,3 +1,10 @@
+## [3.0.25](https://github.com/uport-project/ethr-did/compare/3.0.24...3.0.25) (2025-01-26)
+
+
+### Bug Fixes
+
+* **deps:** update dependency ethers to v6.13.5 ([#128](https://github.com/uport-project/ethr-did/issues/128)) ([b28707b](https://github.com/uport-project/ethr-did/commit/b28707b61f9ce73ab00cab06c4dcab08adc41f4d))
+
 ## [3.0.24](https://github.com/uport-project/ethr-did/compare/3.0.23...3.0.24) (2025-01-26)
 
 
