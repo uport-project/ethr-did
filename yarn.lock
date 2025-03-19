@@ -3934,9 +3934,9 @@ caniuse-lite@^1.0.30001688:
   integrity sha512-b+uH5BakXZ9Do9iK+CkDmctUSEqZl+SP056vc5usa0PL+ev5OHw003rZXcnjNDv3L8P5j6rwT6C0BPKSikW08w==
 
 canonicalize@^2.0.0:
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/canonicalize/-/canonicalize-2.0.0.tgz#32be2cef4446d67fd5348027a384cae28f17226a"
-  integrity sha512-ulDEYPv7asdKvqahuAY35c1selLdzDwHqugK92hfkzvlDCwXRRelDkR+Er33md/PtnpqHemgkuDPanZ4fiYZ8w==
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/canonicalize/-/canonicalize-2.1.0.tgz#92a20ecfb94e96591badf4977dc2fb1bfbc31dc5"
+  integrity sha512-F705O3xrsUtgt98j7leetNhTWPe+5S72rlL5O4jA1pKqBVQ/dT1O1D6PFxmSXvc0SUOinWS57DKx0I3CHrXJHQ==
 
 catering@^2.0.0, catering@^2.1.0:
   version "2.1.1"
@@ -4447,9 +4447,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^8.0.0:
-  version "8.0.8"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.8.tgz#642ee1dd426fcfffed0ef056f62c6d545119867a"
-  integrity sha512-XlL71xneBxwGiED4yB+LklGpBnCwY3/ZpIf9o3e+3ubo1BLDaPppfhZTevUKG4UXWAqZC5/WT2hD/WfqAhl8FA==
+  version "8.0.9"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.9.tgz#750b358e74d521f29a57f2f643712654d12e4955"
+  integrity sha512-Tc2wdkGwAyqiL1oYZvdIJ4k/LcrUpJIcXEQNb/yyegY9/CPeeXEbwsgg8BDAaoYdaDFknyFolLZb+Sp9uU1U5w==
   dependencies:
     "@noble/ciphers" "^1.0.0"
     "@noble/curves" "^1.0.0"
