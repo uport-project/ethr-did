@@ -2442,10 +2442,15 @@
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
   integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
 
-"@noble/hashes@1.7.2", "@noble/hashes@^1.3.0":
+"@noble/hashes@1.7.2":
   version "1.7.2"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.2.tgz#d53c65a21658fb02f3303e7ee3ba89d6754c64b4"
   integrity sha512-biZ0NUSxyjLLqo6KxEJ1b+C2NAx0wtDoFvCaXHGgUkeHzf3Xc1xKumFKREuT7f7DARNZ/slvYUwFG6B0f2b6hQ==
+
+"@noble/hashes@^1.3.0":
+  version "1.8.0"
+  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.8.0.tgz#cee43d801fcef9644b11b8194857695acd5f815a"
+  integrity sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==
 
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
@@ -4508,9 +4513,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^8.0.0:
-  version "8.0.11"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.11.tgz#2539deb6e4473e2768b0b40492f347df1df711a9"
-  integrity sha512-Uz2BRDr/PoLyXXPLSziNVVvFc3XgZCnB2bDla+5/FGgbdbWDzVqOyTUMxSNbUlsmrmHeZMH3KnaybW+PfplGNA==
+  version "8.0.12"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.12.tgz#ffac65b8a382e58c020ebe5b24628e9fa6a11c59"
+  integrity sha512-tfKeyT/5RkfvUVj/yIKi3ytElQsSj7Aq8V6zIX0gXFf4tVde32m3zJr4GJqlQiRyb7QE91zSsnyOXiWCPMZIXw==
   dependencies:
     "@noble/ciphers" "^1.0.0"
     "@noble/curves" "^1.0.0"
