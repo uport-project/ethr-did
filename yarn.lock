@@ -2431,23 +2431,18 @@
     "@noble/hashes" "1.3.2"
 
 "@noble/curves@^1.0.0":
-  version "1.8.2"
-  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.8.2.tgz#8f24c037795e22b90ae29e222a856294c1d9ffc7"
-  integrity sha512-vnI7V6lFNe0tLAuJMu+2sX+FcL14TaCWy1qiczg1VwRmPrpQCdq5ESXQMqUc2tluRNf6irBXrWbl1mGN8uaU/g==
+  version "1.9.0"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.0.tgz#13e0ca8be4a0ce66c113693a94514e5599f40cfc"
+  integrity sha512-7YDlXiNMdO1YZeH6t/kvopHHbIZzlxrCV9WLqCY6QhcXOoXiNCMDqJIglZ9Yjx5+w7Dz30TITFrlTjnRg7sKEg==
   dependencies:
-    "@noble/hashes" "1.7.2"
+    "@noble/hashes" "1.8.0"
 
 "@noble/hashes@1.3.2":
   version "1.3.2"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.3.2.tgz#6f26dbc8fbc7205873ce3cee2f690eba0d421b39"
   integrity sha512-MVC8EAQp7MvEcm30KWENFjgR+Mkmf+D189XJTkFIlwohU5hcBbn1ZkKq7KVTi2Hme3PMGF390DaL52beVrIihQ==
 
-"@noble/hashes@1.7.2":
-  version "1.7.2"
-  resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.7.2.tgz#d53c65a21658fb02f3303e7ee3ba89d6754c64b4"
-  integrity sha512-biZ0NUSxyjLLqo6KxEJ1b+C2NAx0wtDoFvCaXHGgUkeHzf3Xc1xKumFKREuT7f7DARNZ/slvYUwFG6B0f2b6hQ==
-
-"@noble/hashes@^1.3.0":
+"@noble/hashes@1.8.0", "@noble/hashes@^1.3.0":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@noble/hashes/-/hashes-1.8.0.tgz#cee43d801fcef9644b11b8194857695acd5f815a"
   integrity sha512-jCs9ldd7NwzpgXDIf6P3+NrHh9/sD6CQdxHyjQI+h/6rDNo88ypBxxz45UDuZHz9r3tNz7N/VInSVoVdtXEI4A==
@@ -4513,9 +4508,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^8.0.0:
-  version "8.0.12"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.12.tgz#ffac65b8a382e58c020ebe5b24628e9fa6a11c59"
-  integrity sha512-tfKeyT/5RkfvUVj/yIKi3ytElQsSj7Aq8V6zIX0gXFf4tVde32m3zJr4GJqlQiRyb7QE91zSsnyOXiWCPMZIXw==
+  version "8.0.13"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.13.tgz#406f26bcf7e47fe642bfa65b1e80566654112412"
+  integrity sha512-h31lj+Zm6b4H/u9mB7JlS0nV4qhVDfPc18AW5z2v3PRmY+J/HxiZtNtsCf6PwznBR09g92F1NadTNoL7kkboow==
   dependencies:
     "@noble/ciphers" "^1.0.0"
     "@noble/curves" "^1.0.0"
