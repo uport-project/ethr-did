@@ -2277,9 +2277,9 @@
     "@noble/hashes" "1.3.2"
 
 "@noble/curves@^1.0.0":
-  version "1.9.1"
-  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.1.tgz#9654a0bc6c13420ae252ddcf975eaf0f58f0a35c"
-  integrity sha512-k11yZxZg+t+gWvBbIswW0yoJlu8cHOC7dhunwOzoWH/mXGBiYyR4YY6hAEK/3EUs4UpB8la1RfdRpeGsFHkWsA==
+  version "1.9.2"
+  resolved "https://registry.yarnpkg.com/@noble/curves/-/curves-1.9.2.tgz#73388356ce733922396214a933ff7c95afcef911"
+  integrity sha512-HxngEd2XUcg9xi20JkwlLCtYwfoFw4JGkuZpT+WlsPD4gB/cxkvTD8fSsoAnphGZhFdZYKeQIPCuFlWPm1uE0g==
   dependencies:
     "@noble/hashes" "1.8.0"
 
@@ -4354,9 +4354,9 @@ detect-newline@^3.0.0:
   integrity sha512-TLz+x/vEXm/Y7P7wn1EJFNLxYpUD4TgMosxY6fAVJUnJMbupHBOncxyWUG9OpTaH9EBD7uFI5LfEgmMOc54DsA==
 
 did-jwt@^8.0.0:
-  version "8.0.16"
-  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.16.tgz#419e9333d56fd90e482ac44e8cac8cffa943e05a"
-  integrity sha512-iCduKLgY8F+JG6FcmaErfBD+f6RfIw44uTDZQRe4ISMDeCvySGKLN1nzM62eir7RbaruZgHbZ9qYKq4zBVbTFA==
+  version "8.0.17"
+  resolved "https://registry.yarnpkg.com/did-jwt/-/did-jwt-8.0.17.tgz#805cb93b649989a5e856b7fad52b118a38a5d659"
+  integrity sha512-qWPog796seH8CzvNShvqvs6YeCRVAYWmKzcPtirnhvH6wjiFvhquztJZwr5E9VHnTosW6V7bclWzrp7/HGJbSw==
   dependencies:
     "@noble/ciphers" "^1.0.0"
     "@noble/curves" "^1.0.0"
