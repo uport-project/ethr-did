@@ -5084,10 +5084,10 @@ ethers@^6.8.1:
     tslib "2.7.0"
     ws "8.17.1"
 
-ethr-did-resolver@11.0.4:
-  version "11.0.4"
-  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-11.0.4.tgz#0d6b1bd9b287e636b73d98060d3015a1f930529c"
-  integrity sha512-EJ/dL2QsFzvhBJd0nlPFjma3bxpQOWyp2TytQZyAeqi6SfZ4ALCB0VaA4dSeT4T8ZtI2pzs/sD7t/7A0584J6Q==
+ethr-did-resolver@11.0.5:
+  version "11.0.5"
+  resolved "https://registry.yarnpkg.com/ethr-did-resolver/-/ethr-did-resolver-11.0.5.tgz#24cc01cbdb6c878c26d83be5d8a140488f680611"
+  integrity sha512-fTQ+4g4aRDyU1hzlPH6FYgpoOd7fM8ZV9+3JCl2PqSDnS8Iz9V+y/9KOjLzqhY6LKhMWW5hIbaGypwOPWj15JA==
   dependencies:
     did-resolver "^4.1.0"
     ethers "^6.8.1"
